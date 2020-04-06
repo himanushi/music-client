@@ -1,11 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import ImageCardComponent from '../../components/imageCard/ImageCardComponent';
 
-function App() {
+const App = () => {
   return (
-    <Button variant="contained" color="primary">
-      Hello World
-    </Button>
+    <ImageCardComponent />
   );
 }
 
