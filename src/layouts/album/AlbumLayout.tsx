@@ -1,18 +1,10 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
+import { Album } from '../../graphql/types.d';
 
-function App() {
+const AlbumLayout = ({ album }:{ album: Album }) => {
   return (
-    <Button variant="contained" color="primary">
-      Hello World
-    </Button>
-  );
-}
-
-const ImageComponent: React.FC = () => {
-  return (
-    <div></div>
+  <div>{album.name}</div>
   )
 }
 
-export default App;
+export default AlbumLayout;

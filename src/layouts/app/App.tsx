@@ -1,10 +1,13 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import ImageCardComponent from '../../components/imageCard/ImageCardComponent';
+import AlbumsLayout from '../albums/AlbumsLayout';
+import { ApolloProvider } from '@apollo/react-common';
+import client from './client';
 
 const App = () => {
   return (
-    <ImageCardComponent />
+    <ApolloProvider client={client}>
+      <AlbumsLayout />
+    </ApolloProvider>
   );
 }
 
