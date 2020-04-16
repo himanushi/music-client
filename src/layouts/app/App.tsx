@@ -1,14 +1,6 @@
 import React from 'react';
-import AlbumsLayout from '../albums/AlbumsLayout';
-import { ApolloProvider } from '@apollo/react-common';
-import client from './client';
+import RootStyleLayout from './RootStyle';
 
-const App = () => {
-  return (
-    <ApolloProvider client={client}>
-      <AlbumsLayout />
-    </ApolloProvider>
-  );
-}
+const App = () => <RootStyleLayout />
 
-export default App;
+export default App

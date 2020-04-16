@@ -10,7 +10,7 @@ const headersLink = new ApolloLink((operation, forward) => {
 let endpoint = 'http://0.0.0.0:3000/graphql'
 
 if(process.env.NODE_ENV === 'production') {
-  endpoint = 'https://music-catalog.himacloud.app/graphql'
+  endpoint = 'https://music-server.himacloud.app/graphql'
 }
 
 const httpLink = new HttpLink({ uri: endpoint })
