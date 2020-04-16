@@ -1,0 +1,30 @@
+query Album($id: TTID!) {
+  album(id: $id) {
+    id
+    totalTracks
+    name
+    releaseDate
+    artworkL {
+      url
+      width
+      height
+    }
+    artworkM {
+      url
+      width
+      height
+    }
+    appleMusicAlbum {
+      id
+      appleMusicId
+    }
+    itunesAlbum {
+      id
+      appleMusicId
+    }
+    spotifyAlbum {
+      id
+      spotifyId
+    }
+  }
+}

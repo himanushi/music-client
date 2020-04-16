@@ -1,0 +1,30 @@
+query Albums($offset: Int, $limit: PositiveNumber) {
+  albums(offset: $offset, limit: $limit, order: RELEASE, asc: true) {
+    id
+    totalTracks
+    name
+    releaseDate
+    artworkL {
+      url
+      width
+      height
+    }
+    artworkM {
+      url
+      width
+      height
+    }
+    appleMusicAlbum {
+      id
+      appleMusicId
+    }
+    itunesAlbum {
+      id
+      appleMusicId
+    }
+    spotifyAlbum {
+      id
+      spotifyId
+    }
+  }
+}
