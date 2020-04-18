@@ -53,7 +53,9 @@ export enum AlbumsQueryOrder {
   /** 新しい順 */
   New = 'NEW',
   /** 発売日順 */
-  Release = 'RELEASE'
+  Release = 'RELEASE',
+  /** 人気順 */
+  Popularity = 'POPULARITY'
 }
 
 /** Apple Music アルバム */
@@ -156,12 +158,14 @@ export type AlbumQuery = (
 export type AlbumsQueryVariables = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['PositiveNumber']>;
+  order: AlbumsQueryOrder;
+  asc?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type AlbumsQuery = (
   { __typename?: 'Query' }
-  & { albums: Array<(
+  & { items: Array<(
     { __typename?: 'Album' }
     & Pick<Album, 'id' | 'totalTracks' | 'name' | 'releaseDate'>
     & { artworkL: (
@@ -237,8 +241,8 @@ export function withAlbum<TProps, TChildProps = {}, TDataName extends string = '
 };
 export type AlbumQueryResult = ApolloReactCommon.QueryResult<AlbumQuery, AlbumQueryVariables>;
 export const AlbumsDocument = gql`
-    query Albums($offset: Int, $limit: PositiveNumber) {
-  albums(offset: $offset, limit: $limit, order: RELEASE, asc: true) {
+    query Albums($offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $asc: Boolean) {
+  items: albums(offset: $offset, limit: $limit, order: $order, asc: $asc) {
     id
     totalTracks
     name
@@ -268,7 +272,7 @@ export const AlbumsDocument = gql`
   }
 }
     `;
-export type AlbumsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<AlbumsQuery, AlbumsQueryVariables>, 'query'>;
+export type AlbumsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<AlbumsQuery, AlbumsQueryVariables>, 'query'> & ({ variables: AlbumsQueryVariables; skip?: boolean; } | { skip: boolean; });
 
     export const AlbumsComponent = (props: AlbumsComponentProps) => (
       <ApolloReactComponents.Query<AlbumsQuery, AlbumsQueryVariables> query={AlbumsDocument} {...props} />

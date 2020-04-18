@@ -3,7 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ImageComponent from '../image/ImageComponent'
 import TitleComponent from '../title/TitleComponent';
-import { Grid } from '@material-ui/core';
+import { Grid, CardActionArea } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 interface Image {
@@ -11,6 +11,7 @@ interface Image {
   src?: string | null
   width: string | number
   linkUrl: string
+  componentInImage?: JSX.Element
 }
 
 const ImageCardComponent = (image:Image) => {
@@ -22,14 +23,16 @@ const ImageCardComponent = (image:Image) => {
       alignItems="center"
       component={Link} to={image.linkUrl}
     >
-      <Card style={{ width: image.width }}>
-        <ImageComponent src={image.src || ""} width={image.width}/>
-        <CardContent style={{ padding: "10px" }} >
-          <TitleComponent title={image.title} />
-        </CardContent>
+      <Card style={{ width: image.width, position: "relative" }}>
+        <CardActionArea>
+          <span style={{ position: "absolute", left: "5px", bottom: "5px" }}>
+            { image.componentInImage ? image.componentInImage : <></> }
+          </span>
+          <ImageComponent src={image.src || ""} width={image.width}/>
+        </CardActionArea>
       </Card>
     </Grid>
   )
 }
 
-export default ImageCardComponent;
+export default ImageCardComponent

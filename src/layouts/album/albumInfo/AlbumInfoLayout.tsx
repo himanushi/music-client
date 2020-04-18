@@ -1,10 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { Album, AlbumDocument } from '../../../graphql/types.d';
-import LoadingAlbumItemLayout from '../albumItem/LoadingAlbumItemLayout';
 import { Grid } from '@material-ui/core';
 import { RouteComponentProps } from 'react-router-dom';
-import AlbumItemLayout from '../albumItem/AlbumItemLayout';
 
 interface Props extends RouteComponentProps<{ id?: string }>{}
 
@@ -25,17 +23,18 @@ const AlbumInfoLayout = ({ match }:Props) => {
       if(data.album.appleMusicAlbum) {
         preview_content =
           <iframe
+            title={data.album.id}
             allow="autoplay *; encrypted-media *;"
             frameBorder="0"
             width="660"
             height="1000"
             style={{width:"100%", maxWidth:"660px", overflow:"hidden", background:"transparent"}}
-            sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
             src={`https://embed.music.apple.com/jp/album/game/${data.album.appleMusicAlbum.appleMusicId}?app=music`}>
           </iframe>
       } else if(data.album.itunesAlbum) {
         preview_content =
           <iframe
+            title={data.album.id}
             src={`https://tools.applemusic.com/embed/v1/album/${data.album.itunesAlbum.appleMusicId}?country=jp`}
             frameBorder="0"
             width="660"
@@ -44,6 +43,7 @@ const AlbumInfoLayout = ({ match }:Props) => {
       } else if(data.album.spotifyAlbum) {
         preview_content =
           <iframe
+            title={data.album.id}
             src={`https://open.spotify.com/embed/album/${data.album.spotifyAlbum.spotifyId}`}
             width="660"
             height="1000"

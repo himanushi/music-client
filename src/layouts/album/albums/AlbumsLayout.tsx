@@ -1,34 +1,42 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { AlbumsDocument, AlbumsQuery, Album } from '../../../graphql/types.d';
+import { AlbumsDocument, Album } from '../../../graphql/types.d';
 import AlbumItemLayout from '../albumItem/AlbumItemLayout';
-import LoadingAlbumItemLayout from '../albumItem/LoadingAlbumItemLayout';
 import { Grid } from '@material-ui/core';
+import PaginationComponent from '../../../components/pagination/paginationComponent';
 
 const AlbumsLayout = () => {
-  const { loading, error, data } = useQuery<{ albums: Album[] }>(
+  const limit = 50
+  const { error, data, fetchMore } = useQuery<{ items: Album[] }>(
     AlbumsDocument,
     {
       variables: {
         offset: 0,
-        limit: 1000,
-      }
+        limit: limit,
+        order: "POPULARITY",
+        asc: false
+      },
+      // 戻るボタンで戻っても最初から読み込みが発生しない
+      fetchPolicy: "cache-first"
     }
   )
 
   if (error) return <div>{error.message}</div>
 
-  let albums_content = [<></>]
+  let albums_content:JSX.Element[] = []
 
-  if (loading || !data) {
+  if (data) {
     albums_content =
-      [...Array(50)].map(
-        (_, i) => <LoadingAlbumItemLayout width="150px" key={i} />
-      )
-  } else {
-    albums_content =
-      data.albums.map(
-        (album, i) => <AlbumItemLayout album={album} width="150px" key={i} />
+      data.items.map(
+        (item, i) =>
+          <PaginationComponent
+            key={i}
+            component={<AlbumItemLayout album={item} width="150px" key={i} />}
+            no={i}
+            offset={data.items.length}
+            limit={limit}
+            fetchMore={fetchMore}
+          />
       )
   }
 

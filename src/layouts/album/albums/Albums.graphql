@@ -1,5 +1,5 @@
-query Albums($offset: Int, $limit: PositiveNumber) {
-  albums(offset: $offset, limit: $limit, order: RELEASE, asc: true) {
+query Albums($offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $asc: Boolean) {
+  items: albums(offset: $offset, limit: $limit, order: $order, asc: $asc) {
     id
     totalTracks
     name
