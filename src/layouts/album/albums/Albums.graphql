@@ -1,14 +1,6 @@
-query Albums($offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $asc: Boolean) {
-  items: albums(offset: $offset, limit: $limit, order: $order, asc: $asc) {
+query Albums($conditions: AlbumsConditions, $offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $asc: Boolean) {
+  items: albums(conditions: $conditions,offset: $offset, limit: $limit, order: $order, asc: $asc) {
     id
-    totalTracks
-    name
-    releaseDate
-    artworkL {
-      url
-      width
-      height
-    }
     artworkM {
       url
       width
@@ -16,15 +8,12 @@ query Albums($offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $a
     }
     appleMusicAlbum {
       id
-      appleMusicId
     }
     itunesAlbum {
       id
-      appleMusicId
     }
     spotifyAlbum {
       id
-      spotifyId
     }
   }
 }

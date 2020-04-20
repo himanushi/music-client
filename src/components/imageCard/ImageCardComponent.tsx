@@ -25,9 +25,9 @@ const ImageCardComponent = (image:Image) => {
     >
       <Card style={{ width: image.width, position: "relative" }}>
         <CardActionArea>
-          <span style={{ position: "absolute", left: "5px", bottom: "5px" }}>
+          <Grid container style={{ position: "absolute", left: "5px", bottom: "5px" }}>
             { image.componentInImage ? image.componentInImage : <></> }
-          </span>
+          </Grid>
           <ImageComponent src={image.src || ""} width={image.width}/>
         </CardActionArea>
       </Card>

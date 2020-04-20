@@ -1,16 +1,33 @@
 import React from 'react';
 import { Album } from '../../../graphql/types.d';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
-import ImageComponent from '../../../components/image/ImageComponent';
+import { Grid } from '@material-ui/core';
 
 const AlbumItemLayout = (
   { album, width }:
   { album: Album, width:string|number }
 ) => {
+  const style = {
+    width: "15px",
+    height: "15px",
+    borderRadius: "50%",
+    fontSize: "10px",
+    color: "#fff",
+    lineHeight: "15px",
+    textAlign: "center" as "center",
+    background: "#000",
+  }
+
   const serviceIcons = []
-  if(album.appleMusicAlbum) serviceIcons.push(<span>A</span>)
-  if(album.itunesAlbum) serviceIcons.push(<span>i</span>)
-  if(album.spotifyAlbum) serviceIcons.push(<span>S</span>)
+  if(album.appleMusicAlbum){
+    serviceIcons.push(<Grid item style={{...style, backgroundColor: "#ff2f56"}}>A</Grid>)
+  }
+  if(album.itunesAlbum){
+    serviceIcons.push(<Grid item style={{...style, backgroundColor: "#0070c9"}}>iT</Grid>)
+  }
+  if(album.spotifyAlbum){
+    serviceIcons.push(<Grid item style={{...style, backgroundColor: "#1DB954"}}>S</Grid>)
+  }
   const componentInImage = <>{serviceIcons}</>
 
   return (
@@ -24,4 +41,4 @@ const AlbumItemLayout = (
   )
 }
 
-export default AlbumItemLayout;
+export default AlbumItemLayout

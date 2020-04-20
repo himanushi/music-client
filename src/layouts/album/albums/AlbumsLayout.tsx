@@ -1,11 +1,13 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { AlbumsDocument, Album } from '../../../graphql/types.d';
+import { AlbumsDocument, Album, AlbumsConditions } from '../../../graphql/types.d';
 import AlbumItemLayout from '../albumItem/AlbumItemLayout';
 import { Grid } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
+import useConditions from '../../../hooks/useConditions';
 
 const AlbumsLayout = () => {
+  const conditions = useConditions<AlbumsConditions>()
   const limit = 50
   const { error, data, fetchMore } = useQuery<{ items: Album[] }>(
     AlbumsDocument,
@@ -13,8 +15,9 @@ const AlbumsLayout = () => {
       variables: {
         offset: 0,
         limit: limit,
-        order: "POPULARITY",
-        asc: false
+        order: "RELEASE",
+        asc: true,
+        ...{ conditions }
       },
       // 戻るボタンで戻っても最初から読み込みが発生しない
       fetchPolicy: "cache-first"
