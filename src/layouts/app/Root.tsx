@@ -5,12 +5,14 @@ import Bar from './Bar';
 import { ApolloProvider } from '@apollo/react-hoc';
 import client from './client';
 import AlbumInfoLayout from '../album/albumInfo/AlbumInfoLayout';
+import ArtistsLayout from '../artist/artists/ArtistsLayout';
 
 const RootStyleLayout = () =>
   <BrowserRouter>
     <ApolloProvider client={client}>
       <Bar />
       <Switch>
+        <Route exact path="/artists" component={ArtistsLayout} />
         <Route exact path="/albums" component={AlbumsLayout} />
         <Route path="/albums/:id" component={AlbumInfoLayout} />
       </Switch>
