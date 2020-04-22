@@ -6,15 +6,19 @@ import { ApolloProvider } from '@apollo/react-hoc';
 import client from './client';
 import AlbumInfoLayout from '../album/albumInfo/AlbumInfoLayout';
 import ArtistsLayout from '../artist/artists/ArtistsLayout';
+import ArtistInfoLayout from '../artist/artistInfo/ArtistInfoLayout';
 
 const RootStyleLayout = () =>
   <BrowserRouter>
     <ApolloProvider client={client}>
       <Bar />
       <Switch>
-        <Route exact path="/artists" component={ArtistsLayout} />
-        <Route exact path="/albums" component={AlbumsLayout} />
-        <Route path="/albums/:id" component={AlbumInfoLayout} />
+        <div style={{ padding: "0 1%" }}>
+          <Route exact path="/artists" component={ArtistsLayout} />
+          <Route exact path="/artists/:id" component={ArtistInfoLayout} />
+          <Route exact path="/albums" component={AlbumsLayout} />
+          <Route exact path="/albums/:id" component={AlbumInfoLayout} />
+        </div>
       </Switch>
     </ApolloProvider>
   </BrowserRouter>

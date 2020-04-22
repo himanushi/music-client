@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { Album, AlbumDocument } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
-import { RouteComponentProps, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const AlbumInfoLayout = () => {
   const { id } = useParams()
@@ -13,6 +13,13 @@ const AlbumInfoLayout = () => {
 
   let album_content = <></>
 
+  const resize = (event: React.SyntheticEvent<HTMLIFrameElement, Event>) => {
+    const target = event.target as HTMLIFrameElement
+    target.style.width  = document.documentElement.scrollWidth + 'px';
+    target.style.height = (document.documentElement.scrollHeight - 70) + 'px';
+    return event
+  }
+
   if (loading || !data) {
     // todo
   } else {
@@ -22,30 +29,33 @@ const AlbumInfoLayout = () => {
       if(data.album.appleMusicAlbum) {
         preview_content =
           <iframe
+            onLoad={event=>resize(event)}
             title={data.album.id}
             allow="autoplay *; encrypted-media *;"
             frameBorder="0"
             width="660"
-            height="1000"
-            style={{width:"100%", maxWidth:"660px", overflow:"hidden", background:"transparent"}}
+            height="500"
+            style={{overflow:"hidden", background:"transparent"}}
             src={`https://embed.music.apple.com/jp/album/game/${data.album.appleMusicAlbum.appleMusicId}?app=music`}>
           </iframe>
       } else if(data.album.itunesAlbum) {
         preview_content =
           <iframe
+            onLoad={event=>resize(event)}
             title={data.album.id}
             src={`https://tools.applemusic.com/embed/v1/album/${data.album.itunesAlbum.appleMusicId}?country=jp`}
             frameBorder="0"
             width="660"
-            height="1000">
+            height="500">
           </iframe>
       } else if(data.album.spotifyAlbum) {
         preview_content =
           <iframe
+            onLoad={event=>resize(event)}
             title={data.album.id}
             src={`https://open.spotify.com/embed/album/${data.album.spotifyAlbum.spotifyId}`}
             width="660"
-            height="1000"
+            height="500"
             frameBorder="0"
             allowTransparency={true}
             allow="encrypted-media">

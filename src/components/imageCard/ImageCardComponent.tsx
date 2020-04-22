@@ -10,28 +10,29 @@ interface Image {
   title: string
   src?: string | null
   width: string | number
-  linkUrl: string
+  linkUrl?: string
   componentInImage?: JSX.Element
 }
 
 const ImageCardComponent = (image:Image) => {
+  const link = image.linkUrl ? { component: Link, to: image.linkUrl } : {}
+
   return (
-    <Grid
-      container item xs
-      direction="row"
-      justify="center"
-      alignItems="center"
-      component={Link} to={image.linkUrl}
-    >
-      <Card style={{ width: image.width, position: "relative" }}>
-        <CardActionArea>
-          <Grid container style={{ position: "absolute", left: "5px", bottom: "5px" }}>
-            { image.componentInImage ? image.componentInImage : <></> }
-          </Grid>
-          <ImageComponent src={image.src || ""} width={image.width}/>
-        </CardActionArea>
-      </Card>
-    </Grid>
+    React.createElement(Grid, {
+      container: true, item: true, xs: true,
+      direction: "row", justify: "center", alignItems: "center",
+      ...link,
+      children: (
+        <Card style={{ width: image.width, position: "relative" }}>
+          <CardActionArea>
+            <Grid container style={{ position: "absolute", left: "5px", bottom: "5px" }}>
+              { image.componentInImage ? image.componentInImage : <></> }
+            </Grid>
+            <ImageComponent src={image.src || ""} width={image.width} title={image.title}/>
+          </CardActionArea>
+        </Card>
+      )
+    })
   )
 }
 

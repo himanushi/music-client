@@ -76,11 +76,24 @@ export type AppleMusicAlbum = {
   name: Scalars['String'];
 };
 
+/** Apple Music アーティスト */
+export type AppleMusicArtist = {
+   __typename?: 'AppleMusicArtist';
+  /** Apple Music ID */
+  appleMusicId: Scalars['String'];
+  /** ID */
+  id: Scalars['TTID'];
+  /** タイトル */
+  name: Scalars['String'];
+};
+
 /** アーティスト */
 export type Artist = {
    __typename?: 'Artist';
   /** 関連アルバム */
   albums?: Maybe<Array<Album>>;
+  /** Apple Music アルバム */
+  appleMusicArtists?: Maybe<Array<AppleMusicArtist>>;
   /** 大型アートワーク */
   artworkL: Artwork;
   /** 中型アートワーク */
@@ -93,6 +106,10 @@ export type Artist = {
   name: Scalars['String'];
   /** 発売日 */
   releaseDate: Scalars['ISO8601DateTime'];
+  /** Spotify アルバム */
+  spotifyArtists?: Maybe<Array<AppleMusicAlbum>>;
+  /** 関連曲 */
+  tracks?: Maybe<Array<Track>>;
 };
 
 export enum ArtistsQueryOrder {
@@ -126,6 +143,8 @@ export type Query = {
   album?: Maybe<Album>;
   /** アルバム一覧取得 */
   albums: Array<Album>;
+  /** アーティスト取得 */
+  artist?: Maybe<Artist>;
   /** アーティスト一覧取得 */
   artists: Array<Artist>;
 };
@@ -142,6 +161,11 @@ export type QueryAlbumsArgs = {
   asc?: Maybe<Scalars['Boolean']>;
   conditions?: Maybe<AlbumsConditions>;
   order: AlbumsQueryOrder;
+};
+
+
+export type QueryArtistArgs = {
+  id: Scalars['TTID'];
 };
 
 
@@ -231,6 +255,29 @@ export type AlbumsQuery = (
       { __typename?: 'SpotifyAlbum' }
       & Pick<SpotifyAlbum, 'id'>
     )> }
+  )> }
+);
+
+export type ArtistQueryVariables = {
+  id: Scalars['TTID'];
+};
+
+
+export type ArtistQuery = (
+  { __typename?: 'Query' }
+  & { artist?: Maybe<(
+    { __typename?: 'Artist' }
+    & Pick<Artist, 'id' | 'name'>
+    & { appleMusicArtists?: Maybe<Array<(
+      { __typename?: 'AppleMusicArtist' }
+      & Pick<AppleMusicArtist, 'id'>
+    )>>, spotifyArtists?: Maybe<Array<(
+      { __typename?: 'AppleMusicAlbum' }
+      & Pick<AppleMusicAlbum, 'id'>
+    )>>, artworkL: (
+      { __typename?: 'Artwork' }
+      & Pick<Artwork, 'url' | 'width' | 'height'>
+    ) }
   )> }
 );
 
@@ -351,6 +398,45 @@ export function withAlbums<TProps, TChildProps = {}, TDataName extends string = 
     });
 };
 export type AlbumsQueryResult = ApolloReactCommon.QueryResult<AlbumsQuery, AlbumsQueryVariables>;
+export const ArtistDocument = gql`
+    query Artist($id: TTID!) {
+  artist(id: $id) {
+    id
+    name
+    appleMusicArtists {
+      id
+    }
+    spotifyArtists {
+      id
+    }
+    artworkL {
+      url
+      width
+      height
+    }
+  }
+}
+    `;
+export type ArtistComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<ArtistQuery, ArtistQueryVariables>, 'query'> & ({ variables: ArtistQueryVariables; skip?: boolean; } | { skip: boolean; });
+
+    export const ArtistComponent = (props: ArtistComponentProps) => (
+      <ApolloReactComponents.Query<ArtistQuery, ArtistQueryVariables> query={ArtistDocument} {...props} />
+    );
+    
+export type ArtistProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<ArtistQuery, ArtistQueryVariables>
+    } & TChildProps;
+export function withArtist<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  ArtistQuery,
+  ArtistQueryVariables,
+  ArtistProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, ArtistQuery, ArtistQueryVariables, ArtistProps<TChildProps, TDataName>>(ArtistDocument, {
+      alias: 'artist',
+      ...operationOptions
+    });
+};
+export type ArtistQueryResult = ApolloReactCommon.QueryResult<ArtistQuery, ArtistQueryVariables>;
 export const ArtistsDocument = gql`
     query Artists($offset: Int, $limit: PositiveNumber, $order: ArtistsQueryOrder!, $asc: Boolean) {
   items: artists(offset: $offset, limit: $limit, order: $order, asc: $asc) {

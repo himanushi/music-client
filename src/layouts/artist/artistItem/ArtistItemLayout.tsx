@@ -13,7 +13,7 @@ const ArtistItemLayout = (
       title={artist.name}
       src={artist.artworkM.url}
       width={width}
-      linkUrl={`/albums?q=${artist.id}`}
+      linkUrl={`/artists/${artist.id}?q=${artist.id}`}
       componentInImage={componentInImage}
     />
   )
