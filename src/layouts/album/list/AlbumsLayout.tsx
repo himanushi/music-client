@@ -1,20 +1,23 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { Artist, ArtistsDocument } from '../../../graphql/types.d';
+import { AlbumsDocument, Album, AlbumsConditions } from '../../../graphql/types.d';
+import AlbumItemLayout from '../item/AlbumItemLayout';
 import { Grid } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
-import ArtistItemLayout from '../artistItem/ArtistItemLayout';
+import useConditions from '../../../hooks/useConditions';
 
-const ArtistsLayout = () => {
-  const limit = 30
-  const { error, data, fetchMore } = useQuery<{ items: Artist[] }>(
-    ArtistsDocument,
+const AlbumsLayout = () => {
+  const conditions = useConditions<AlbumsConditions>()
+  const limit = 50
+  const { error, data, fetchMore } = useQuery<{ items: Album[] }>(
+    AlbumsDocument,
     {
       variables: {
         offset: 0,
         limit: limit,
-        order: "POPULARITY",
-        asc: false
+        order: "RELEASE",
+        asc: true,
+        ...{ conditions }
       },
       // 戻るボタンで戻っても最初から読み込みが発生しない
       fetchPolicy: "cache-first"
@@ -23,15 +26,15 @@ const ArtistsLayout = () => {
 
   if (error) return <div>{error.message}</div>
 
-  let content:JSX.Element[] = []
+  let albums_content:JSX.Element[] = []
 
   if (data) {
-    content =
+    albums_content =
       data.items.map(
         (item, i) =>
           <PaginationComponent
             key={i}
-            component={<ArtistItemLayout artist={item} width="150px" key={i} />}
+            component={<AlbumItemLayout album={item} width="150px" key={i} />}
             no={i}
             offset={data.items.length}
             limit={limit}
@@ -48,9 +51,9 @@ const ArtistsLayout = () => {
       justify="center"
       alignItems="center"
     >
-      {content}
+      {albums_content}
     </Grid>
   )
 }
 
-export default ArtistsLayout
+export default AlbumsLayout;

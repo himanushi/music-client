@@ -1,12 +1,12 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter } from "react-router-dom"
-import AlbumsLayout from '../album/albums/AlbumsLayout';
+import AlbumsLayout from '../album/list/AlbumsLayout';
 import Bar from './Bar';
 import { ApolloProvider } from '@apollo/react-hoc';
 import client from './client';
-import AlbumInfoLayout from '../album/albumInfo/AlbumInfoLayout';
-import ArtistsLayout from '../artist/artists/ArtistsLayout';
-import ArtistInfoLayout from '../artist/artistInfo/ArtistInfoLayout';
+import AlbumInfoLayout from '../album/info/AlbumInfoLayout';
+import ArtistsLayout from '../artist/list/ArtistsLayout';
+import ArtistInfoLayout from '../artist/info/ArtistInfoLayout';
 
 const RootStyleLayout = () =>
   <BrowserRouter>

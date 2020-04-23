@@ -16,7 +16,7 @@ export type Scalars = {
   ISO8601DateTime: any;
   /** 正の整数 */
   PositiveNumber: any;
-  /** Table id and hex Timestamp and hex ID */
+  /** Table id, hex Timestamp, ID */
   TTID: any;
 };
 
@@ -83,7 +83,7 @@ export type AppleMusicArtist = {
   appleMusicId: Scalars['String'];
   /** ID */
   id: Scalars['TTID'];
-  /** タイトル */
+  /** 名前 */
   name: Scalars['String'];
 };
 
@@ -92,7 +92,7 @@ export type Artist = {
    __typename?: 'Artist';
   /** 関連アルバム */
   albums?: Maybe<Array<Album>>;
-  /** Apple Music アルバム */
+  /** Apple Music アーティスト */
   appleMusicArtists?: Maybe<Array<AppleMusicArtist>>;
   /** 大型アートワーク */
   artworkL: Artwork;
@@ -106,8 +106,8 @@ export type Artist = {
   name: Scalars['String'];
   /** 発売日 */
   releaseDate: Scalars['ISO8601DateTime'];
-  /** Spotify アルバム */
-  spotifyArtists?: Maybe<Array<AppleMusicAlbum>>;
+  /** Spotify アーティスト */
+  spotifyArtists?: Maybe<Array<SpotifyArtist>>;
   /** 関連曲 */
   tracks?: Maybe<Array<Track>>;
 };
@@ -182,6 +182,17 @@ export type SpotifyAlbum = {
   /** ID */
   id: Scalars['TTID'];
   /** タイトル */
+  name: Scalars['String'];
+  /** Spotify ID */
+  spotifyId: Scalars['String'];
+};
+
+/** Spotify アーティスト */
+export type SpotifyArtist = {
+   __typename?: 'SpotifyArtist';
+  /** ID */
+  id: Scalars['TTID'];
+  /** 名前 */
   name: Scalars['String'];
   /** Spotify ID */
   spotifyId: Scalars['String'];
@@ -272,8 +283,8 @@ export type ArtistQuery = (
       { __typename?: 'AppleMusicArtist' }
       & Pick<AppleMusicArtist, 'id'>
     )>>, spotifyArtists?: Maybe<Array<(
-      { __typename?: 'AppleMusicAlbum' }
-      & Pick<AppleMusicAlbum, 'id'>
+      { __typename?: 'SpotifyArtist' }
+      & Pick<SpotifyArtist, 'id'>
     )>>, artworkL: (
       { __typename?: 'Artwork' }
       & Pick<Artwork, 'url' | 'width' | 'height'>

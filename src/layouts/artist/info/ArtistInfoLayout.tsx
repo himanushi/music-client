@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { Artist, ArtistDocument } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import AlbumsLayout from '../../album/albums/AlbumsLayout';
+import AlbumsLayout from '../../album/list/AlbumsLayout';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 
 const ArtistInfoLayout = () => {
