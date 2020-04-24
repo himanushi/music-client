@@ -13,12 +13,10 @@ const RootStyleLayout = () =>
     <ApolloProvider client={client}>
       <Bar />
       <Switch>
-        <div style={{ padding: "0 1%" }}>
-          <Route exact path="/artists" component={ArtistsLayout} />
-          <Route exact path="/artists/:id" component={ArtistInfoLayout} />
-          <Route exact path="/albums" component={AlbumsLayout} />
-          <Route exact path="/albums/:id" component={AlbumInfoLayout} />
-        </div>
+        <Route exact path="/artists" component={ArtistsLayout} />
+        <Route exact path="/artists/:id" component={ArtistInfoLayout} />
+        <Route exact path="/albums" component={AlbumsLayout} />
+        <Route exact path="/albums/:id" component={AlbumInfoLayout} />
       </Switch>
     </ApolloProvider>
   </BrowserRouter>
