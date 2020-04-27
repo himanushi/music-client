@@ -7,7 +7,7 @@ const headersLink = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
-const httpLink = new HttpLink({ uri: `http://localhost:3000/graphql` })
+const httpLink = new HttpLink({ uri: `http://localhost:3000/graphql`, credentials : 'include' })
 const link = ApolloLink.from([headersLink, httpLink])
 
 export default new ApolloClient({
