@@ -7,13 +7,7 @@ const headersLink = new ApolloLink((operation, forward) => {
   return forward(operation)
 })
 
-let endpoint = 'http://0.0.0.0:3000/graphql'
-
-if(process.env.NODE_ENV === 'production') {
-  endpoint = 'https://music-server.himacloud.app/graphql'
-}
-
-const httpLink = new HttpLink({ uri: endpoint })
+const httpLink = new HttpLink({ uri: `http://localhost:3000/graphql` })
 const link = ApolloLink.from([headersLink, httpLink])
 
 export default new ApolloClient({
