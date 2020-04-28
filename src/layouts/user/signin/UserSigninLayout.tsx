@@ -13,8 +13,8 @@ const UserSigninLayout = () => {
   }
   const [signin] = useSigninMutation({
     update: (_, response:SigninResponse) => {
-      if (response.data.signin.errors) {
-        setNotification(<Alert severity="error">{response.data.signin.errors}</Alert>)
+      if (response.data.signin.error) {
+        setNotification(<Alert severity="error">{response.data.signin.error}</Alert>)
       } else {
         setNotification(<Alert severity="success">ログインしました</Alert>)
       }

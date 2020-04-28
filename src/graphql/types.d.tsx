@@ -202,7 +202,7 @@ export type SigninPayload = {
    __typename?: 'SigninPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
-  errors?: Maybe<Scalars['String']>;
+  error?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -254,7 +254,7 @@ export type UpdateUserPayload = {
    __typename?: 'UpdateUserPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
-  errors?: Maybe<Scalars['String']>;
+  error?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -384,7 +384,7 @@ export type SigninMutation = (
   { __typename?: 'Mutation' }
   & { signin?: Maybe<(
     { __typename?: 'SigninPayload' }
-    & Pick<SigninPayload, 'errors'>
+    & Pick<SigninPayload, 'error'>
     & { user?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'username' | 'name'>
@@ -602,7 +602,7 @@ export const SigninDocument = gql`
       username
       name
     }
-    errors
+    error
   }
 }
     `;

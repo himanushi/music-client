@@ -8,6 +8,6 @@ mutation Signin($username: String, $password: String){
       username
       name
     }
-    errors
+    error
   }
 }
