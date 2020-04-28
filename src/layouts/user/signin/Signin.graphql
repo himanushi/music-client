@@ -1,0 +1,13 @@
+mutation Signin($username: String, $password: String){
+  signin(input: {
+    username: $username,
+    password: $password,
+  }) {
+    user {
+      id
+      username
+      name
+    }
+    errors
+  }
+}
