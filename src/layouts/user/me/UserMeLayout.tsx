@@ -14,7 +14,7 @@ const UserMeLayout = () => {
   const { data } = useMeQuery()
   if(name === "" && username === "" && data && data.me){
     setName(data.me.name)
-    setUsername(data.me.name)
+    setUsername(data.me.username)
   }
   // TODO: 適当すぎるので直すこと
   let role = [<></>]
