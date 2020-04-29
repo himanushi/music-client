@@ -1,8 +1,5 @@
-mutation Signin($username: String, $password: String){
-  signin(input: {
-    username: $username,
-    password: $password,
-  }) {
+mutation Signin($input:SigninInput!){
+  signin(input: $input) {
     user {
       id
       username

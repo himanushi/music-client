@@ -1,0 +1,13 @@
+query Me {
+  me {
+    id
+    name
+    username
+    role {
+      id
+      name
+      description
+      allowedActions
+    }
+  }
+}

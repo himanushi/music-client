@@ -8,6 +8,7 @@ import AlbumInfoLayout from '../album/info/AlbumInfoLayout';
 import ArtistsLayout from '../artist/list/ArtistsLayout';
 import ArtistInfoLayout from '../artist/info/ArtistInfoLayout';
 import UserSigninLayout from '../user/signin/UserSigninLayout';
+import UserMeLayout from '../user/me/UserMeLayout';
 
 const RootStyleLayout = () =>
   <BrowserRouter>
@@ -19,6 +20,7 @@ const RootStyleLayout = () =>
         <Route exact path="/albums" component={AlbumsLayout} />
         <Route exact path="/albums/:id" component={AlbumInfoLayout} />
         <Route exact path="/signin" component={UserSigninLayout} />
+        <Route exact path="/me" component={UserMeLayout} />
       </Switch>
     </ApolloProvider>
   </BrowserRouter>

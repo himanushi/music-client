@@ -19,7 +19,7 @@ const UserSigninLayout = () => {
         setNotification(<Alert severity="success">ログインしました</Alert>)
       }
     },
-    variables: { username, password },
+    variables: { input: { username, password } },
   })
 
   return (
