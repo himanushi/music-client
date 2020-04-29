@@ -1,13 +1,11 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { Album, AlbumDocument } from '../../../graphql/types.d';
+import { Album, useAlbumQuery } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 
 const AlbumInfoLayout = () => {
   const { id } = useParams()
-  const { loading, error, data } =
-    useQuery<{ album: Album | null }>(AlbumDocument,{ variables: { id: id } });
+  const { loading, error, data } = useAlbumQuery({ variables: { id: id } })
 
   if (error) return <div>{error.message}</div>
 

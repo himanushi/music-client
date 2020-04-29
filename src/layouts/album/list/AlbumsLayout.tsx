@@ -1,6 +1,5 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { AlbumsDocument, Album, AlbumsConditions } from '../../../graphql/types.d';
+import { useAlbumsQuery, Album, AlbumsConditions, AlbumsQueryOrder } from '../../../graphql/types.d';
 import AlbumItemLayout from '../item/AlbumItemLayout';
 import { Grid } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
@@ -9,13 +8,12 @@ import useConditions from '../../../hooks/useConditions';
 const AlbumsLayout = () => {
   const conditions = useConditions<AlbumsConditions>()
   const limit = 50
-  const { error, data, fetchMore } = useQuery<{ items: Album[] }>(
-    AlbumsDocument,
+  const { error, data, fetchMore } = useAlbumsQuery(
     {
       variables: {
         offset: 0,
         limit: limit,
-        order: "RELEASE",
+        order: AlbumsQueryOrder.Release,
         asc: true,
         ...{ conditions }
       },
@@ -34,7 +32,7 @@ const AlbumsLayout = () => {
         (item, i) =>
           <PaginationComponent
             key={i}
-            component={<AlbumItemLayout album={item} width="150px" key={i} />}
+            component={<AlbumItemLayout album={item as Album} width="150px" key={i} />}
             no={i}
             offset={data.items.length}
             limit={limit}
