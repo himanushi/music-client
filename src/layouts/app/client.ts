@@ -21,5 +21,5 @@ const link = ApolloLink.from([headersLink, httpLink, errorLink])
 
 export default new ApolloClient({
   link,
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({ dataIdFromObject: object => object.id })
 })
