@@ -1,10 +1,5 @@
 mutation Signin($input:SigninInput!){
   signin(input: $input) {
-    user {
-      id
-      username
-      name
-    }
     error
   }
 }

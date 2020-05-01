@@ -24,13 +24,13 @@ export default function useConditions<T>() {
   // ID
   getUniqueValues("q").forEach((condition_id) => {
     switch( true ){
-      case /^arst/.test(condition_id):
+      case /^art/.test(condition_id):
         conditions = _.merge(conditions, { artists: { id: [condition_id] } })
         break;
-      case /^albm/.test(condition_id):
+      case /^abm/.test(condition_id):
         conditions = _.merge(conditions, { albums: { id: [condition_id] } })
         break;
-      case /^trak/.test(condition_id):
+      case /^trk/.test(condition_id):
         conditions = _.merge(conditions, { tracks: { id: [condition_id] } })
         break;
     }

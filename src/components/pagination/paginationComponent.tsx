@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Waypoint } from 'react-waypoint';
 
+// TODO: hasNext とかないのでページ遷移によって再度取得してしまう？
 const PaginationComponent = (
   { component, no, offset, limit, fetchMore }:
   { component:JSX.Element, no:number, offset:number, limit:number, fetchMore:any }

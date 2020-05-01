@@ -2,12 +2,6 @@ query Artist($id: TTID!){
   artist(id: $id) {
     id
     name
-    appleMusicArtists {
-      id
-    }
-    spotifyArtists {
-      id
-    }
     artworkL {
       url
       width

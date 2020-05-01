@@ -368,13 +368,7 @@ export type ArtistQuery = (
   & { artist?: Maybe<(
     { __typename?: 'Artist' }
     & Pick<Artist, 'id' | 'name'>
-    & { appleMusicArtists?: Maybe<Array<(
-      { __typename?: 'AppleMusicArtist' }
-      & Pick<AppleMusicArtist, 'id'>
-    )>>, spotifyArtists?: Maybe<Array<(
-      { __typename?: 'SpotifyArtist' }
-      & Pick<SpotifyArtist, 'id'>
-    )>>, artworkL: (
+    & { artworkL: (
       { __typename?: 'Artwork' }
       & Pick<Artwork, 'url' | 'width' | 'height'>
     ) }
@@ -394,10 +388,7 @@ export type ArtistsQuery = (
   & { items: Array<(
     { __typename?: 'Artist' }
     & Pick<Artist, 'id' | 'name'>
-    & { artworkL: (
-      { __typename?: 'Artwork' }
-      & Pick<Artwork, 'url' | 'width' | 'height'>
-    ), artworkM: (
+    & { artworkM: (
       { __typename?: 'Artwork' }
       & Pick<Artwork, 'url' | 'width' | 'height'>
     ) }
@@ -446,10 +437,6 @@ export type SigninMutation = (
   & { signin?: Maybe<(
     { __typename?: 'SigninPayload' }
     & Pick<SigninPayload, 'error'>
-    & { user?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'name'>
-    )> }
   )> }
 );
 
@@ -568,12 +555,6 @@ export const ArtistDocument = gql`
   artist(id: $id) {
     id
     name
-    appleMusicArtists {
-      id
-    }
-    spotifyArtists {
-      id
-    }
     artworkL {
       url
       width
@@ -613,11 +594,6 @@ export const ArtistsDocument = gql`
   items: artists(offset: $offset, limit: $limit, order: $order, asc: $asc) {
     id
     name
-    artworkL {
-      url
-      width
-      height
-    }
     artworkM {
       url
       width
@@ -735,11 +711,6 @@ export type UpdateMeMutationOptions = ApolloReactCommon.BaseMutationOptions<Upda
 export const SigninDocument = gql`
     mutation Signin($input: SigninInput!) {
   signin(input: $input) {
-    user {
-      id
-      username
-      name
-    }
     error
   }
 }

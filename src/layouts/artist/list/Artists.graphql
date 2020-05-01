@@ -2,11 +2,6 @@ query Artists($offset: Int, $limit: PositiveNumber, $order: ArtistsQueryOrder!, 
   items: artists(offset: $offset, limit: $limit, order: $order,  asc: $asc) {
     id
     name
-    artworkL {
-      url
-      width
-      height
-    }
     artworkM {
       url
       width
