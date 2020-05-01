@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { Grid, FormControl, InputLabel, Input, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
-import { useMeQuery, useUpdateMeMutation, UpdateMePayload } from '../../../graphql/types.d';
+import { useMeQuery, useUpdateMeMutation, UpdateMePayload, UpdateMeInput } from '../../../graphql/types.d';
 
 const UserMeLayout = () => {
   const [notification, setNotification] = useState(<></>)
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [input, setInput] = useState({})
+  const [oldPassword, setOldPassword] = useState("")
+  const [newPassword, setNewPassword] = useState("")
+  const [input, setInput] = useState<UpdateMeInput>({ oldPassword })
 
   // カレントユーザーデフォルト値
   const { data } = useMeQuery()
@@ -70,10 +71,19 @@ const UserMeLayout = () => {
         </div>
         <div>
           <FormControl>
-            <InputLabel>パスワード再設定</InputLabel>
-            <Input value={password} onChange={e => {
-              setPassword(e.target.value || "")
-              setInput({ ...input, password: (e.target.value || "") })
+            <InputLabel>新しいパスワード</InputLabel>
+            <Input value={newPassword} onChange={e => {
+              setNewPassword(e.target.value || "")
+              setInput({ ...input, newPassword: (e.target.value || "") })
+            }} type="password" />
+          </FormControl>
+        </div>
+        <div>
+          <FormControl required={true}>
+            <InputLabel>古いパスワード</InputLabel>
+            <Input value={oldPassword} onChange={e => {
+              setOldPassword(e.target.value || "")
+              setInput({ ...input, oldPassword: (e.target.value || "") })
             }} type="password" />
           </FormControl>
         </div>
