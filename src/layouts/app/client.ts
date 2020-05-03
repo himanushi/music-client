@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { onError } from "apollo-link-error"
 
-const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI, credentials: 'same-origin' })
+const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_URI, credentials: 'include' })
 const headersLink = new ApolloLink((operation, forward) => forward(operation))
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
