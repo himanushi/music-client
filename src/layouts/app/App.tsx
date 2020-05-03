@@ -6,4 +6,4 @@ const App = () => <RootStyleLayout />
 
 export default App
 
-serviceWorker.register()
+serviceWorker.unregister()
