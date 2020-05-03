@@ -18,10 +18,10 @@ const UserMeLayout = () => {
     setUsername(data.me.username)
   }
   // TODO: 適当すぎるので直すこと
-  let role = [<></>]
+  let role:JSX.Element[] = []
   if(data && data.me){
-    role = data.me.role.allowedActions.map((action) => {
-        return <p>{action}</p>
+    role = data.me.role.allowedActions.map((action, i) => {
+        return <p key={i}>{action}</p>
       }
     )
   }
