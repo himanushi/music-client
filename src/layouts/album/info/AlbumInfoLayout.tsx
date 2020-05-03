@@ -1,5 +1,5 @@
 import React from 'react';
-import { Album, useAlbumQuery } from '../../../graphql/types.d';
+import { useAlbumQuery } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import ArtistsLayout from '../../artist/list/ArtistsLayout';

@@ -32,7 +32,7 @@ const AlbumsLayout = () => {
         (item, i) =>
           <PaginationComponent
             key={i}
-            component={<AlbumItemLayout album={item as Album} width="150px" key={i} />}
+            component={<AlbumItemLayout album={item as Album} width="150px" />}
             no={i}
             offset={data.items.length}
             limit={limit}

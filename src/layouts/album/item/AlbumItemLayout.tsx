@@ -20,13 +20,13 @@ const AlbumItemLayout = (
 
   const serviceIcons = []
   if(album.appleMusicAlbum){
-    serviceIcons.push(<Grid item style={{...style, backgroundColor: "#ff2f56"}}>A</Grid>)
+    serviceIcons.push(<Grid key={1} item style={{...style, backgroundColor: "#ff2f56"}}>A</Grid>)
   }
   if(album.itunesAlbum){
-    serviceIcons.push(<Grid item style={{...style, backgroundColor: "#0070c9"}}>iT</Grid>)
+    serviceIcons.push(<Grid key={2} item style={{...style, backgroundColor: "#0070c9"}}>iT</Grid>)
   }
   if(album.spotifyAlbum){
-    serviceIcons.push(<Grid item style={{...style, backgroundColor: "#1DB954"}}>S</Grid>)
+    serviceIcons.push(<Grid key={3} item style={{...style, backgroundColor: "#1DB954"}}>S</Grid>)
   }
   const componentInImage = <>{serviceIcons}</>
 

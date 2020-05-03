@@ -1,8 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import ImageComponent from '../image/ImageComponent'
-import TitleComponent from '../title/TitleComponent';
 import { Grid, CardActionArea } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
