@@ -1,11 +1,13 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { Artist, ArtistsDocument } from '../../../graphql/types.d';
+import { Artist, ArtistsDocument, ArtistsConditions } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
 import ArtistItemLayout from '../item/ArtistItemLayout';
+import useConditions from '../../../hooks/useConditions';
 
 const ArtistsLayout = () => {
+  const conditions = useConditions<ArtistsConditions>()
   const limit = 30
   const { error, data, fetchMore } = useQuery<{ items: Artist[] }>(
     ArtistsDocument,
@@ -14,7 +16,8 @@ const ArtistsLayout = () => {
         offset: 0,
         limit: limit,
         order: "POPULARITY",
-        asc: false
+        asc: false,
+        ...{ conditions }
       },
       // 戻るボタンで戻っても最初から読み込みが発生しない
       fetchPolicy: "cache-first"

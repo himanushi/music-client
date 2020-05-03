@@ -36,5 +36,20 @@ export default function useConditions<T>() {
     }
   })
 
+  // ステータス
+  getUniqueValues("s").forEach((status) => {
+    switch( status ){
+      case "p":
+        conditions = _.merge(conditions, { status: ["PENDING"] })
+        break;
+      case "a":
+        conditions = _.merge(conditions, { status: ["ACTIVE"] })
+        break;
+      case "i":
+        conditions = _.merge(conditions, { status: ["IGNORE"] })
+        break;
+    }
+  })
+
   return conditions as T
 }

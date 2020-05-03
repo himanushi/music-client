@@ -15,6 +15,7 @@ const RootStyleLayout = () =>
     <ApolloProvider client={client}>
       <Bar />
       <Switch>
+        <Route exact path="/" component={AlbumsLayout} />
         <Route exact path="/artists" component={ArtistsLayout} />
         <Route exact path="/artists/:id" component={ArtistInfoLayout} />
         <Route exact path="/albums" component={AlbumsLayout} />

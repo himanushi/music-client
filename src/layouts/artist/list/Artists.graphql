@@ -1,5 +1,5 @@
-query Artists($offset: Int, $limit: PositiveNumber, $order: ArtistsQueryOrder!, $asc: Boolean) {
-  items: artists(offset: $offset, limit: $limit, order: $order,  asc: $asc) {
+query Artists($conditions: ArtistsConditions, $offset: Int, $limit: PositiveNumber, $order: ArtistsQueryOrder!, $asc: Boolean) {
+  items: artists(conditions: $conditions, offset: $offset, limit: $limit, order: $order,  asc: $asc) {
     id
     name
     artworkM {

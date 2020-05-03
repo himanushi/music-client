@@ -35,7 +35,7 @@ const AlbumItemLayout = (
       title={album.name}
       src={album.artworkM.url}
       width={width}
-      linkUrl={`/albums/${album.id}`}
+      linkUrl={`/albums/${album.id}?q=${album.id}`}
       componentInImage={componentInImage}
     />
   )
