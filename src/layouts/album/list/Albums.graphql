@@ -1,6 +1,7 @@
 query Albums($conditions: AlbumsConditions, $offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $asc: Boolean) {
   items: albums(conditions: $conditions,offset: $offset, limit: $limit, order: $order, asc: $asc) {
     id
+    name
     artworkM {
       url
       width
