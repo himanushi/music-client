@@ -9,11 +9,6 @@ query Album($id: TTID!) {
       width
       height
     }
-    artworkM {
-      url
-      width
-      height
-    }
     appleMusicAlbum {
       id
       appleMusicId
@@ -25,6 +20,14 @@ query Album($id: TTID!) {
     spotifyAlbum {
       id
       spotifyId
+    }
+    tracks {
+      isrc
+      name
+      discNumber
+      trackNumber
+      durationMs
+      previewUrl
     }
   }
 }

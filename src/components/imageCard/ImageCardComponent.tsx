@@ -5,7 +5,7 @@ import { Grid, CardActionArea, CardContent, Typography } from '@material-ui/core
 import { Link } from 'react-router-dom';
 
 interface Image {
-  title: string
+  title?: string
   src?: string | null
   width: string | number
   linkUrl?: string
@@ -29,15 +29,19 @@ const ImageCardComponent = (image:Image) => {
             </Grid>
             <ImageComponent src={image.src || ""} width={image.width} title={image.title}/>
           </CardActionArea>
-          <CardContent style={{ padding: "5px 5px" }}>
-            <Typography style={{
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap"
-            }} variant="caption" color="textSecondary" component="p">
-              {image.title}
-            </Typography>
-          </CardContent>
+          { image.title ?
+              <CardContent style={{ padding: "5px 5px" }}>
+                <Typography style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap"
+                }} variant="caption" color="textSecondary" component="p">
+                  {image.title}
+                </Typography>
+              </CardContent>
+              :
+              <></>
+          }
         </Card>
       )
     })
