@@ -1,6 +1,9 @@
-import React from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, IconButton } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
+import PreviewPlayerControllerComponent from './PreviewPlayerControllerComponent';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import PreviewPlayer from './PreviewPlayer';
 
 interface Track {
   isrc:string
@@ -25,7 +28,7 @@ interface Album {
   tracks:Track[]
 }
 
-const PreviewPlayer = ({ album }:{ album:Album }) => {
+const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const timeConversion = (ms:number) => {
     const seconds = parseInt((ms / 1000).toFixed(0))
     const minutes = parseInt((ms / (1000 * 60)).toFixed(0))
@@ -43,10 +46,29 @@ const PreviewPlayer = ({ album }:{ album:Album }) => {
     }
   }
 
+  // アルバム情報
   const reducer = (accumulator:number, currentValue:number) => accumulator + currentValue
   const ms = album.tracks.map(track => track.durationMs).reduce(reducer)
-  const [{ value: year },{ value: literal }] = new Intl.DateTimeFormat("jp", { year: 'numeric' }).formatToParts(album.releaseDate)
+  const [{ value: year },{ value: literal }] =
+    new Intl.DateTimeFormat("jp", { year: 'numeric' }).formatToParts(album.releaseDate)
   const releaseYear = `${year}${literal}`
+
+  // プレイヤー
+  const [player, setPlayer] = useState<PreviewPlayer|null>(null);
+
+  const play = (no:number) => {
+    player?.play(no)
+  }
+
+  useEffect(() => {
+    if(!player) {
+      setPlayer(new PreviewPlayer({ urls: album.tracks.map(track => track.previewUrl) }))
+    }
+
+    return () => {
+      player?.stop()
+    }
+  }, [player])
 
   return (
     <TableContainer component={Paper}>
@@ -68,6 +90,11 @@ const PreviewPlayer = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
+            <TableCell colSpan={3}>
+              <PreviewPlayerControllerComponent player={player} />
+            </TableCell>
+          </TableRow>
+          <TableRow>
             <TableCell></TableCell>
             <TableCell>No.</TableCell>
             <TableCell>タイトル</TableCell>
@@ -76,7 +103,11 @@ const PreviewPlayer = ({ album }:{ album:Album }) => {
         <TableBody>
           {album.tracks.map((track, i) => (
             <TableRow key={i}>
-              <TableCell>再生</TableCell>
+              <TableCell>
+                <IconButton onClick={() => play(i)} component="span">
+                  <PlayArrowIcon />
+                </IconButton>
+              </TableCell>
               <TableCell>{track.trackNumber}</TableCell>
               <TableCell>{track.name}</TableCell>
             </TableRow>
@@ -87,4 +118,4 @@ const PreviewPlayer = ({ album }:{ album:Album }) => {
   )
 }
 
-export default PreviewPlayer
+export default PreviewPlayerComponent

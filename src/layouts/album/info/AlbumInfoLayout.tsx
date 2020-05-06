@@ -3,7 +3,7 @@ import { useAlbumQuery } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import ArtistsLayout from '../../artist/list/ArtistsLayout';
-import PreviewPlayer from '../../../components/player/PreviewPlayer';
+import PreviewPlayerComponent from '../../../components/player/PreviewPlayerComponent';
 
 const AlbumInfoLayout = () => {
   const { id } = useParams()
@@ -14,7 +14,7 @@ const AlbumInfoLayout = () => {
   let content = <></>
 
   if (!loading && data && data.album) {
-    content = <PreviewPlayer
+    content = <PreviewPlayerComponent
       album={{
         title: data.album.name,
         releaseDate: new Date(data.album.releaseDate),
