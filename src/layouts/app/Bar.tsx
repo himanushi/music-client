@@ -39,13 +39,11 @@ const Bar = () =>
             <Grid item>
               <IconButton component={Link} to={`/artists`} edge="start" size="small" color="inherit" aria-label="menu">
                 <PersonIcon />
-                アーティスト
               </IconButton>
             </Grid>
             <Grid item>
               <IconButton component={Link} to={`/albums`} edge="start" size="small" color="inherit" aria-label="menu">
                 <AlbumIcon />
-                アルバム
               </IconButton>
             </Grid>
           </Grid>
