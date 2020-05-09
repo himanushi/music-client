@@ -14,7 +14,7 @@ const AlbumInfoLayout = () => {
 
   if (error) return <div>{error.message}</div>
 
-  let album_content = <></>
+  let content = <></>
 
   const resize = (event: React.SyntheticEvent<HTMLIFrameElement, Event>) => {
     const target = event.target as HTMLIFrameElement
@@ -124,12 +124,14 @@ const AlbumInfoLayout = () => {
         </iframe>
     }
 
-    album_content =
+    content =
       <Grid
         container
-        direction="row"
+        direction="column"
         justify="center"
-        alignItems="center">
+        alignItems="center"
+        spacing={2}
+        >
           <Grid item>
             {preview_content}
           </Grid>
@@ -138,8 +140,10 @@ const AlbumInfoLayout = () => {
               {button_contents}
             </Grid>
           </Grid>
-          <Grid container style={{ padding: "4px 0" }}>
-            <ArtistsLayout />
+          <Grid item>
+            <Grid container>
+              <ArtistsLayout />
+            </Grid>
           </Grid>
       </Grid>
   }
@@ -148,23 +152,27 @@ const AlbumInfoLayout = () => {
     <Grid
       container
       spacing={1}
-      direction="row"
+      direction="column"
       justify="center"
       alignItems="center"
     >
-      <Tabs
-        value={index || 0}
-        onChange={(_event: React.ChangeEvent<{}>, newValue: number) => setIndex(newValue)}
-        indicatorColor="primary"
-        textColor="primary"
-        variant="fullWidth"
-        aria-label="full width tabs example"
-      >
-        <Tab label="Apple Music" disabled={!data?.album?.appleMusicAlbum} />
-        <Tab label="iTunes" disabled={!data?.album?.itunesAlbum}/>
-        <Tab label="Spotify" disabled={!data?.album?.spotifyAlbum}/>
-      </Tabs>
-      {album_content}
+      <Grid item>
+        <Tabs
+          value={index || 0}
+          onChange={(_event: React.ChangeEvent<{}>, newValue: number) => setIndex(newValue)}
+          indicatorColor="primary"
+          textColor="primary"
+          variant="fullWidth"
+          aria-label="full width tabs example"
+        >
+          <Tab label="Apple Music" disabled={!data?.album?.appleMusicAlbum} />
+          <Tab label="iTunes" disabled={!data?.album?.itunesAlbum}/>
+          <Tab label="Spotify" disabled={!data?.album?.spotifyAlbum}/>
+        </Tabs>
+      </Grid>
+      <Grid item>
+        {content}
+      </Grid>
     </Grid>
   )
 }

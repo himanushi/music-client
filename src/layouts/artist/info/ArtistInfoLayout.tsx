@@ -29,7 +29,7 @@ const ArtistInfoLayout = () => {
   return (
     <Grid
       container
-      spacing={1}
+      spacing={2}
       direction="column"
       justify="center"
       alignItems="center"

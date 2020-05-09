@@ -1,17 +1,18 @@
 import { useLocation } from "react-router-dom"
 import _ from "lodash"
 
-export const ParameterKeys = {
-  keyword:  "q",
-  ids:      "i",
-  status:   "t",
-  order:    "o",
-  sortType: "s",
-}
-
 export const ParameterPrefixKeys = {
   album:  "b",
   artist: "a",
+}
+
+export const ParameterKeys = {
+  keyword:  "q",
+  ids:      "i",
+  status:   "s",
+  order:    "o",
+  sortType: "r",
+//tag:      "t", // いつか実装する
 }
 
 export type ParameterPrefix = keyof typeof ParameterPrefixKeys;
