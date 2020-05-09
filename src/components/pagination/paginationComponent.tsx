@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Waypoint } from 'react-waypoint';
-import useParameters from '../../hooks/useParameters';
 
 // TODO: hasNext とかないのでページ遷移によって再度取得してしまう？
 const PaginationComponent = (

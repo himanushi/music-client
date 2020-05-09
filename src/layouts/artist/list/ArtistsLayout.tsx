@@ -28,7 +28,7 @@ const ArtistsLayout = () => {
 
   // 並び順初期化
   const _order = parameters?.sort ? `${parameters?.sort?.order}.${parameters?.sort?.type}` : null
-  if(_order && order != _order){
+  if(_order && order !== _order){
     setOrder(_order)
   }
 

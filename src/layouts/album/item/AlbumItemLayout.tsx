@@ -31,7 +31,7 @@ const AlbumItemLayout = (
   }
   const componentInImage = <>{serviceIcons}</>
 
-  const params = new URLSearchParams
+  const params = new URLSearchParams()
   params.set(ParameterPrefixKeys.artist + ParameterKeys.ids, album.id)
 
   return (

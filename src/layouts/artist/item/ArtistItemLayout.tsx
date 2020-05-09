@@ -7,7 +7,7 @@ const ArtistItemLayout = (
   { artist, width }:
   { artist: Artist, width:string|number }
 ) => {
-  const params = new URLSearchParams
+  const params = new URLSearchParams()
   params.set(ParameterPrefixKeys.album + ParameterKeys.ids, artist.id)
 
   return (

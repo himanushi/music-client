@@ -119,7 +119,6 @@ const AlbumInfoLayout = () => {
           width="300"
           height="500"
           frameBorder="0"
-          allowTransparency={true}
           allow="encrypted-media">
         </iframe>
     }

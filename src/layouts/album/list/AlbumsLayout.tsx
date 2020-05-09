@@ -3,7 +3,7 @@ import { useAlbumsQuery, Album, AlbumsQueryVariables } from '../../../graphql/ty
 import AlbumItemLayout from '../item/AlbumItemLayout';
 import { Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
-import useParameters, { ParameterKeys, ParameterPrefix, ParameterPrefixKeys } from '../../../hooks/useParameters';
+import useParameters, { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
 
 const AlbumsLayout = () => {
@@ -28,7 +28,7 @@ const AlbumsLayout = () => {
 
   // 並び順初期化
   const _order = parameters?.sort ? `${parameters?.sort?.order}.${parameters?.sort?.type}` : null
-  if(_order && order != _order){
+  if(_order && order !== _order){
     setOrder(_order)
   }
 
