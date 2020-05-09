@@ -1,5 +1,5 @@
 import React from 'react';
-import { Album } from '../../../graphql/types.d';
+import { Album, StatusEnum } from '../../../graphql/types.d';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 import { Grid } from '@material-ui/core';
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
@@ -29,6 +29,14 @@ const AlbumItemLayout = (
   if(album.spotifyAlbum){
     serviceIcons.push(<Grid key={3} item style={{...style, backgroundColor: "#1DB954"}}>S</Grid>)
   }
+
+  // ステータスをわかりやすいようにしておく
+  if(album.status === StatusEnum.Pending){
+    serviceIcons.push(<Grid key={10} item style={{...style, color: "#000", backgroundColor: "#FFFF00"}}>PN</Grid>)
+  } else if (album.status === StatusEnum.Ignore){
+    serviceIcons.push(<Grid key={11} item style={{...style, color: "#000",backgroundColor: "#FF0000"}}>IG</Grid>)
+  }
+
   const componentInImage = <>{serviceIcons}</>
 
   const params = new URLSearchParams()

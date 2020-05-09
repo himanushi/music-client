@@ -2,6 +2,7 @@ query Albums($cursor: CursorInputObject, $sort:  AlbumsSortInputObject, $conditi
   items: albums(cursor: $cursor, sort: $sort, conditions: $conditions) {
     id
     name
+    status
     artworkM {
       url
       width

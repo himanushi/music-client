@@ -55,11 +55,11 @@ export type AlbumsConditionsInputObject = {
 
 export enum AlbumsQueryOrderEnum {
   /** 追加順 */
-  New = 'new',
+  New = 'NEW',
   /** 発売日順 */
-  Release = 'release',
+  Release = 'RELEASE',
   /** 人気順 */
-  Popularity = 'popularity'
+  Popularity = 'POPULARITY'
 }
 
 export type AlbumsSortInputObject = {
@@ -127,11 +127,11 @@ export type ArtistsConditionsInputObject = {
 
 export enum ArtistsQueryOrderEnum {
   /** 名前順 */
-  Name = 'name',
+  Name = 'NAME',
   /** 追加順 */
-  New = 'new',
+  New = 'NEW',
   /** 人気順 */
-  Popularity = 'popularity'
+  Popularity = 'POPULARITY'
 }
 
 export type ArtistsSortInputObject = {
@@ -162,6 +162,8 @@ export type ChangeStatusInput = {
   trackId?: Maybe<Scalars['TTID']>;
   /** 変更したいステータス */
   status: StatusEnum;
+  /** true の場合は関連のステータスは変更しない。デフォルトは false。アーティスト限定 */
+  only?: Maybe<Scalars['Boolean']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
 };
@@ -407,9 +409,9 @@ export type SigninPayload = {
 
 export enum SortEnum {
   /** 昇順 */
-  Asc = 'asc',
+  Asc = 'ASC',
   /** 降順 */
-  Desc = 'desc'
+  Desc = 'DESC'
 }
 
 /** Spotify アルバム */
@@ -436,11 +438,11 @@ export type SpotifyArtist = {
 
 export enum StatusEnum {
   /** 保留 : デフォルトの検索結果に表示されない */
-  Pending = 'pending',
+  Pending = 'PENDING',
   /** 有効 : 通常検索結果に表示される */
-  Active = 'active',
+  Active = 'ACTIVE',
   /** 除外 : 検索結果から除外される。最新情報などを取得する際などでも除外される */
-  Ignore = 'ignore'
+  Ignore = 'IGNORE'
 }
 
 
@@ -620,7 +622,7 @@ export type AlbumsQuery = (
   { __typename?: 'Query' }
   & { items: Array<(
     { __typename?: 'Album' }
-    & Pick<Album, 'id' | 'name'>
+    & Pick<Album, 'id' | 'name' | 'status'>
     & { artworkM: (
       { __typename?: 'Artwork' }
       & Pick<Artwork, 'url' | 'width' | 'height'>
@@ -665,7 +667,7 @@ export type ArtistsQuery = (
   { __typename?: 'Query' }
   & { items: Array<(
     { __typename?: 'Artist' }
-    & Pick<Artist, 'id' | 'name'>
+    & Pick<Artist, 'id' | 'name' | 'status'>
     & { artworkM: (
       { __typename?: 'Artwork' }
       & Pick<Artwork, 'url' | 'width' | 'height'>
@@ -782,6 +784,7 @@ export const AlbumsDocument = gql`
   items: albums(cursor: $cursor, sort: $sort, conditions: $conditions) {
     id
     name
+    status
     artworkM {
       url
       width
@@ -871,6 +874,7 @@ export const ArtistsDocument = gql`
   items: artists(cursor: $cursor, sort: $sort, conditions: $conditions) {
     id
     name
+    status
     artworkM {
       url
       width

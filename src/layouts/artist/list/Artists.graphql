@@ -2,6 +2,7 @@ query Artists($cursor: CursorInputObject, $sort: ArtistsSortInputObject, $condit
   items: artists(cursor: $cursor, sort: $sort, conditions: $conditions) {
     id
     name
+    status
     artworkM {
       url
       width
