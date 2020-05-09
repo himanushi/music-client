@@ -7,7 +7,7 @@ import useParameters, { ParameterKeys, ParameterPrefixKeys } from '../../../hook
 import { useHistory } from 'react-router-dom';
 
 const AlbumsLayout = () => {
-  const [order, setOrder] = useState<string>("release.desc")
+  const [order, setOrder] = useState<string>("RELEASE.DESC")
   const parameters = useParameters<AlbumsQueryVariables>("album")
   let history = useHistory()
   const limit = 50
@@ -90,11 +90,11 @@ const AlbumsLayout = () => {
                 onChange={handleChange}
                 label="アルバム表示順"
               >
-                <MenuItem value={"release.desc"}>発売日新しい順</MenuItem>
-                <MenuItem value={"release.asc"}>発売日古い順</MenuItem>
-                <MenuItem value={"new.desc"}>追加日新しい順</MenuItem>
-                <MenuItem value={"new.asc"}>追加日古い順</MenuItem>
-                <MenuItem value={"popularity.desc"}>人気順</MenuItem>
+                <MenuItem value={"RELEASE.DESC"}>発売日新しい順</MenuItem>
+                <MenuItem value={"RELEASE.ASC"}>発売日古い順</MenuItem>
+                <MenuItem value={"NEW.DESC"}>追加日新しい順</MenuItem>
+                <MenuItem value={"NEW.ASC"}>追加日古い順</MenuItem>
+                <MenuItem value={"POPULARITY.DESC"}>人気順</MenuItem>
               </Select>
             </FormControl>
           </Grid>
