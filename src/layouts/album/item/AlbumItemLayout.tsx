@@ -2,6 +2,7 @@ import React from 'react';
 import { Album } from '../../../graphql/types.d';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 import { Grid } from '@material-ui/core';
+import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 
 const AlbumItemLayout = (
   { album, width }:
@@ -30,12 +31,15 @@ const AlbumItemLayout = (
   }
   const componentInImage = <>{serviceIcons}</>
 
+  const params = new URLSearchParams
+  params.set(ParameterPrefixKeys.artist + ParameterKeys.ids, album.id)
+
   return (
     <ImageCardComponent
       title={album.name}
       src={album.artworkM.url}
       width={width}
-      linkUrl={`/albums/${album.id}?q=${album.id}`}
+      linkUrl={`/albums/${album.id}?${params.toString()}`}
       componentInImage={componentInImage}
     />
   )

@@ -9,7 +9,7 @@ import ImageCardComponent from '../../../components/imageCard/ImageCardComponent
 const ArtistInfoLayout = () => {
   const { id } = useParams()
   const { error, data } =
-    useQuery<{ artist: Artist | null }>(ArtistDocument,{ variables: { id: id } });
+    useQuery<{ artist: Artist | null }>(ArtistDocument,{ variables: { id: id } })
 
   if (error) return <div>{error.message}</div>
 
@@ -17,14 +17,12 @@ const ArtistInfoLayout = () => {
 
   if (data && data.artist) {
     content =
-      <Grid>
+      <Grid item>
         <ImageCardComponent
           title={data.artist.name}
           src={data.artist.artworkL.url}
           width={270}
         />
-        <div style={{ padding: "4px 0" }} />
-        <AlbumsLayout />
       </Grid>
   }
 
@@ -32,11 +30,14 @@ const ArtistInfoLayout = () => {
     <Grid
       container
       spacing={1}
-      direction="row"
+      direction="column"
       justify="center"
       alignItems="center"
     >
       {content}
+      <Grid item>
+        <AlbumsLayout />
+      </Grid>
     </Grid>
   )
 }

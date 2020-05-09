@@ -1,5 +1,5 @@
-query Albums($conditions: AlbumsConditions, $offset: Int, $limit: PositiveNumber, $order: AlbumsQueryOrder!, $asc: Boolean) {
-  items: albums(conditions: $conditions,offset: $offset, limit: $limit, order: $order, asc: $asc) {
+query Albums($cursor: CursorInputObject, $sort:  AlbumsSortInputObject, $conditions: AlbumsConditionsInputObject) {
+  items: albums(cursor: $cursor, sort: $sort, conditions: $conditions) {
     id
     name
     artworkM {
