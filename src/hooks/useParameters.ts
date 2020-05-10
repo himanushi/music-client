@@ -1,6 +1,5 @@
 import { useLocation } from "react-router-dom"
 import _ from "lodash"
-import { StatusEnum } from "../graphql/types.d";
 
 export const ParameterPrefixKeys = {
   album:  "b",
