@@ -3,11 +3,21 @@ import { Album, StatusEnum } from '../../../graphql/types.d';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 import { Grid } from '@material-ui/core';
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
+import { useHistory } from 'react-router-dom';
 
 const AlbumItemLayout = (
   { album, width }:
   { album: Album, width:string|number }
 ) => {
+  // クエリパラメータ引き継ぎ
+  let history = useHistory()
+  const params = new URLSearchParams(history.location.search)
+  params.set(ParameterPrefixKeys.artist + ParameterKeys.ids, album.id)
+  const status = params.get(ParameterPrefixKeys.album + ParameterKeys.status)
+  if(status !== null) {
+    params.set(ParameterPrefixKeys.album + ParameterKeys.status, status)
+  }
+
   const style = {
     width: "15px",
     height: "15px",
@@ -38,9 +48,6 @@ const AlbumItemLayout = (
   }
 
   const componentInImage = <>{serviceIcons}</>
-
-  const params = new URLSearchParams()
-  params.set(ParameterPrefixKeys.artist + ParameterKeys.ids, album.id)
 
   return (
     <ImageCardComponent

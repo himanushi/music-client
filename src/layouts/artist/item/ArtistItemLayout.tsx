@@ -3,13 +3,20 @@ import { Artist, StatusEnum } from '../../../graphql/types.d';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { Grid } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 const ArtistItemLayout = (
   { artist, width }:
   { artist: Artist, width:string|number }
 ) => {
-  const params = new URLSearchParams()
+  // クエリパラメータ引き継ぎ
+  let history = useHistory()
+  const params = new URLSearchParams(history.location.search)
   params.set(ParameterPrefixKeys.album + ParameterKeys.ids, artist.id)
+  const status = params.get(ParameterPrefixKeys.artist + ParameterKeys.status)
+  if(status !== null) {
+    params.set(ParameterPrefixKeys.album + ParameterKeys.status, status)
+  }
 
   const style = {
     width: "15px",

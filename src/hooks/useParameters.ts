@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom"
 import _ from "lodash"
+import { StatusEnum } from "../graphql/types.d";
 
 export const ParameterPrefixKeys = {
   album:  "b",
@@ -26,7 +27,8 @@ export default function useParameters<T>(prefix:ParameterPrefix){
     const value = params.get(key)
     if(value === null) return []
 
-    const values = value.split(",")
+    // , ではなく - にしている理由は文字化けするからURLセーフな - または _ にする必要あり
+    const values = value.split("-")
     const uniqueValues = new Set<string>()
 
     values.forEach((value) => {
@@ -34,6 +36,12 @@ export default function useParameters<T>(prefix:ParameterPrefix){
     })
 
     return Array.from(uniqueValues)
+  }
+
+  const customizer = (objValue:any, srcValue:any) => {
+    if (_.isArray(objValue)) {
+      return objValue.concat(srcValue)
+    }
   }
 
   let parameters = {}
@@ -54,9 +62,13 @@ export default function useParameters<T>(prefix:ParameterPrefix){
   })
 
   // ステータス
+  let status = { status: [] }
   getUniqueValues(prefixKey + ParameterKeys.status).forEach((value) => {
-    parameters = _.merge(parameters, { conditions: { status: [value] } })
+      status = _.mergeWith(status, { status: [value] }, customizer)
   })
+  if(status.status.length !== 0) {
+    parameters = _.mergeWith(parameters, { conditions: { ...status } })
+  }
 
   // 並び順対象
   getUniqueValues(prefixKey + ParameterKeys.order).forEach((value) => {
