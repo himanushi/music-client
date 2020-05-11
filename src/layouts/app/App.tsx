@@ -1,9 +1,9 @@
 import React from 'react';
 import RootStyleLayout from './RootStyle';
-import * as serviceWorker from './serviceWorker'
+import { unregister } from './serviceWorker'
 
 const App = () => <RootStyleLayout />
 
 export default App
 
-serviceWorker.unregister()
+unregister()
