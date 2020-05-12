@@ -43,7 +43,7 @@ export type Album = {
   /** トラック数 */
   totalTracks: Scalars['PositiveNumber'];
   /** トラック */
-  tracks?: Maybe<Array<Track>>;
+  tracks: Array<Track>;
 };
 
 export type AlbumsConditionsInputObject = {
@@ -459,6 +459,8 @@ export type Track = {
   isrc: Scalars['String'];
   /** タイトル */
   name: Scalars['String'];
+  /** 人気度 */
+  popularity: Scalars['Int'];
   /** プレビューURL */
   previewUrl: Scalars['String'];
   /** ステータス */
@@ -607,6 +609,9 @@ export type AlbumQuery = (
     )>, spotifyAlbum?: Maybe<(
       { __typename?: 'SpotifyAlbum' }
       & Pick<SpotifyAlbum, 'id' | 'spotifyId'>
+    )>, tracks: Array<(
+      { __typename?: 'Track' }
+      & Pick<Track, 'isrc' | 'name' | 'discNumber' | 'trackNumber' | 'durationMs' | 'previewUrl' | 'popularity'>
     )> }
   )> }
 );
@@ -749,6 +754,15 @@ export const AlbumDocument = gql`
     spotifyAlbum {
       id
       spotifyId
+    }
+    tracks {
+      isrc
+      name
+      discNumber
+      trackNumber
+      durationMs
+      previewUrl
+      popularity
     }
   }
 }
