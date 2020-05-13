@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, IconButton } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
@@ -34,11 +34,8 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   // プレイヤー
   const [player, setPlayer] = useState<PreviewPlayer|null>(null);
   const play = (no:number) => {
-    player?.play(no)
+    if(player) player.play(no)
   }
-
-  // TODO:共有ボタン
-  // ShareButtonComponent
 
   useEffect(() => {
     if(!player) {
@@ -55,38 +52,53 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell align="center" colSpan={3} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={6} style={{ border: 'none' }}>
               <ImageCardComponent title={""} src={album.artworkL.url} width={"300px"}/>
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={3} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={6} style={{ border: 'none' }}>
               { album.name }
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={3}>
+            <TableCell align="center" colSpan={6} style={{ border: 'none' }}>
               { `${releaseYear}発売、${album.totalTracks}曲、${timeConversion(ms)}` }
             </TableCell>
           </TableRow>
           <TableRow>
+            <TableCell align="center" colSpan={6}>
+             <ShareButtonComponent album={album} />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell></TableCell>
             <TableCell></TableCell>
             <TableCell>No.</TableCell>
             <TableCell>タイトル</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {album.tracks.map((track, i) => {
             // TODO: あまり意味のある数値ではないのでアルバムの中の平均からスターをつける
             const star = track.popularity > 5 ? "★" : ""
+            const durationTime = new Date(0)
+            durationTime.setSeconds(track.durationMs / 1000)
+            const duration = durationTime.toISOString().substr(14, 5)
+
             return <TableRow key={i}>
+              <TableCell>{star}</TableCell>
               <TableCell>
                 <IconButton onClick={() => play(i)} component="span">
                   <PlayArrowIcon />
                 </IconButton>
               </TableCell>
-              <TableCell>{track.trackNumber}{star}</TableCell>
+              <TableCell>{track.trackNumber}</TableCell>
               <TableCell>{track.name}</TableCell>
+              <TableCell align="right">{duration}</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           })}
         </TableBody>
