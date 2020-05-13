@@ -26,13 +26,13 @@ class PreviewPlayer {
   }
 
   play(no?:number) {
-    if(no) {
+    if(no === undefined) {
+      this.playlist[this.currentPlaybackNo].stop()
+      this.playlist[this.currentPlaybackNo].play()
+    } else {
       this.playlist[this.currentPlaybackNo].stop()
       this.playlist[no].play()
       this.currentPlaybackNo = no
-    } else {
-      this.playlist[this.currentPlaybackNo].stop()
-      this.playlist[this.currentPlaybackNo].play()
     }
   }
 
