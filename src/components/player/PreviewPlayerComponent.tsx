@@ -73,7 +73,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
           <TableRow>
             <TableCell></TableCell>
-            <TableCell></TableCell>
+            <TableCell align="center">試聴</TableCell>
             <TableCell>No.</TableCell>
             <TableCell>タイトル</TableCell>
             <TableCell></TableCell>
