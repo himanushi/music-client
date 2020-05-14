@@ -1,10 +1,17 @@
-import { Howl, Howler } from 'howler'
+import { Howl } from 'howler'
+import { Track } from '../../graphql/types.d'
+import { ActionType } from '../../hooks/playerContext'
 
 class PreviewPlayer {
   playlist: Howl[]
+  tracks: Track[]
   currentPlaybackNo: number
+  dispatch?: React.Dispatch<ActionType>
 
-  constructor({ urls }:{ urls:string[] }){
+  constructor(
+    { urls, tracks, dispatch }:
+    { urls:string[], tracks:Track[], dispatch?: React.Dispatch<ActionType> }
+  ){
     this.currentPlaybackNo = 0
     this.playlist = urls.map((url) => {
       return new Howl({
@@ -12,12 +19,16 @@ class PreviewPlayer {
         html5: true,
         preload: false,
         autoplay: false,
-        onend: () => this.nextPlay(),
+        onend: () => this.autoNextPlay(),
       })
     })
+    this.tracks = tracks
+    this.dispatch = dispatch
   }
 
   currentPlaybackTime() {
+    if(this.playlist.length === 0) return 0
+
     if(this.playlist[this.currentPlaybackNo].state() !== "unloaded") {
       return this.playlist[this.currentPlaybackNo].seek()
     } else {
@@ -25,34 +36,46 @@ class PreviewPlayer {
     }
   }
 
-  play(no?:number) {
+  async play(no?:number) {
+    if(this.playlist.length === 0) return
+
     if(no === undefined) {
-      this.playlist[this.currentPlaybackNo].stop()
-      this.playlist[this.currentPlaybackNo].play()
+      await this.playlist[this.currentPlaybackNo].play()
     } else {
-      this.playlist[this.currentPlaybackNo].stop()
-      this.playlist[no].play()
+      this.stopAndPlay(this.currentPlaybackNo, no)
       this.currentPlaybackNo = no
     }
   }
 
-  nextPlay() {
+  async autoNextPlay() {
+    if(this.dispatch) this.dispatch({ type: "NEXT_PLAY" })
+  }
+
+  nextPlay():number {
+    if(this.playlist.length === 0) return 0
     const nextNo = this.currentPlaybackNo + 1
     if((this.playlist.length - 1) < nextNo) {
-      this.currentPlaybackNo = 0
-      return
+      return this.currentPlaybackNo = 0
     }
-    this.playlist[this.currentPlaybackNo].stop()
-    this.playlist[nextNo].play()
-    this.currentPlaybackNo = nextNo
+    this.stopAndPlay(this.currentPlaybackNo, nextNo)
+    return this.currentPlaybackNo = nextNo
   }
 
-  pause() {
-    this.playlist[this.currentPlaybackNo].pause()
+  async stopAndPlay(stopNo:number, playNo:number) {
+    await this.playlist[stopNo].stop()
+    await this.playlist[playNo].play()
   }
 
-  stop() {
-    this.playlist[this.currentPlaybackNo].stop()
+  async pause() {
+    if(this.playlist.length === 0) return
+
+    await this.playlist[this.currentPlaybackNo].pause()
+  }
+
+  async stop() {
+    if(this.playlist.length === 0) return
+
+    await this.playlist[this.currentPlaybackNo].stop()
     this.currentPlaybackNo = 0
   }
 }

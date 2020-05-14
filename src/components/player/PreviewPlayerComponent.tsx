@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, IconButton } from '@material-ui/core';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PreviewPlayer from './PreviewPlayer';
 import ShareButtonComponent from './ShareButtonComponent';
 import { Album } from '../../graphql/types.d'
+import PlayerContext from '../../hooks/playerContext';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
+  const { state, dispatch } = useContext(PlayerContext)
+
   const timeConversion = (ms:number) => {
     const seconds = parseInt((ms / 1000).toFixed(0))
     const minutes = parseInt((ms / (1000 * 60)).toFixed(0))
@@ -31,21 +34,21 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
     new Intl.DateTimeFormat("jp", { year: 'numeric' }).formatToParts(new Date(album.releaseDate))
   const releaseYear = `${year}${literal}`
 
-  // プレイヤー
-  const [player, setPlayer] = useState<PreviewPlayer|null>(null);
+  // プレビュー画面表示時に初期化される
+  const initPlayer = useRef<boolean>(true);
   const play = (no:number) => {
-    if(player) player.play(no)
+    if(initPlayer.current) {
+      const _player = new PreviewPlayer({
+        urls: album.tracks.map(track => track.previewUrl),
+        tracks: album.tracks,
+        dispatch,
+      })
+      dispatch({ type: "SET_PLAYER", player: _player })
+      initPlayer.current = false
+    }
+    console.log("dispatch PLAY")
+    dispatch({ type: "PLAY", no })
   }
-
-  useEffect(() => {
-    if(!player) {
-      setPlayer(new PreviewPlayer({ urls: album.tracks.map(track => track.previewUrl) }))
-    }
-
-    return () => {
-      player?.stop()
-    }
-  }, [player])
 
   return (
     <TableContainer component={Paper}>

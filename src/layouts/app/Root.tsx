@@ -11,17 +11,21 @@ import UserSigninLayout from '../user/signin/UserSigninLayout';
 import UserMeLayout from '../user/me/UserMeLayout';
 import { Grid } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
+import PlayerBar from './PlayerBar';
 
 const RootStyleLayout = () =>
   <BrowserRouter>
     <ApolloProvider client={client}>
       <PlayerProvider >
         <Bar />
+        <PlayerBar />
         <Grid
           container
           direction="column"
           justify="center"
-          alignItems="center">
+          alignItems="center"
+          style={{ paddingBottom: "80px" }}
+        >
             <Grid item>
               <Switch>
                 <Route exact path="/" component={AlbumsLayout} />
