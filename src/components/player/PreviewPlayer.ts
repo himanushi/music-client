@@ -19,7 +19,7 @@ class PreviewPlayer {
         html5: true,
         preload: false,
         autoplay: false,
-        onend: () => this.autoNextPlay(),
+        onend: async () => this.autoNextPlay(),
       })
     })
     this.tracks = tracks
@@ -51,7 +51,7 @@ class PreviewPlayer {
     if(this.dispatch) this.dispatch({ type: "NEXT_PLAY" })
   }
 
-  nextPlay():number {
+  async nextPlay():Promise<number> {
     if(this.playlist.length === 0) return 0
     const nextNo = this.currentPlaybackNo + 1
     if((this.playlist.length - 1) < nextNo) {

@@ -1,15 +1,15 @@
-import React, { useReducer, createContext } from 'react'
+import React, { useReducer, createContext, Dispatch } from 'react'
 import PreviewPlayer from '../components/player/PreviewPlayer'
 
 type ContextValue = {
   state: StateType
-  dispatch: React.Dispatch<ActionType>
+  dispatch: Dispatch<ActionType>
 }
 
 const PlayerContext = createContext({} as ContextValue)
 
 export enum PlaybackStatus {
-  None, // 再生不可
+  None,
   Play,
   Pause,
   Stop,
@@ -26,7 +26,7 @@ const initialState = {
   currentNo: 0,
   currentTrackId: "",
   playbackStatus: PlaybackStatus.None,
-  loadingStatus: LoadingStatus.None,
+  loadingStatus: LoadingStatus.Done,
 }
 
 export type StateType = typeof initialState
@@ -39,57 +39,57 @@ export type ActionType =
   | { type: 'LOADING_START' }
   | { type: 'LOADING_DONE' }
 
-const PlayerProvider = ({ children }:{ children:JSX.Element|JSX.Element[] }) => {
-  // TODO: Reducer 増えたら分離させる
-  const [state, dispatch] = useReducer((state:StateType, action:ActionType):StateType => {
-    switch(action.type) {
-      case 'SET_PLAYER':
-        state.player.stop()
-        return {
-          ...state,
-          player: action.player,
-          playbackStatus: PlaybackStatus.Stop,
-        }
-      case 'PLAY':
-        state.player.play(action.no)
-        return {
-          ...state,
-          playbackStatus: PlaybackStatus.Play,
-          currentNo: action.no || state.currentNo,
-        }
-      case 'NEXT_PLAY':
-        const no = state.player.nextPlay()
-        return {
-          ...state,
-          playbackStatus: PlaybackStatus.Play,
-        }
-      case 'PAUSE':
-        state.player.pause()
-        return {
-          ...state,
-          playbackStatus: PlaybackStatus.Pause,
-        }
-      case 'STOP':
-        state.player.stop()
-        return {
-          ...state,
-          playbackStatus: PlaybackStatus.Play,
-        }
-      case 'LOADING_START':
-        return {
-          ...state,
-          loadingStatus: LoadingStatus.Loading,
-        }
-      case 'LOADING_DONE':
-        return {
-          ...state,
-          loadingStatus: LoadingStatus.Done,
-        }
-      default:
-        return state
-    }
-  }, initialState)
+const reducer = (state:StateType, action:ActionType):StateType => {
+  switch(action.type) {
+    case 'SET_PLAYER':
+      state.player.stop()
+      return {
+        ...state,
+        player: action.player,
+        playbackStatus: PlaybackStatus.Stop,
+      }
+    case 'PLAY':
+      state.player.play(action.no)
+      return {
+        ...state,
+        playbackStatus: PlaybackStatus.Play,
+        currentNo: action.no || state.currentNo,
+      }
+    case 'NEXT_PLAY':
+      (async () => await state.player.nextPlay())()
+      return {
+        ...state,
+        playbackStatus: PlaybackStatus.Play,
+      }
+    case 'PAUSE':
+      state.player.pause()
+      return {
+        ...state,
+        playbackStatus: PlaybackStatus.Pause,
+      }
+    case 'STOP':
+      state.player.stop()
+      return {
+        ...state,
+        playbackStatus: PlaybackStatus.Play,
+      }
+    case 'LOADING_START':
+      return {
+        ...state,
+        loadingStatus: LoadingStatus.Loading,
+      }
+    case 'LOADING_DONE':
+      return {
+        ...state,
+        loadingStatus: LoadingStatus.Done,
+      }
+    default:
+      return state
+  }
+}
 
+const PlayerProvider = ({ children }:{ children:JSX.Element|JSX.Element[] }) => {
+  const [state, dispatch] = useReducer(reducer, initialState)
   return <PlayerContext.Provider value={{ state, dispatch }}>{children}</PlayerContext.Provider>
 }
 
