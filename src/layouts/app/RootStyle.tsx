@@ -4,7 +4,13 @@ import Root from './Root';
 
 const theme = createMuiTheme({
   palette: {
-    type: "dark"
+    type: "dark",
+    primary: {
+      main: '#222222',
+    },
+    secondary: {
+      main: '#4AC6D2',
+    },
   },
   typography: {
     fontFamily: [
