@@ -4,7 +4,7 @@ import PreviewPlayerLayout from '../player/PreviewPlayerLayout';
 
 // ref: https://material-ui.com/components/app-bar/#elevate-app-bar
 const PlayerBar = () =>
-  <AppBar position="fixed" color="primary" style={{ top: 'auto', bottom: 0 }}>
+  <AppBar position="fixed" color="secondary" style={{ top: 'auto', bottom: 0 }}>
     <PreviewPlayerLayout />
   </AppBar>
 

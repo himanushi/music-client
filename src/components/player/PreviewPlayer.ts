@@ -3,19 +3,21 @@ import { Track } from '../../graphql/types.d'
 import { ActionType } from '../../hooks/playerContext'
 
 class PreviewPlayer {
+  linkUrl: string
   playlist: Howl[]
   tracks: Track[]
   currentPlaybackNo: number
   dispatch?: React.Dispatch<ActionType>
 
   constructor(
-    { urls, tracks, dispatch }:
-    { urls:string[], tracks:Track[], dispatch?: React.Dispatch<ActionType> }
+    { linkUrl, tracks, dispatch }:
+    { linkUrl:string, tracks:Track[], dispatch?: React.Dispatch<ActionType> }
   ){
+    this.linkUrl = linkUrl
     this.currentPlaybackNo = 0
-    this.playlist = urls.map((url) => {
+    this.playlist = tracks.map(track => {
       return new Howl({
-        src: url,
+        src: track.previewUrl,
         html5: true,
         preload: false,
         autoplay: false,
@@ -24,6 +26,11 @@ class PreviewPlayer {
     })
     this.tracks = tracks
     this.dispatch = dispatch
+  }
+
+  currentTrack() {
+    if(this.playlist.length === 0) return
+    return this.tracks[this.currentPlaybackNo]
   }
 
   currentPlaybackTime() {
@@ -48,17 +55,23 @@ class PreviewPlayer {
   }
 
   async autoNextPlay() {
-    if(this.dispatch) this.dispatch({ type: "NEXT_PLAY" })
+    this.dispatch && this.dispatch({ type: "NEXT_PLAY" })
   }
 
   async nextPlay():Promise<number> {
     if(this.playlist.length === 0) return 0
+
     const nextNo = this.currentPlaybackNo + 1
     if((this.playlist.length - 1) < nextNo) {
-      return this.currentPlaybackNo = 0
+      // プレイリスト最後の曲
+      await this.playlist[this.currentPlaybackNo].stop()
+      this.currentPlaybackNo = 0
+      this.dispatch && this.dispatch({ type: "STATUS_FINISH" })
+      return this.currentPlaybackNo
+    } else {
+      this.stopAndPlay(this.currentPlaybackNo, nextNo)
+      return this.currentPlaybackNo = nextNo
     }
-    this.stopAndPlay(this.currentPlaybackNo, nextNo)
-    return this.currentPlaybackNo = nextNo
   }
 
   async stopAndPlay(stopNo:number, playNo:number) {

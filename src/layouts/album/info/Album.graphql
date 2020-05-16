@@ -27,6 +27,7 @@ query Album($id: TTID!) {
       spotifyId
     }
     tracks {
+      id
       isrc
       name
       discNumber
@@ -34,6 +35,11 @@ query Album($id: TTID!) {
       durationMs
       previewUrl
       popularity
+      artworkM {
+        url
+        width
+        height
+      }
     }
   }
 }

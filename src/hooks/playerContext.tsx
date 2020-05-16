@@ -22,9 +22,8 @@ export enum LoadingStatus {
 }
 
 const initialState = {
-  player: new PreviewPlayer({ urls: [], tracks: [] }),
+  player: new PreviewPlayer({ linkUrl: "", tracks: [] }),
   currentNo: 0,
-  currentTrackId: "",
   playbackStatus: PlaybackStatus.None,
   loadingStatus: LoadingStatus.Done,
 }
@@ -38,6 +37,7 @@ export type ActionType =
   | { type: 'STOP' }
   | { type: 'LOADING_START' }
   | { type: 'LOADING_DONE' }
+  | { type: 'STATUS_FINISH' }
 
 const reducer = (state:StateType, action:ActionType):StateType => {
   switch(action.type) {
@@ -50,15 +50,17 @@ const reducer = (state:StateType, action:ActionType):StateType => {
       }
     case 'PLAY':
       state.player.play(action.no)
+      const currentNo = action.no === undefined ? state.currentNo : action.no
       return {
         ...state,
         playbackStatus: PlaybackStatus.Play,
-        currentNo: action.no || state.currentNo,
+        currentNo,
       }
     case 'NEXT_PLAY':
       (async () => await state.player.nextPlay())()
       return {
         ...state,
+        currentNo: state.player.currentPlaybackNo,
         playbackStatus: PlaybackStatus.Play,
       }
     case 'PAUSE':
@@ -81,6 +83,13 @@ const reducer = (state:StateType, action:ActionType):StateType => {
     case 'LOADING_DONE':
       return {
         ...state,
+        loadingStatus: LoadingStatus.Done,
+      }
+    case 'STATUS_FINISH':
+      return {
+        ...state,
+        currentNo: state.player.currentPlaybackNo,
+        playbackStatus: PlaybackStatus.Pause,
         loadingStatus: LoadingStatus.Done,
       }
     default:

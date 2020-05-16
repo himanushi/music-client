@@ -25,7 +25,7 @@ const AlbumInfoLayout = () => {
         direction="column"
         justify="center"
         alignItems="center"
-        spacing={1}
+        spacing={2}
         >
           <Grid item>
             {album_content}

@@ -449,6 +449,8 @@ export enum StatusEnum {
 /** トラック */
 export type Track = {
    __typename?: 'Track';
+  /** 中型アートワーク */
+  artworkM: Artwork;
   /** ディスク番号 */
   discNumber: Scalars['PositiveNumber'];
   /** 再生時間 */
@@ -611,7 +613,11 @@ export type AlbumQuery = (
       & Pick<SpotifyAlbum, 'id' | 'spotifyId'>
     )>, tracks: Array<(
       { __typename?: 'Track' }
-      & Pick<Track, 'isrc' | 'name' | 'discNumber' | 'trackNumber' | 'durationMs' | 'previewUrl' | 'popularity'>
+      & Pick<Track, 'id' | 'isrc' | 'name' | 'discNumber' | 'trackNumber' | 'durationMs' | 'previewUrl' | 'popularity'>
+      & { artworkM: (
+        { __typename?: 'Artwork' }
+        & Pick<Artwork, 'url' | 'width' | 'height'>
+      ) }
     )> }
   )> }
 );
@@ -756,6 +762,7 @@ export const AlbumDocument = gql`
       spotifyId
     }
     tracks {
+      id
       isrc
       name
       discNumber
@@ -763,6 +770,11 @@ export const AlbumDocument = gql`
       durationMs
       previewUrl
       popularity
+      artworkM {
+        url
+        width
+        height
+      }
     }
   }
 }

@@ -1,14 +1,16 @@
 import React, { useContext, useRef } from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Grid } from '@material-ui/core';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import PreviewPlayer from './PreviewPlayer';
 import ShareButtonComponent from './ShareButtonComponent';
 import { Album } from '../../graphql/types.d'
 import PlayerContext from '../../hooks/playerContext';
+import { useLocation } from 'react-router-dom';
+import PreviewPlayerItemComponent from './PreviewPlayerItemComponent';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
+  const location = useLocation()
 
   const timeConversion = (ms:number) => {
     const seconds = parseInt((ms / 1000).toFixed(0))
@@ -36,13 +38,14 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
 
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
-  const play = (no:number) => {
+  const playAction = (no:number) => {
     if(initPlayer.current) {
       const _player = new PreviewPlayer({
-        urls: album.tracks.map(track => track.previewUrl),
+        linkUrl: `${location.pathname}${location.search}`,
         tracks: album.tracks,
-        dispatch,
+        dispatch
       })
+
       dispatch({ type: "SET_PLAYER", player: _player })
       initPlayer.current = false
     }
@@ -86,16 +89,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {album.tracks.map((track, i) => {
-            return <TableRow key={i}>
-              <TableCell align="center">
-                <IconButton onClick={() => play(i)} component="span">
-                  <PlayArrowIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell>{track.name}</TableCell>
-            </TableRow>
-          })}
+          {album.tracks.map((track, i) => <PreviewPlayerItemComponent key={i} track={track} index={i} playAction={playAction} />)}
         </TableBody>
       </Table>
     </TableContainer>
