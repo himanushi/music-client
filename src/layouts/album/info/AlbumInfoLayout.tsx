@@ -25,15 +25,13 @@ const AlbumInfoLayout = () => {
         direction="column"
         justify="center"
         alignItems="center"
-        spacing={2}
+        spacing={1}
         >
           <Grid item>
             {album_content}
           </Grid>
           <Grid item>
-            <Grid container>
-              <ArtistsLayout />
-            </Grid>
+            <ArtistsLayout />
           </Grid>
       </Grid>
   }

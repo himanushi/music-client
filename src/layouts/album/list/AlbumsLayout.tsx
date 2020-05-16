@@ -68,19 +68,19 @@ const AlbumsLayout = () => {
   return (
     <Grid
       container
+      spacing={2}
       direction="column"
       justify="center"
       alignItems="center"
-      spacing={1}
     >
-      <Grid item >
+      <Grid item>
         <Grid
           container
           direction="row"
           justify="flex-start"
           alignItems="flex-start"
         >
-          <Grid>
+          <Grid item>
             <FormControl variant="outlined" style={{minWidth: 150}}>
               <InputLabel id="demo-simple-select-outlined-label">アルバム表示順</InputLabel>
               <Select
@@ -104,7 +104,7 @@ const AlbumsLayout = () => {
         <Grid
           container
           direction="row"
-          justify="center"
+          justify="space-evenly"
           alignItems="center"
           spacing={1}
         >

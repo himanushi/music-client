@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createElement } from 'react';
 import Card from '@material-ui/core/Card';
 import ImageComponent from '../image/ImageComponent'
 import { Grid, CardActionArea, CardContent, Typography } from '@material-ui/core';
@@ -16,11 +16,8 @@ const ImageCardComponent = (image:Image) => {
   const link = image.linkUrl ? { component: Link, to: image.linkUrl } : {}
 
   return (
-    React.createElement(Grid, {
-      container: true, item: true, xs: true,
-      direction: "row", justify: "center", alignItems: "center",
-      style: { textDecoration: "none" },
-      ...link,
+    createElement(Grid, {
+      item: true, style: { textDecoration: "none" }, ...link,
       children: (
         <Card style={{ width: image.width, position: "relative" }}>
           <CardActionArea>

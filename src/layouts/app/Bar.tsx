@@ -50,7 +50,6 @@ const Bar = () =>
         </Toolbar>
       </AppBar>
     </HideOnScroll>
-    <Toolbar style={{ margin: "4px" }} />
   </>
 
 export default Bar

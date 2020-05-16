@@ -17,13 +17,11 @@ const ArtistInfoLayout = () => {
 
   if (data && data.artist) {
     content =
-      <Grid item>
-        <ImageCardComponent
-          title={data.artist.name}
-          src={data.artist.artworkL.url}
-          width={270}
-        />
-      </Grid>
+      <ImageCardComponent
+        title={data.artist.name}
+        src={data.artist.artworkL.url}
+        width={270}
+      />
   }
 
   return (

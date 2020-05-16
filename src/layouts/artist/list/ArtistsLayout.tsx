@@ -68,7 +68,7 @@ const ArtistsLayout = () => {
   return (
     <Grid
       container
-      spacing={1}
+      spacing={2}
       direction="column"
       justify="center"
       alignItems="center"
@@ -104,7 +104,7 @@ const ArtistsLayout = () => {
         <Grid
           container
           direction="row"
-          justify="center"
+          justify="space-evenly"
           alignItems="center"
           spacing={1}
         >

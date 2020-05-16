@@ -9,7 +9,7 @@ import ArtistsLayout from '../artist/list/ArtistsLayout';
 import ArtistInfoLayout from '../artist/info/ArtistInfoLayout';
 import UserSigninLayout from '../user/signin/UserSigninLayout';
 import UserMeLayout from '../user/me/UserMeLayout';
-import { Grid } from '@material-ui/core';
+import { Grid, Container, Toolbar } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
 import PlayerBar from './PlayerBar';
 
@@ -17,15 +17,22 @@ const RootStyleLayout = () =>
   <BrowserRouter>
     <ApolloProvider client={client}>
       <PlayerProvider >
+        {/* アプリバー */}
         <Bar />
+        {/* プレイヤー */}
         <PlayerBar />
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          style={{ paddingBottom: "80px" }}
-        >
+        <Container style={{ flexGrow: 1 }}>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            spacing={1}
+          >
+            <Grid item>
+              {/* アプリバーダミー */}
+              <Toolbar />
+            </Grid>
             <Grid item>
               <Switch>
                 <Route exact path="/" component={AlbumsLayout} />
@@ -37,7 +44,12 @@ const RootStyleLayout = () =>
                 <Route exact path="/me" component={UserMeLayout} />
               </Switch>
             </Grid>
-        </Grid>
+            <Grid item>
+              {/* プレイヤーダミー */}
+              <Toolbar />
+            </Grid>
+          </Grid>
+        </Container>
       </PlayerProvider>
     </ApolloProvider>
   </BrowserRouter>
