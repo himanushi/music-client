@@ -464,7 +464,7 @@ export type Track = {
   /** 人気度 */
   popularity: Scalars['Int'];
   /** プレビューURL */
-  previewUrl: Scalars['String'];
+  previewUrl?: Maybe<Scalars['String']>;
   /** ステータス */
   status: StatusEnum;
   /** トラック番号 */

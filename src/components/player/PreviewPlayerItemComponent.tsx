@@ -28,7 +28,6 @@ const PreviewPlayerItemComponent = (
   const { state } = useContext(PlayerContext)
 
   const playable = track.previewUrl !== null
-  if(!playable)debugger
   const playing = (state.playbackStatus === PlaybackStatus.Play)
   const currentTrack =
     (index === state.currentNo) &&
@@ -68,18 +67,14 @@ const PreviewPlayerItemComponent = (
     <TableRow>
       <TableCell align="center">
         {
-          playable ? (
-            currentTrack ?
-              <IconButton component="span">
-                {currentTrackIcon}
-              </IconButton>
-            :
-              <IconButton onClick={() => playAction(index)} component="span">
-                <PlayArrowIcon />
-              </IconButton>
-          )
+          currentTrack ?
+            <IconButton component="span">
+              {currentTrackIcon}
+            </IconButton>
           :
-            <></>
+            <IconButton onClick={() => playAction(index)} disabled={!playable} component="span">
+              <PlayArrowIcon />
+            </IconButton>
         }
       </TableCell>
       <TableCell>{track.name}</TableCell>
