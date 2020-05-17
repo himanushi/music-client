@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Grid, IconButton, makeStyles, Theme, Typography } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow'
 import PauseIcon from '@material-ui/icons/Pause'
@@ -6,6 +6,9 @@ import AutorenewIcon from '@material-ui/icons/Autorenew'
 import PlayerContext, { PlaybackStatus, LoadingStatus } from '../../hooks/playerContext';
 import SkipNextIcon from '@material-ui/icons/SkipNext';
 import ImageCardComponent from '../../components/imageCard/ImageCardComponent';
+import FullscreenIcon from '@material-ui/icons/Fullscreen'
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit'
+import screenfull from 'screenfull'
 
 const useStyles = makeStyles((_theme: Theme) => ({
   '@keyframes loading-icon-spin': {
@@ -88,6 +91,29 @@ const PreviewPlayerLayout = () => {
       }} variant="caption" component="p">{track.name}</Typography>
   }
 
+  // フルスクリーン
+  const [isFullscreen, setIsFullscreen] = useState(false)
+  let fullscreenButton = <></>
+  if(screenfull.isEnabled){
+    if(isFullscreen) {
+      fullscreenButton =
+        <IconButton color="inherit" onClick={() => {
+          if(screenfull.isEnabled)screenfull.exit()
+          setIsFullscreen(false)
+        }}>
+          <FullscreenExitIcon fontSize="large" />
+        </IconButton>
+    } else {
+      fullscreenButton =
+        <IconButton color="inherit" onClick={() => {
+          if(screenfull.isEnabled)screenfull.request()
+          setIsFullscreen(true)
+        }}>
+          <FullscreenIcon fontSize="large" />
+        </IconButton>
+    }
+  }
+
   return (
     <Grid
       container
@@ -135,7 +161,15 @@ const PreviewPlayerLayout = () => {
         </Grid>
       </Grid>
       <Grid item xs={2}>
-        {/* コントローラー */}
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+        >
+          <Grid item>
+          {fullscreenButton}
+          </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={1}>{/* ダミー */}</Grid>
     </Grid>

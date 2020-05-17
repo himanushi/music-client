@@ -27,7 +27,7 @@ const RootStyleLayout = () =>
             direction="column"
             justify="center"
             alignItems="center"
-            spacing={1}
+            spacing={2}
           >
             <Grid item>
               {/* アプリバーダミー */}
