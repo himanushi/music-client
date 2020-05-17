@@ -41,7 +41,13 @@ class PreviewPlayer {
     if(isEmpty(this.playlist)) return
 
     if(no === undefined) {
-      await this.playlist[this.currentPlaybackNo].play()
+      const player = this.playlist[this.currentPlaybackNo]
+      // 再生可否による分岐
+      if(player){
+        await player.play()
+      } else {
+        await this.autoNextPlay()
+      }
     } else {
       this.stopAndPlay(this.currentPlaybackNo, no)
       this.currentPlaybackNo = no
@@ -63,14 +69,22 @@ class PreviewPlayer {
       this.dispatch && this.dispatch({ type: "STATUS_FINISH" })
       return this.currentPlaybackNo
     } else {
-      this.stopAndPlay(this.currentPlaybackNo, nextNo)
-      return this.currentPlaybackNo = nextNo
+      const currentNo = this.currentPlaybackNo
+      this.currentPlaybackNo = nextNo
+      await this.stopAndPlay(currentNo, nextNo)
+      return this.currentPlaybackNo
     }
   }
 
   async stopAndPlay(stopNo:number, playNo:number) {
-    await this.playlist[stopNo].stop()
-    await this.playlist[playNo].play()
+    await this.playlist[stopNo]?.stop()
+    const player = this.playlist[playNo]
+    // 再生可否による分岐
+    if(player){
+      await player.play()
+    } else {
+      await this.autoNextPlay()
+    }
   }
 
   async pause() {
