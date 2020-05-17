@@ -7,6 +7,7 @@ import { Album } from '../../graphql/types.d'
 import PlayerContext from '../../hooks/playerContext';
 import { useLocation } from 'react-router-dom';
 import PreviewPlayerItemComponent from './PreviewPlayerItemComponent';
+import _ from 'lodash';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
@@ -53,6 +54,9 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
     dispatch({ type: "PLAY", no })
   }
 
+  // 人気度平均
+  const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)
+
   return (
     <TableContainer component={Paper} style={{ maxWidth: "600px" }}>
       <Table size="small">
@@ -89,7 +93,15 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {album.tracks.map((track, i) => <PreviewPlayerItemComponent key={i} track={track} index={i} playAction={playAction} />)}
+          {album.tracks.map((track, i) => {
+            return <PreviewPlayerItemComponent
+              key={i}
+              track={track}
+              index={i}
+              playAction={playAction}
+              averagePopularity={averagePopularity}
+            />
+          })}
         </TableBody>
       </Table>
     </TableContainer>

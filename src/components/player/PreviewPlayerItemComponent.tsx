@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { TableRow, TableCell, IconButton, makeStyles, Theme, SvgIconProps } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import StarRateIcon from '@material-ui/icons/StarRate'
 import AlbumIcon from '@material-ui/icons/Album'
 import { Track } from '../../graphql/types.d'
 import PlayerContext, { PlaybackStatus } from '../../hooks/playerContext';
@@ -21,8 +22,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const PreviewPlayerItemComponent = (
-  { track, index, playAction }:
-  { track:Track, index:number, playAction:(no:number) => void }
+  { track, index, playAction, averagePopularity }:
+  { track:Track, index:number, playAction:(no:number) => void, averagePopularity:number }
 ) => {
   const classes = useStyles()
   const { state } = useContext(PlayerContext)
@@ -44,8 +45,8 @@ const PreviewPlayerItemComponent = (
               {
                 playing ?
                 <>
-                  <stop offset="10%" stopColor={"#4AC6D2"} />
-                  <stop offset="90%" stopColor={"#F2D349"} />
+                  <stop offset="20%" stopColor={"#4AC6D2"} />
+                  <stop offset="80%" stopColor={"#F2D349"} />
                 </>
                 :
                 <stop offset="100%" stopColor={"#4AC6D2"} />
@@ -63,6 +64,10 @@ const PreviewPlayerItemComponent = (
     }}
   />
 
+  // 人気度が平均以上のものは星にする
+  let starable = false
+  if(averagePopularity < track.popularity) starable = true
+
   return (
     <TableRow>
       <TableCell align="center">
@@ -73,7 +78,7 @@ const PreviewPlayerItemComponent = (
             </IconButton>
           :
             <IconButton onClick={() => playAction(index)} disabled={!playable} component="span">
-              <PlayArrowIcon />
+              {starable ? <StarRateIcon /> : <PlayArrowIcon />}
             </IconButton>
         }
       </TableCell>
