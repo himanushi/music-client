@@ -7,7 +7,7 @@ import useParameters, { ParameterPrefixKeys, ParameterKeys } from '../../../hook
 import { useHistory } from 'react-router-dom';
 
 const ArtistsLayout = () => {
-  const [order, setOrder] = useState<string>("NAME.ASC")
+  const [order, setOrder] = useState<string>("NAME.DESC")
   const parameters = useParameters<ArtistsQueryVariables>("artist")
   let history = useHistory()
   const limit = 30
@@ -90,8 +90,8 @@ const ArtistsLayout = () => {
                 onChange={handleChange}
                 label="アーティスト表示順"
               >
-                <MenuItem value={"NAME.ASC"}>名前昇順</MenuItem>
                 <MenuItem value={"NAME.DESC"}>名前降順</MenuItem>
+                <MenuItem value={"NAME.ASC"}>名前昇順</MenuItem>
                 <MenuItem value={"NEW.DESC"}>追加日新しい順</MenuItem>
                 <MenuItem value={"NEW.ASC"}>追加日古い順</MenuItem>
                 <MenuItem value={"POPULARITY.DESC"}>人気順</MenuItem>
