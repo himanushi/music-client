@@ -28,7 +28,15 @@ class PreviewPlayer {
         onplay: () => {
           // フェードイン
           if(player.volume() === 0) player.fade(0, 0.5, 2000)
+          // フェードアウト
+          // ref: https://stackoverflow.com/questions/56043259/how-to-make-a-fade-out-at-the-end-of-the-sound-in-howlerjs
+          var fadeouttime = 2000;
+          setTimeout(
+            () => player.fade(0.5, 0, fadeouttime),
+            (player.duration() - (player.seek() as number)) * 1000 - fadeouttime
+          )
         },
+        onstop: () => player.volume(0),
         volume: 0,
       })
       this.playlist[index] = player
