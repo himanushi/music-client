@@ -19,14 +19,19 @@ class PreviewPlayer {
     this.playlist = {}
     tracks.forEach((track, index) => {
       if(!track.previewUrl) return
-      this.playlist[index] =
-        new Howl({
-          src: track.previewUrl,
-          html5: true,
-          preload: false,
-          autoplay: false,
-          onend: async () => this.autoNextPlay(),
-        })
+      const player:Howl = new Howl({
+        src: track.previewUrl,
+        html5: true,
+        preload: false,
+        autoplay: false,
+        onend: async () => this.autoNextPlay(),
+        onplay: () => {
+          // フェードイン
+          if(player.volume() === 0) player.fade(0, 0.5, 2000)
+        },
+        volume: 0,
+      })
+      this.playlist[index] = player
     })
     this.tracks = tracks
     this.dispatch = dispatch
