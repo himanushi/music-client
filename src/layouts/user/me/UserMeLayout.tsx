@@ -12,7 +12,7 @@ const UserMeLayout = () => {
   const [input, setInput] = useState<UpdateMeInput>({ oldPassword })
 
   // カレントユーザーデフォルト値
-  const { data } = useMeQuery()
+  const { data } = useMeQuery({ fetchPolicy: "network-only" })
   if(name === "" && username === "" && data && data.me){
     setName(data.me.name)
     setUsername(data.me.username)

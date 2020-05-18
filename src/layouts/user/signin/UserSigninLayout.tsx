@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Grid, FormControl, InputLabel, Input, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
 import { useSigninMutation, SigninPayload } from '../../../graphql/types.d';
+import UserContext from '../../../hooks/userContext';
 
 const UserSigninLayout = () => {
+  const { dispatch } = useContext(UserContext)
   const [notification, setNotification] = useState(<></>)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
@@ -16,6 +18,8 @@ const UserSigninLayout = () => {
       if (response.data.signin.error) {
         setNotification(<Alert severity="error">{response.data.signin.error}</Alert>)
       } else {
+        dispatch({ type: "SIGN_IN", user: response.data.signin.currentUser })
+        if(!!response.data.signin.currentUser?.initializedPassword) dispatch({ type: "INIT_DONE" })
         setNotification(<Alert severity="success">ログインしました</Alert>)
       }
     },

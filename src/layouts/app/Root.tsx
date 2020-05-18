@@ -12,10 +12,12 @@ import UserMeLayout from '../user/me/UserMeLayout';
 import { Grid, Container, Toolbar } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
 import PlayerBar from './PlayerBar';
+import { UserProvider } from '../../hooks/userContext';
 
 const RootStyleLayout = () =>
   <BrowserRouter>
     <ApolloProvider client={client}>
+      <UserProvider >
       <PlayerProvider >
         {/* アプリバー */}
         <Bar />
@@ -51,6 +53,7 @@ const RootStyleLayout = () =>
           </Grid>
         </Container>
       </PlayerProvider>
+      </UserProvider>
     </ApolloProvider>
   </BrowserRouter>
 

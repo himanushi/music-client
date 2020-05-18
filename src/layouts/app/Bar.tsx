@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person'
 import AlbumIcon from '@material-ui/icons/Album'
 import { Link } from 'react-router-dom';
+import UserContext, { InitializeStatus } from '../../hooks/userContext';
 
 // ref: https://material-ui.com/components/app-bar/#hide-app-bar
 interface Props {
@@ -21,8 +22,20 @@ const HideOnScroll = (props: Props) => {
   );
 }
 
-const Bar = () =>
-  <>
+const Bar = () => {
+  const { state } = useContext(UserContext)
+
+  let meContent = <></>
+  if(state.initializeStatus === InitializeStatus.Done){
+    meContent =
+      <Grid item>
+        <IconButton component={Link} to={`/me`} size="small" color="inherit">
+          <AlbumIcon />
+        </IconButton>
+      </Grid>
+  }
+
+   return <>
     <HideOnScroll>
       <AppBar>
         <Toolbar>
@@ -37,19 +50,21 @@ const Bar = () =>
               <Typography variant="h6">ゲーム音楽</Typography>
             </Grid>
             <Grid item>
-              <IconButton component={Link} to={`/artists`} edge="start" size="small" color="inherit" aria-label="menu">
+              <IconButton component={Link} to={`/artists`} size="small" color="inherit">
                 <PersonIcon />
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton component={Link} to={`/albums`} edge="start" size="small" color="inherit" aria-label="menu">
+              <IconButton component={Link} to={`/albums`} size="small" color="inherit">
                 <AlbumIcon />
               </IconButton>
             </Grid>
+            {meContent}
           </Grid>
         </Toolbar>
       </AppBar>
     </HideOnScroll>
   </>
+}
 
 export default Bar

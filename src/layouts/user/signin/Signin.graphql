@@ -1,5 +1,8 @@
 mutation Signin($input:SigninInput!){
   signin(input: $input) {
+    currentUser {
+      initializedPassword
+    }
     error
   }
 }

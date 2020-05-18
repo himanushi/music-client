@@ -220,6 +220,8 @@ export type CurrentUser = {
    __typename?: 'CurrentUser';
   /** ID */
   id: Scalars['TTID'];
+  /** パスワード設定済み */
+  initializedPassword: Scalars['Boolean'];
   /** 名前 */
   name: Scalars['String'];
   /** ロール */
@@ -403,8 +405,8 @@ export type SigninPayload = {
    __typename?: 'SigninPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
+  currentUser?: Maybe<CurrentUser>;
   error?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
 };
 
 export enum SortEnum {
@@ -575,17 +577,6 @@ export type UpsertArtistPayload = {
   error?: Maybe<Scalars['String']>;
 };
 
-/** ユーザー */
-export type User = {
-   __typename?: 'User';
-  /** ID */
-  id: Scalars['TTID'];
-  /** 名前 */
-  name: Scalars['String'];
-  /** ユーザー名 */
-  username: Scalars['String'];
-};
-
 export type AlbumQueryVariables = {
   id: Scalars['TTID'];
 };
@@ -693,7 +684,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'CurrentUser' }
-    & Pick<CurrentUser, 'id' | 'name' | 'username'>
+    & Pick<CurrentUser, 'id' | 'name' | 'username' | 'initializedPassword'>
     & { role: (
       { __typename?: 'Role' }
       & Pick<Role, 'id' | 'name' | 'description' | 'allowedActions'>
@@ -728,6 +719,10 @@ export type SigninMutation = (
   & { signin?: Maybe<(
     { __typename?: 'SigninPayload' }
     & Pick<SigninPayload, 'error'>
+    & { currentUser?: Maybe<(
+      { __typename?: 'CurrentUser' }
+      & Pick<CurrentUser, 'initializedPassword'>
+    )> }
   )> }
 );
 
@@ -943,6 +938,7 @@ export const MeDocument = gql`
     id
     name
     username
+    initializedPassword
     role {
       id
       name
@@ -1017,6 +1013,9 @@ export type UpdateMeMutationOptions = ApolloReactCommon.BaseMutationOptions<Upda
 export const SigninDocument = gql`
     mutation Signin($input: SigninInput!) {
   signin(input: $input) {
+    currentUser {
+      initializedPassword
+    }
     error
   }
 }
