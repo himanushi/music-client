@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Grid, Button, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import { red, green, blue } from '@material-ui/core/colors';
 import { Album } from '../../graphql/types.d'
+import PlayerContext from '../../hooks/playerContext';
 
 const ShareButtonComponent = ({ album }:{ album:Album|null }) => {
+  const { dispatch } = useContext(PlayerContext)
   let contents:JSX.Element[] = []
 
   if(album?.appleMusicAlbum){
@@ -14,6 +16,7 @@ const ShareButtonComponent = ({ album }:{ album:Album|null }) => {
             href={`https://music.apple.com/jp/album/${album.appleMusicAlbum.appleMusicId}`}
             target="_blank"
             variant="contained" color="primary"
+            onClick={() => dispatch({ type: "PAUSE" })}
           >
             Apple Music で聴く
           </Button>
@@ -30,6 +33,7 @@ const ShareButtonComponent = ({ album }:{ album:Album|null }) => {
             href={`https://music.apple.com/jp/album/${album.itunesAlbum.appleMusicId}`}
             target="_blank"
             variant="contained" color="primary"
+            onClick={() => dispatch({ type: "PAUSE" })}
           >
             iTunes で聴く
           </Button>
@@ -46,6 +50,7 @@ const ShareButtonComponent = ({ album }:{ album:Album|null }) => {
             href={`https://open.spotify.com/album/${album.spotifyAlbum.spotifyId}`}
             target="_blank"
             variant="contained" color="primary"
+            onClick={() => dispatch({ type: "PAUSE" })}
           >
             Spotify で聴く
           </Button>
