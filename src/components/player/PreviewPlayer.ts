@@ -59,6 +59,7 @@ class PreviewPlayer {
       if(player){
         await player.play()
       } else {
+        // 再生不可の場合は次の曲を再生
         await this.autoNextPlay()
       }
     } else {
@@ -96,6 +97,7 @@ class PreviewPlayer {
     if(player){
       await player.play()
     } else {
+      // 再生不可の場合は次の曲を再生
       await this.autoNextPlay()
     }
   }
