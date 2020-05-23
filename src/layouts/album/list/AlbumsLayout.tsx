@@ -5,6 +5,7 @@ import { Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/co
 import PaginationComponent from '../../../components/pagination/paginationComponent';
 import useParameters, { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
+import OrderComponent from '../../../components/search/OrderComponent';
 
 const AlbumsLayout = () => {
   const [order, setOrder] = useState<string>("RELEASE.DESC")
@@ -81,22 +82,19 @@ const AlbumsLayout = () => {
           alignItems="flex-start"
         >
           <Grid item>
-            <FormControl variant="outlined" style={{minWidth: 150}}>
-              <InputLabel id="demo-simple-select-outlined-label">アルバム表示順</InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={order}
-                onChange={handleChange}
-                label="アルバム表示順"
-              >
-                <MenuItem value={"RELEASE.DESC"}>発売日新しい順</MenuItem>
-                <MenuItem value={"RELEASE.ASC"}>発売日古い順</MenuItem>
-                <MenuItem value={"NEW.DESC"}>追加日新しい順</MenuItem>
-                <MenuItem value={"NEW.ASC"}>追加日古い順</MenuItem>
-                <MenuItem value={"POPULARITY.DESC"}>人気順</MenuItem>
-              </Select>
-            </FormControl>
+            <OrderComponent
+              label="アルバム表示順"
+              value={order}
+              onChange={handleChange}
+              minWidth={150}
+              selectItems={[
+                { label: "発売日新しい順", value: "RELEASE.DESC" },
+                { label: "発売日古い順", value: "RELEASE.ASC" },
+                { label: "追加日新しい順", value: "NEW.DESC" },
+                { label: "追加日古い順", value: "NEW.ASC" },
+                { label: "人気順", value: "POPULARITY.DESC" },
+              ]}
+            />
           </Grid>
         </Grid>
       </Grid>

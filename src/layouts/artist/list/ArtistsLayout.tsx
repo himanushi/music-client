@@ -5,6 +5,7 @@ import PaginationComponent from '../../../components/pagination/paginationCompon
 import ArtistItemLayout from '../item/ArtistItemLayout';
 import useParameters, { ParameterPrefixKeys, ParameterKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
+import OrderComponent from '../../../components/search/OrderComponent';
 
 const ArtistsLayout = () => {
   const [order, setOrder] = useState<string>("NAME.DESC")
@@ -80,23 +81,20 @@ const ArtistsLayout = () => {
           justify="flex-start"
           alignItems="flex-start"
         >
-          <Grid>
-            <FormControl variant="outlined" style={{minWidth: 150}}>
-              <InputLabel id="demo-simple-select-outlined-label">アーティスト表示順</InputLabel>
-              <Select
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                value={order}
-                onChange={handleChange}
-                label="アーティスト表示順"
-              >
-                <MenuItem value={"NAME.DESC"}>名前降順</MenuItem>
-                <MenuItem value={"NAME.ASC"}>名前昇順</MenuItem>
-                <MenuItem value={"NEW.DESC"}>追加日新しい順</MenuItem>
-                <MenuItem value={"NEW.ASC"}>追加日古い順</MenuItem>
-                <MenuItem value={"POPULARITY.DESC"}>人気順</MenuItem>
-              </Select>
-            </FormControl>
+          <Grid item>
+            <OrderComponent
+              label="アーティスト表示順"
+              value={order}
+              onChange={handleChange}
+              minWidth={150}
+              selectItems={[
+                { label: "名前降順", value: "NAME.DESC" },
+                { label: "名前昇順", value: "NAME.ASC" },
+                { label: "追加日新しい順", value: "NEW.DESC" },
+                { label: "追加日古い順", value: "NEW.ASC" },
+                { label: "人気順", value: "POPULARITY.DESC" },
+              ]}
+            />
           </Grid>
         </Grid>
       </Grid>
