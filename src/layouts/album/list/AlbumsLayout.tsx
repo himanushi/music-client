@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useAlbumsQuery, Album, AlbumsQueryVariables } from '../../../graphql/types.d';
 import AlbumItemLayout from '../item/AlbumItemLayout';
-import { Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
 import useParameters, { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
 import OrderComponent from '../../../components/search/OrderComponent';
+import SearchKeywordComponent from '../../../components/search/SearchKeywordComponent';
 
 const AlbumsLayout = () => {
   const [order, setOrder] = useState<string>("RELEASE.DESC")
@@ -77,10 +78,14 @@ const AlbumsLayout = () => {
       <Grid item>
         <Grid
           container
+          spacing={2}
           direction="row"
-          justify="flex-start"
-          alignItems="flex-start"
+          justify="center"
+          alignItems="center"
         >
+          <Grid item>
+            <SearchKeywordComponent type={"album"}/>
+          </Grid>
           <Grid item>
             <OrderComponent
               label="アルバム表示順"

@@ -13,6 +13,9 @@ const AlbumItemLayout = (
   let history = useHistory()
   const params = new URLSearchParams(history.location.search)
   params.set(ParameterPrefixKeys.artist + ParameterKeys.ids, album.id)
+  // キーワード検索はいちいち検索されるので削除
+  params.delete(ParameterPrefixKeys.album + ParameterKeys.keyword)
+  params.delete(ParameterPrefixKeys.artist + ParameterKeys.keyword)
   const status = params.get(ParameterPrefixKeys.album + ParameterKeys.status)
   // すでにアーティストステータスが設定されていた場合はそちらを優先する
   if(status !== null && !params.get(ParameterPrefixKeys.album + ParameterKeys.status)) {

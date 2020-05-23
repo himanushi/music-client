@@ -44,6 +44,13 @@ export default function useParameters<T>(prefix:ParameterPrefix){
   }
 
   let parameters = {}
+  let conditions = {}
+
+  // 並び順対象
+  getUniqueValues(prefixKey + ParameterKeys.keyword).forEach((value) => {
+    conditions = _.merge(conditions, { name: value })
+  })
+  parameters = { ...parameters, conditions: conditions }
 
   // ID
   getUniqueValues(prefixKey + ParameterKeys.ids).forEach((value) => {

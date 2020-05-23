@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useArtistsQuery, ArtistsQueryVariables, Artist } from '../../../graphql/types.d';
-import { Grid, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import PaginationComponent from '../../../components/pagination/paginationComponent';
 import ArtistItemLayout from '../item/ArtistItemLayout';
 import useParameters, { ParameterPrefixKeys, ParameterKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
 import OrderComponent from '../../../components/search/OrderComponent';
+import SearchKeywordComponent from '../../../components/search/SearchKeywordComponent';
 
 const ArtistsLayout = () => {
   const [order, setOrder] = useState<string>("NAME.DESC")
@@ -53,7 +54,7 @@ const ArtistsLayout = () => {
       )
   }
 
-  const handleChange = (event: React.ChangeEvent<{
+  const orderChangeHandler = (event: React.ChangeEvent<{
     name?: string | undefined
     value: unknown
   }>, _child: React.ReactNode) => {
@@ -77,15 +78,19 @@ const ArtistsLayout = () => {
       <Grid item >
         <Grid
           container
+          spacing={2}
           direction="row"
-          justify="flex-start"
-          alignItems="flex-start"
+          justify="center"
+          alignItems="center"
         >
+          <Grid item>
+            <SearchKeywordComponent type={"artist"}/>
+          </Grid>
           <Grid item>
             <OrderComponent
               label="アーティスト表示順"
               value={order}
-              onChange={handleChange}
+              onChange={orderChangeHandler}
               minWidth={150}
               selectItems={[
                 { label: "名前降順", value: "NAME.DESC" },

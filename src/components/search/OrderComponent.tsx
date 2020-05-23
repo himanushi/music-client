@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, InputLabel, Select, MenuItem, ListItemSecondaryAction } from '@material-ui/core'
+import { FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 
 interface SelectItem {
   value:string
@@ -21,15 +21,13 @@ const OrderComponent = ({
 
   return (
     <FormControl variant="outlined" style={{ minWidth }}>
-      <InputLabel id="demo-simple-select-outlined-label">{label}</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
         value={value}
         onChange={onChange}
         label={label}
       >
-        {selectItems.map((item) => <MenuItem value={item.value}>{item.label}</MenuItem>)}
+        {selectItems.map((item, i) => <MenuItem key={i} value={item.value}>{item.label}</MenuItem>)}
       </Select>
     </FormControl>
   )
