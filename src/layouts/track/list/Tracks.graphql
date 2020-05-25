@@ -1,0 +1,26 @@
+query Tracks($cursor: CursorInputObject, $sort: TracksSortInputObject, $conditions: TracksConditionsInputObject) {
+  items: tracks(cursor: $cursor, sort: $sort, conditions: $conditions) {
+    id
+    isrc
+    name
+    discNumber
+    trackNumber
+    durationMs
+    previewUrl
+    popularity
+    appleMusicTracks {
+      id
+    }
+    itunesTracks {
+      id
+    }
+    spotifyTracks {
+      id
+    }
+    artworkM {
+      url
+      width
+      height
+    }
+  }
+}
