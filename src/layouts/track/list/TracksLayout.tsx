@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState } from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid } from '@material-ui/core';
 import { useLocation, useHistory } from 'react-router-dom';
-import _ from 'lodash';
 import PreviewPlayerItemComponent from '../../../components/player/PreviewPlayerItemComponent';
 import { useTracksQuery, TracksQueryVariables, Track } from '../../../graphql/types.d';
 import useParameters, { ParameterPrefixKeys, ParameterKeys } from '../../../hooks/useParameters';
