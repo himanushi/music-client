@@ -33,9 +33,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   // アルバム情報
   const reducer = (accumulator:number, currentValue:number) => accumulator + currentValue
   const ms = album.tracks.map(track => track.durationMs).reduce(reducer)
-  const [{ value: year },,{ value: month }] =
-    new Intl.DateTimeFormat("jp", { year: 'numeric', month: 'numeric' }).formatToParts(new Date(album.releaseDate))
-  const releaseYear = `${year}年${month}月`
+  const releaseYear = (new Date(album.releaseDate)).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
 
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
