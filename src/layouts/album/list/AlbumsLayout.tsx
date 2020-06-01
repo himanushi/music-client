@@ -7,6 +7,8 @@ import useParameters, { ParameterKeys, ParameterPrefixKeys } from '../../../hook
 import { useHistory } from 'react-router-dom';
 import OrderComponent from '../../../components/search/OrderComponent';
 import SearchKeywordComponent from '../../../components/search/SearchKeywordComponent';
+import MasonryComponent from '../../../components/masonry/MasonryComponent';
+import { RenderComponentProps } from 'masonic';
 
 const AlbumsLayout = () => {
   const [order, setOrder] = useState<string>("RELEASE.DESC")
@@ -36,22 +38,23 @@ const AlbumsLayout = () => {
 
   if (error) return <div>{error.message}</div>
 
-  let content:JSX.Element[] = []
-
+  let items:Album[] = []
   if (data) {
-    content =
-      data.items.map(
-        (item, i) =>
-          <Grid item key={i}>
-            <PaginationComponent
-              component={<AlbumItemLayout album={item as Album} width="150px" />}
-              no={i}
-              offset={data.items.length}
-              limit={limit}
-              fetchMore={fetchMore}
-            />
-          </Grid>
-      )
+    items = data.items as Album[]
+  }
+
+  const renderComponent = ({ index, width, data }:RenderComponentProps) => {
+    return(
+      // <Grid item style={{ width: 150 }}>
+        <PaginationComponent
+          component={<AlbumItemLayout album={data as Album} width="150px" />}
+          no={index}
+          offset={items.length}
+          limit={limit}
+          fetchMore={fetchMore}
+        />
+      // </Grid>
+    )
   }
 
   const handleChange = (event: React.ChangeEvent<{
@@ -107,11 +110,12 @@ const AlbumsLayout = () => {
         <Grid
           container
           direction="row"
-          justify="space-evenly"
+          justify="center"
           alignItems="center"
-          spacing={1}
         >
-          {content}
+          <Grid item>
+            <MasonryComponent items={items} renderComponent={renderComponent} />
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

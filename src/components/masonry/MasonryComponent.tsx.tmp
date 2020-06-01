@@ -1,0 +1,77 @@
+import React, { PureComponent } from 'react';
+import { AutoSizer, Masonry, WindowScroller, CellMeasurerCache, CellMeasurer } from 'react-virtualized';
+import { createCellPositioner, MasonryCellProps } from 'react-virtualized/dist/es/Masonry';
+
+// コンポーネント再利用
+// 石積みレイアウト用
+const MasonryComponent = ({
+  items, renderItem
+}:{
+  items:any[], renderItem: (item:any) => JSX.Element
+}) => {
+  const _columnCount = 0
+  const _columnWidth = 200
+  let _height = 300
+  let _scrollTop = 0
+  const _gutterSize = 10
+  const _overscanByPixels = 0
+
+  const cache = new CellMeasurerCache({
+    defaultHeight: 179,
+    defaultWidth: 150,
+    fixedWidth: true,
+  })
+
+  const cellPositioner = createCellPositioner({
+    cellMeasurerCache: cache,
+    columnCount: items.length,
+    columnWidth: 150,
+    spacer: 10,
+  })
+
+  const cellRenderer = (props: MasonryCellProps) => {
+    return (
+      <CellMeasurer cache={cache} index={props.index} key={props.key} parent={props.parent}>
+        {renderItem(items[props.index])}
+      </CellMeasurer>
+    )
+  }
+
+  const renderMasonry = (width:number) => {
+    return (
+      <Masonry
+        autoHeight={true}
+        cellCount={items.length}
+        cellMeasurerCache={cache}
+        cellPositioner={cellPositioner}
+        cellRenderer={cellRenderer}
+        height={179}
+        width={150}
+      />
+    );
+  }
+
+  const renderAutoSizer = ({ height, scrollTop }:{ height:number, scrollTop:number }) => {
+    _height = height;
+    _scrollTop = scrollTop;
+
+    return (
+      <AutoSizer
+        disableHeight
+        height={height}
+        overscanByPixels={_overscanByPixels}
+        scrollTop={_scrollTop}
+      >
+        {({width}) => renderMasonry(width)}
+      </AutoSizer>
+    )
+  }
+
+  return (
+    <WindowScroller overscanByPixels={_overscanByPixels}>
+      {renderAutoSizer}
+    </WindowScroller>
+  )
+}
+
+export default MasonryComponent
