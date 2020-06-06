@@ -26,6 +26,8 @@ class PreviewPlayer {
         autoplay: false,
         onend: async () => this.autoNextPlay(),
         onplay: () => {
+          // Media Session API
+          if(this.dispatch) this.setMediaMetadata(this.dispatch)
           // フェードイン
           if(player.volume() === 0) player.fade(0, 0.5, 2000)
           // フェードアウト
@@ -43,6 +45,21 @@ class PreviewPlayer {
     })
     this.tracks = tracks
     this.dispatch = dispatch
+  }
+
+  setMediaMetadata(dispatch: React.Dispatch<ActionType>) {
+    if(navigator.mediaSession) {
+      const track = this.currentTrack()
+      if(track) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: track.name,
+          artwork: [{ src: track.artworkM.url || "", sizes: "300x300", type: 'image/png' }]
+        })
+      }
+      navigator.mediaSession.setActionHandler('play', () => dispatch({ type: "PLAY" }))
+      navigator.mediaSession.setActionHandler('pause', () => dispatch({ type: "PAUSE" }))
+      navigator.mediaSession.setActionHandler('nexttrack', () => dispatch({ type: "NEXT_PLAY" }))
+    }
   }
 
   currentTrack() {
