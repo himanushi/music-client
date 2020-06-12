@@ -2,7 +2,6 @@ import React from 'react';
 import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person'
 import AlbumIcon from '@material-ui/icons/Album'
-import LibraryMusicIcon from '@material-ui/icons/LibraryMusic'
 import { Link } from 'react-router-dom';
 
 // ref: https://material-ui.com/components/app-bar/#hide-app-bar
@@ -47,11 +46,11 @@ const Bar = () =>
                 <AlbumIcon />
               </IconButton>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <IconButton component={Link} to={`/tracks`} edge="start" size="small" color="inherit" aria-label="menu">
                 <LibraryMusicIcon />
               </IconButton>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Toolbar>
       </AppBar>
