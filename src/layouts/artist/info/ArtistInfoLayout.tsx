@@ -16,6 +16,10 @@ const ArtistInfoLayout = () => {
   let content = <></>
 
   if (data && data.artist) {
+    // SEO対策
+    const titles = document.title.split("-")
+    document.title = `${data.artist.name} - ${titles[titles.length - 1].trim()}`
+
     content =
       <ImageCardComponent
         title={data.artist.name}

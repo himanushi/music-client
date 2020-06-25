@@ -17,6 +17,10 @@ const AlbumInfoLayout = () => {
 
   if(!loading && data && data.album) {
 
+    // SEO対策
+    const titles = document.title.split("-")
+    document.title = `${data.album.name} - ${titles[titles.length - 1].trim()}`
+
     const album_content = <PreviewPlayerComponent album={data.album as Album} />
 
     content =

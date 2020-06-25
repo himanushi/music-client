@@ -21,8 +21,11 @@ const HideOnScroll = (props: Props) => {
   );
 }
 
-const Bar = () =>
-  <>
+const Bar = () => {
+  // SEO対策
+  const resetTitle = (title:string) => () => document.title = `${title} - ゲーム音楽`
+
+  return <>
     <HideOnScroll>
       <AppBar>
         <Toolbar>
@@ -37,12 +40,12 @@ const Bar = () =>
               <Typography variant="h6">ゲーム音楽</Typography>
             </Grid>
             <Grid item>
-              <IconButton component={Link} to={`/artists`} edge="start" size="small" color="inherit" aria-label="menu">
+              <IconButton component={Link} onClick={resetTitle("アーティスト一覧")} to={`/artists`} edge="start" size="small" color="inherit" aria-label="menu">
                 <PersonIcon />
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton component={Link} to={`/albums`} edge="start" size="small" color="inherit" aria-label="menu">
+              <IconButton component={Link} onClick={resetTitle("アルバム一覧")} to={`/albums`} edge="start" size="small" color="inherit" aria-label="menu">
                 <AlbumIcon />
               </IconButton>
             </Grid>
@@ -56,5 +59,6 @@ const Bar = () =>
       </AppBar>
     </HideOnScroll>
   </>
+}
 
 export default Bar
