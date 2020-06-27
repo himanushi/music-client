@@ -23,7 +23,10 @@ const HideOnScroll = (props: Props) => {
 
 const Bar = () => {
   // SEO対策
-  const resetTitle = (title:string) => () => document.title = `${title} - ゲーム音楽`
+  const resetTitle = (title:string) => () => {
+    document.title = `${title} - ゲーム音楽`
+    document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+  }
 
   return <>
     <HideOnScroll>

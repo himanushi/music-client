@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
 import PreviewPlayer from './PreviewPlayer';
@@ -33,7 +33,15 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   // アルバム情報
   const reducer = (accumulator:number, currentValue:number) => accumulator + currentValue
   const ms = album.tracks.map(track => track.durationMs).reduce(reducer)
-  const releaseYear = (new Date(album.releaseDate)).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })
+  const releaseDate = (new Date(album.releaseDate)).toLocaleDateString("jp", { year: 'numeric', month: 'long', day: 'numeric' })
+
+  // SEO対策
+  useEffect(() => {
+    const description = `「${album.name}」の発売日は${releaseDate}です。収録曲数は${album.totalTracks}曲あり、全曲再生時間は約${timeConversion(ms)}です。`
+    document.querySelector('meta[name="description"]')?.setAttribute("content", description)
+
+    return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+  }, [album])
 
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
@@ -77,7 +85,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
           <TableRow>
             <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
-              { `${releaseYear}発売、${album.totalTracks}曲、${timeConversion(ms)}` }
+              { `${releaseDate}発売、${album.totalTracks}曲、${timeConversion(ms)}` }
             </TableCell>
           </TableRow>
           <TableRow>
