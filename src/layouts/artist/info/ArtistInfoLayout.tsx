@@ -20,7 +20,10 @@ const ArtistInfoLayout = () => {
       document.querySelector('meta[name="description"]')?.setAttribute("content", description)
     }
 
-    return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+    return () => {
+      document.title = "ゲーム音楽"
+      document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+    }
   }, [data])
 
   if (error) return <div>{error.message}</div>

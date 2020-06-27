@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAlbumQuery, Album } from '../../../graphql/types.d';
 import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
@@ -11,16 +11,22 @@ const AlbumInfoLayout = () => {
   const { id } = useParams()
   const { loading, error, data } = useAlbumQuery({ variables: { id: id } })
 
+  // SEO対策
+  // 説明は PreviewPlayerComponent で追記している
+  useEffect(() => {
+    if (data && data.album) {
+      const titles = document.title.split("-")
+      document.title = `${data.album.name} - ${titles[titles.length - 1].trim()}`
+    }
+
+    return () => { document.title = "ゲーム音楽" }
+  }, [data])
+
   if (error) return <div>{error.message}</div>
 
   let content = <></>
 
   if(!loading && data && data.album) {
-
-    // SEO対策
-    const titles = document.title.split("-")
-    document.title = `${data.album.name} - ${titles[titles.length - 1].trim()}`
-
     const album_content = <PreviewPlayerComponent album={data.album as Album} />
 
     content =
