@@ -37,7 +37,8 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
 
   // SEO対策
   useEffect(() => {
-    const description = `「${album.name}」の発売日は${releaseDate}です。収録曲数は${album.totalTracks}曲あり、全曲再生時間は約${timeConversion(ms)}です。`
+    let description = `「${album.name}」の発売日は${releaseDate}です。収録曲数は${album.totalTracks}曲あり、全曲再生時間は約${timeConversion(ms)}です。`
+    description += `収録曲は、${album.tracks.map((track)=>track.name).join(', ')}です。`
     document.querySelector('meta[name="description"]')?.setAttribute("content", description)
 
     return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
