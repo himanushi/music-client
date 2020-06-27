@@ -41,7 +41,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
     document.querySelector('meta[name="description"]')?.setAttribute("content", description)
 
     return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
-  }, [album])
+  }, [album, ms, releaseDate])
 
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
