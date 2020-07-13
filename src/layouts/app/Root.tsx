@@ -13,48 +13,53 @@ import { Grid, Container, Toolbar } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
 import PlayerBar from './PlayerBar';
 import AboutLayout from '../information/AbputLayout';
+import { UserProvider } from '../../hooks/userContext';
+import InitializeUser from './InitializeUser';
 
-const RootStyleLayout = () =>
+const RootLayout = () =>
   <BrowserRouter>
     <ApolloProvider client={client}>
-      <PlayerProvider >
-        {/* アプリバー */}
-        <Bar />
-        {/* プレイヤー */}
-        <PlayerBar />
-        <Container style={{ flexGrow: 1 }}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              {/* アプリバーダミー */}
-              <Toolbar />
+      <UserProvider >
+        <PlayerProvider >
+          <InitializeUser />
+          {/* アプリバー */}
+          <Bar />
+          {/* プレイヤー */}
+          <PlayerBar />
+          <Container style={{ flexGrow: 1 }}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item>
+                {/* アプリバーダミー */}
+                <Toolbar />
+              </Grid>
+              <Grid item>
+                <Switch>
+                  <Route exact path="/" component={AlbumsLayout} />
+                  <Route exact path="/artists" component={ArtistsLayout} />
+                  <Route exact path="/artists/:id" component={ArtistInfoLayout} />
+                  <Route exact path="/albums" component={AlbumsLayout} />
+                  <Route exact path="/albums/:id" component={AlbumInfoLayout} />
+                  {/* <Route exact path="/tracks" component={TracksLayout} /> */}
+                  <Route exact path="/signin" component={UserSigninLayout} />
+                  <Route exact path="/me" component={UserMeLayout} />
+                  <Route exact path="/about" component={AboutLayout} />
+                </Switch>
+              </Grid>
+              <Grid item>
+                {/* プレイヤーダミー */}
+                <Toolbar />
+              </Grid>
             </Grid>
-            <Grid item>
-              <Switch>
-                <Route exact path="/" component={AlbumsLayout} />
-                <Route exact path="/artists" component={ArtistsLayout} />
-                <Route exact path="/artists/:id" component={ArtistInfoLayout} />
-                <Route exact path="/albums" component={AlbumsLayout} />
-                <Route exact path="/albums/:id" component={AlbumInfoLayout} />
-                {/* <Route exact path="/tracks" component={TracksLayout} /> */}
-                <Route exact path="/signin" component={UserSigninLayout} />
-                <Route exact path="/me" component={UserMeLayout} />
-                <Route exact path="/about" component={AboutLayout} />
-              </Switch>
-            </Grid>
-            <Grid item>
-              {/* プレイヤーダミー */}
-              <Toolbar />
-            </Grid>
-          </Grid>
-        </Container>
-      </PlayerProvider>
+          </Container>
+        </PlayerProvider>
+      </UserProvider>
     </ApolloProvider>
   </BrowserRouter>
 
-export default RootStyleLayout
+export default RootLayout
