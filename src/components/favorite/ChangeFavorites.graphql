@@ -1,0 +1,10 @@
+mutation ChangeFavorites($input:ChangeFavoritesInput!) {
+  changeFavorites(input: $input) {
+    albums {
+      id
+    }
+    artists {
+      id
+    }
+  }
+}

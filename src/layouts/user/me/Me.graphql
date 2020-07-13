@@ -9,5 +9,9 @@ query Me {
       description
       allowedActions
     }
+    favorite {
+      albumIds
+      artistIds
+    }
   }
 }
