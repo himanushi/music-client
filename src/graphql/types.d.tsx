@@ -883,12 +883,16 @@ export type ChangeFavoritesMutation = (
   { __typename?: 'Mutation' }
   & { changeFavorites?: Maybe<(
     { __typename?: 'ChangeFavoritesPayload' }
-    & { albums?: Maybe<Array<(
-      { __typename?: 'Album' }
-      & Pick<Album, 'id'>
-    )>>, artists?: Maybe<Array<(
-      { __typename?: 'Artist' }
-      & Pick<Artist, 'id'>
+    & { currentUser?: Maybe<Array<(
+      { __typename?: 'CurrentUser' }
+      & Pick<CurrentUser, 'id' | 'name' | 'username'>
+      & { role: (
+        { __typename?: 'Role' }
+        & Pick<Role, 'id' | 'name' | 'description' | 'allowedActions'>
+      ), favorite: (
+        { __typename?: 'Favorite' }
+        & Pick<Favorite, 'albumIds' | 'artistIds'>
+      ) }
     )>> }
   )> }
 );
@@ -1081,11 +1085,20 @@ export type SigninMutation = (
 export const ChangeFavoritesDocument = gql`
     mutation ChangeFavorites($input: ChangeFavoritesInput!) {
   changeFavorites(input: $input) {
-    albums {
+    currentUser {
       id
-    }
-    artists {
-      id
+      name
+      username
+      role {
+        id
+        name
+        description
+        allowedActions
+      }
+      favorite {
+        albumIds
+        artistIds
+      }
     }
   }
 }

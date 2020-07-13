@@ -1,10 +1,19 @@
 mutation ChangeFavorites($input:ChangeFavoritesInput!) {
   changeFavorites(input: $input) {
-    albums {
+    currentUser {
       id
-    }
-    artists {
-      id
+      name
+      username
+      role {
+        id
+        name
+        description
+        allowedActions
+      }
+      favorite {
+        albumIds
+        artistIds
+      }
     }
   }
 }
