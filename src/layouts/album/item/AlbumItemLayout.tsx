@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 const AlbumItemLayout = (
   { album, width }:
-  { album: Album, width:string|number }
+  { album: Album, width: number }
 ) => {
   // クエリパラメータ引き継ぎ
   let history = useHistory()
@@ -51,15 +51,13 @@ const AlbumItemLayout = (
     serviceIcons.push(<Grid key={11} item style={{...style, color: "#000",backgroundColor: "#FF0000"}}>IG</Grid>)
   }
 
-  const componentInImage = <>{serviceIcons}</>
-
   return (
     <ImageCardComponent
       title={album.name}
       src={album.artworkM.url}
       width={width}
       linkUrl={`/albums/${album.id}?${params.toString()}`}
-      componentInImage={componentInImage}
+      bottomComponent={<>{serviceIcons}</>}
     />
   )
 }

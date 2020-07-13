@@ -89,7 +89,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
                 justify="center"
                 alignItems="center"
               >
-                <ImageCardComponent title={""} src={album.artworkL.url} width={"250px"}/>
+                <ImageCardComponent title={""} src={album.artworkL.url} width={250}/>
               </Grid>
             </TableCell>
           </TableRow>

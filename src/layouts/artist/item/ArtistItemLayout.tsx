@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom';
 
 const ArtistItemLayout = (
   { artist, width }:
-  { artist: Artist, width:string|number }
+  { artist: Artist, width: number }
 ) => {
   // クエリパラメータ引き継ぎ
   let history = useHistory()
@@ -40,7 +40,7 @@ const ArtistItemLayout = (
   } else if (artist.status === StatusEnum.Ignore){
     serviceIcons.push(<Grid key={11} item style={{...style, color: "#000",backgroundColor: "#FF0000"}}>IG</Grid>)
   }
-  const componentInImage = <>{serviceIcons}</>
+  const bottomComponent = <>{serviceIcons}</>
 
   return (
     <ImageCardComponent
@@ -48,7 +48,7 @@ const ArtistItemLayout = (
       src={artist.artworkM.url}
       width={width}
       linkUrl={`/artists/${artist.id}?${params.toString()}`}
-      componentInImage={componentInImage}
+      bottomComponent={bottomComponent}
     />
   )
 }

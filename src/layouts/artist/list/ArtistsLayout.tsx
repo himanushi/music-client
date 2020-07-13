@@ -44,7 +44,7 @@ const ArtistsLayout = () => {
         (item, i) =>
           <Grid item key={i}>
             <PaginationComponent
-              component={<ArtistItemLayout artist={item as Artist} width="150px" />}
+              component={<ArtistItemLayout artist={item as Artist} width={150} />}
               no={i}
               offset={data.items.length}
               limit={limit}
