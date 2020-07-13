@@ -4,7 +4,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import { red } from '@material-ui/core/colors';
 import UserContext from '../../hooks/userContext';
-import { useChangeFavoritesMutation, ChangeFavoritesInput } from '../../graphql/types.d';
+import { useChangeFavoritesMutation, ChangeFavoritesInput, ChangeFavoritesMutationResult, CurrentUser } from '../../graphql/types.d';
 
 // TODO: 全体的にダサいので実装なんとかする
 const FavoriteComponent = ({
@@ -12,7 +12,7 @@ const FavoriteComponent = ({
 }:{
   contentWidth:number, favorable_type: "artist"|"album", favorable_id:string
 }) => {
-  const { state } = useContext(UserContext)
+  const { state, dispatch } = useContext(UserContext)
   const [favorite, setFavorite] = useState(() => {
     let _favorite = false
     if(state.user && state.user.favorite) {
@@ -32,7 +32,12 @@ const FavoriteComponent = ({
   }
   input = { favorite: !favorite, ...input_id }
   const [changeFavorite] = useChangeFavoritesMutation({
-    update: (_, response:any) => setFavorite(!favorite),
+    update: (_, response:ChangeFavoritesMutationResult) => {
+      if(response.data?.changeFavorites?.currentUser){
+        dispatch({ type: 'SET_USER', user: (response.data.changeFavorites.currentUser as unknown as CurrentUser) })
+        setFavorite(!favorite)
+      }
+    },
     variables: { input },
   })
 
