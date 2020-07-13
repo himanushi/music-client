@@ -4,6 +4,7 @@ import ImageCardComponent from '../../../components/imageCard/ImageCardComponent
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import FavoriteComponent from '../../../components/favorite/FavoriteComponent';
 
 const ArtistItemLayout = (
   { artist, width }:
@@ -48,6 +49,7 @@ const ArtistItemLayout = (
       src={artist.artworkM.url}
       width={width}
       linkUrl={`/artists/${artist.id}?${params.toString()}`}
+      topComponent={<FavoriteComponent favorable_type="artist" favorable_id={artist.id} contentWidth={width} />}
       bottomComponent={bottomComponent}
     />
   )

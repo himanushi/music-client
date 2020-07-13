@@ -4,6 +4,7 @@ import ImageCardComponent from '../../../components/imageCard/ImageCardComponent
 import { Grid } from '@material-ui/core';
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
+import FavoriteComponent from '../../../components/favorite/FavoriteComponent';
 
 const AlbumItemLayout = (
   { album, width }:
@@ -57,6 +58,7 @@ const AlbumItemLayout = (
       src={album.artworkM.url}
       width={width}
       linkUrl={`/albums/${album.id}?${params.toString()}`}
+      topComponent={<FavoriteComponent favorable_type="album" favorable_id={album.id} contentWidth={width} />}
       bottomComponent={<>{serviceIcons}</>}
     />
   )

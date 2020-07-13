@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import AlbumsLayout from '../../album/list/AlbumsLayout';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 import ReactGA from 'react-ga';
+import FavoriteComponent from '../../../components/favorite/FavoriteComponent';
 
 const ArtistInfoLayout = () => {
   const { id } = useParams()
@@ -41,6 +42,7 @@ const ArtistInfoLayout = () => {
         title={data.artist.name}
         src={data.artist.artworkL.url}
         width={270}
+        topComponent={<FavoriteComponent favorable_type="artist" favorable_id={data.artist.id} contentWidth={270} />}
       />
   }
 
