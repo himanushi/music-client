@@ -41,7 +41,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
     description += `収録曲は、${album.tracks.map((track)=>track.name).join(', ')}です。`
     document.querySelector('meta[name="description"]')?.setAttribute("content", description)
 
-    return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+    return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }, [album, ms, releaseDate])
 
   // プレビュー画面表示時に初期化される

@@ -22,7 +22,7 @@ const ArtistInfoLayout = () => {
 
     return () => {
       document.title = "ゲーム音楽"
-      document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+      document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
     }
   }, [data])
 

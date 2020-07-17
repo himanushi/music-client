@@ -26,7 +26,7 @@ const Bar = () => {
   // SEO対策
   const resetTitle = (title:string) => () => {
     document.title = `${title} - ゲーム音楽`
-    document.querySelector('meta[name="description"]')?.setAttribute("content", "ゲーム音楽のポータルサイト")
+    document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }
 
   return <>
