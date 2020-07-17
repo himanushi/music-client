@@ -3,6 +3,7 @@ import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid 
 import PersonIcon from '@material-ui/icons/Person'
 import AlbumIcon from '@material-ui/icons/Album'
 import { Link } from 'react-router-dom';
+import TwitterIcon from '@material-ui/icons/Twitter';
 
 // ref: https://material-ui.com/components/app-bar/#hide-app-bar
 interface Props {
@@ -50,6 +51,11 @@ const Bar = () => {
             <Grid item>
               <IconButton component={Link} onClick={resetTitle("アルバム一覧")} to={`/albums`} edge="start" size="small" color="inherit" aria-label="menu">
                 <AlbumIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => window.open('https://twitter.com/vgm_net/status/1283761061569507328?s=20')} edge="start" size="small" color="inherit" aria-label="menu">
+                <TwitterIcon />
               </IconButton>
             </Grid>
             {/* <Grid item>
