@@ -31,9 +31,22 @@ const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
     history.push(`${history.location.pathname}?${params.toString()}`)
   }
 
+  let searchType = ""
+  switch(type) {
+    case 'artist':
+      searchType = "アーティスト"
+      break
+    case 'album':
+      searchType = "アルバム"
+      break
+    case 'track':
+      searchType = "曲"
+      break
+  }
+
   return (
     <FormControl variant="outlined">
-      <InputLabel htmlFor="ord">検索</InputLabel>
+      <InputLabel htmlFor="ord">{ searchType + "検索" }</InputLabel>
       <OutlinedInput
         onChange={(e)=>{setKeyword(e.target.value as string)}}
         onKeyDown={keyPressHandler}
