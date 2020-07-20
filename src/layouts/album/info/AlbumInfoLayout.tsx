@@ -4,9 +4,9 @@ import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import ArtistsLayout from '../../artist/list/ArtistsLayout';
 import PreviewPlayerComponent from '../../../components/player/PreviewPlayerComponent';
+import ReactGA from 'react-ga';
 
 // TODO: このファイル汚すぎるのでリファクタすること
-
 const AlbumInfoLayout = () => {
   const { id } = useParams()
   const { loading, error, data } = useAlbumQuery({ variables: { id: id } })
@@ -17,6 +17,10 @@ const AlbumInfoLayout = () => {
     if (data && data.album) {
       const titles = document.title.split("-")
       document.title = `${data.album.name} - ${titles[titles.length - 1].trim()}`
+
+      // トラッキング
+      ReactGA.pageview(window.location.pathname + window.location.search);
+      console.log(window.location.pathname + window.location.search)
     }
 
     return () => { document.title = "ゲーム音楽" }

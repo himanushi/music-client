@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import AlbumsLayout from '../../album/list/AlbumsLayout';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
+import ReactGA from 'react-ga';
 
 const ArtistInfoLayout = () => {
   const { id } = useParams()
@@ -18,6 +19,10 @@ const ArtistInfoLayout = () => {
       document.title = `${data.artist.name} - ${titles[titles.length - 1].trim()}`
       const description = `${data.artist.name}さんのゲーム音楽アルバム一覧です。`
       document.querySelector('meta[name="description"]')?.setAttribute("content", description)
+
+      // トラッキング
+      ReactGA.pageview(window.location.pathname + window.location.search)
+      console.log(window.location.pathname + window.location.search)
     }
 
     return () => {
