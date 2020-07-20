@@ -12,6 +12,7 @@ import UserMeLayout from '../user/me/UserMeLayout';
 import { Grid, Container, Toolbar } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
 import PlayerBar from './PlayerBar';
+import AboutLayout from '../information/AbputLayout';
 
 const RootStyleLayout = () =>
   <BrowserRouter>
@@ -43,6 +44,7 @@ const RootStyleLayout = () =>
                 {/* <Route exact path="/tracks" component={TracksLayout} /> */}
                 <Route exact path="/signin" component={UserSigninLayout} />
                 <Route exact path="/me" component={UserMeLayout} />
+                <Route exact path="/about" component={AboutLayout} />
               </Switch>
             </Grid>
             <Grid item>

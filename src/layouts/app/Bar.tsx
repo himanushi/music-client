@@ -1,9 +1,9 @@
 import React from 'react';
-import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid } from '@material-ui/core';
+import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid, Menu, MenuItem } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person'
 import AlbumIcon from '@material-ui/icons/Album'
+import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
-import TwitterIcon from '@material-ui/icons/Twitter';
 
 // ref: https://material-ui.com/components/app-bar/#hide-app-bar
 interface Props {
@@ -28,6 +28,8 @@ const Bar = () => {
     document.title = `${title} - ゲーム音楽`
     document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }
+
+  const [anchorEl, setAnchorEl] = React.useState<Element|null>(null)
 
   return <>
     <HideOnScroll>
@@ -54,9 +56,19 @@ const Bar = () => {
               </IconButton>
             </Grid>
             <Grid item>
-              <IconButton onClick={() => window.open('https://twitter.com/vgm_net/status/1283761061569507328?s=20')} edge="start" size="small" color="inherit" aria-label="menu">
-                <TwitterIcon />
+              <IconButton onClick={(event) => setAnchorEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
+                <InfoIcon />
               </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
+              >
+                <MenuItem component={Link} onClick={()=>{resetTitle("このサイトについて");setAnchorEl(null)}} to={`/about`}>このサイトについて</MenuItem>
+                {/* <MenuItem onClick={() => setAnchorEl(null)}>利用規約</MenuItem>
+                <MenuItem onClick={() => setAnchorEl(null)}>プライバシーポリシー</MenuItem> */}
+              </Menu>
             </Grid>
             {/* <Grid item>
               <IconButton component={Link} to={`/tracks`} edge="start" size="small" color="inherit" aria-label="menu">
