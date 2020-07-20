@@ -60,7 +60,7 @@ const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
             </IconButton>
           </InputAdornment>
         }
-        label="検索"
+        label={ searchType + "検索" }
         value={keyword}
       />
     </FormControl>
