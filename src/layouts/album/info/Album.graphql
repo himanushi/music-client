@@ -4,6 +4,8 @@ query Album($id: TTID!) {
     totalTracks
     name
     releaseDate
+    recordLabel
+    copyright
     artworkL {
       url
       width

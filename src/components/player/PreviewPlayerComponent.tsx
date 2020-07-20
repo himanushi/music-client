@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useEffect } from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid } from '@material-ui/core';
+import React, { useContext, useRef, useEffect, useState } from 'react';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid, Tooltip, ClickAwayListener, IconButton, Typography } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
 import PreviewPlayer from './PreviewPlayer';
 import ShareButtonComponent from './ShareButtonComponent';
@@ -7,11 +7,13 @@ import { Album } from '../../graphql/types.d'
 import PlayerContext from '../../hooks/playerContext';
 import { useLocation } from 'react-router-dom';
 import PreviewPlayerItemComponent from './PreviewPlayerItemComponent';
+import InfoIcon from '@material-ui/icons/Info';
 import _ from 'lodash';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
   const location = useLocation()
+  const [openInfo, setOpenInfo] = useState(false)
 
   const timeConversion = (ms:number) => {
     const seconds = parseInt((ms / 1000).toFixed(0))
@@ -64,6 +66,17 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   // 人気度平均
   const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)
 
+  // 視聴音楽出典元
+  // TODO: デザインとか雑なのであとでしっかり実装すること
+  let previewUrlFromService = ""
+  if(album.appleMusicAlbum) {
+    previewUrlFromService = "Apple Music"
+  } else if(album.itunesAlbum) {
+    previewUrlFromService = "iTunes"
+  } else if(album.spotifyAlbum) {
+    previewUrlFromService = "Spotify"
+  }
+
   return (
     <TableContainer component={Paper} style={{ maxWidth: "600px" }}>
       <Table size="small">
@@ -86,6 +99,13 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
           <TableRow>
             <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+             <Typography color="textSecondary" variant="body2">
+               { album.copyright }
+             </Typography>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
               { `${releaseDate}発売、${album.totalTracks}曲、${timeConversion(ms)}` }
             </TableCell>
           </TableRow>
@@ -95,7 +115,27 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center">試聴</TableCell>
+            <TableCell align="center">
+              試聴
+              <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
+                <Tooltip
+                  PopperProps={{
+                    disablePortal: true,
+                  }}
+                  onClose={()=>setOpenInfo(false)}
+                  open={openInfo}
+                  disableFocusListener
+                  disableHoverListener
+                  disableTouchListener
+                  placement="top-end"
+                  title={ previewUrlFromService + " のプレビューURLによるストリーミング試聴" }
+                >
+                  <IconButton onClick={()=>setOpenInfo(true)}>
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </ClickAwayListener>
+            </TableCell>
             <TableCell>タイトル</TableCell>
           </TableRow>
         </TableHead>
