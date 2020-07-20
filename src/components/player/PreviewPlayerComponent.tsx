@@ -130,8 +130,8 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
                   placement="top-end"
                   title={ previewUrlFromService + " のプレビューURLによるストリーミング試聴" }
                 >
-                  <IconButton onClick={()=>setOpenInfo(true)}>
-                    <InfoIcon />
+                  <IconButton size="small" onClick={()=>setOpenInfo(true)}>
+                    <InfoIcon fontSize="small" />
                   </IconButton>
                 </Tooltip>
               </ClickAwayListener>
