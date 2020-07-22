@@ -99,7 +99,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
           <TableRow>
             <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
-             <Typography color="textSecondary" variant="body2">
+             <Typography color="textSecondary" variant="caption">
                { album.copyright }
              </Typography>
             </TableCell>
