@@ -1,73 +1,36 @@
-import React, { useContext } from 'react';
-import { Grid, Button, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
-import { red, green, blue } from '@material-ui/core/colors';
+import React from 'react';
+import { Grid, IconButton } from '@material-ui/core';
 import { Album } from '../../graphql/types.d'
-import PlayerContext from '../../hooks/playerContext';
+import ShareIcon from '@material-ui/icons/Share';
+import TwitterIcon from '@material-ui/icons/Twitter'
+import FacebookIcon from '@material-ui/icons/Facebook'
 
-const ShareButtonComponent = ({ album }:{ album:Album|null }) => {
-  const { dispatch } = useContext(PlayerContext)
-  let contents:JSX.Element[] = []
-
-  if(album?.appleMusicAlbum){
-    contents.push(
-      <Grid item key={0}>
-        <MuiThemeProvider theme={createMuiTheme({ palette: { primary: red } })}>
-          <Button
-            href={`https://music.apple.com/jp/album/${album.appleMusicAlbum.appleMusicId}`}
-            target="_blank"
-            variant="contained" color="primary"
-            onClick={() => dispatch({ type: "PAUSE" })}
-          >
-            Apple Music で聴く
-          </Button>
-        </MuiThemeProvider>
-      </Grid>
-    )
-  }
-
-  if(album?.itunesAlbum){
-    contents.push(
-      <Grid item key={1}>
-        <MuiThemeProvider theme={createMuiTheme({ palette: { primary: blue } })}>
-          <Button
-            href={`https://music.apple.com/jp/album/${album.itunesAlbum.appleMusicId}`}
-            target="_blank"
-            variant="contained" color="primary"
-            onClick={() => dispatch({ type: "PAUSE" })}
-          >
-            iTunes で聴く
-          </Button>
-        </MuiThemeProvider>
-      </Grid>
-    )
-  }
-
-  if(album?.spotifyAlbum){
-    contents.push(
-      <Grid item key={2}>
-        <MuiThemeProvider theme={createMuiTheme({ palette: { primary: green } })}>
-          <Button
-            href={`https://open.spotify.com/album/${album.spotifyAlbum.spotifyId}`}
-            target="_blank"
-            variant="contained" color="primary"
-            onClick={() => dispatch({ type: "PAUSE" })}
-          >
-            Spotify で聴く
-          </Button>
-        </MuiThemeProvider>
-      </Grid>
-    )
-  }
+const ShareButtonComponent = ({ album }:{ album:Album }) => {
+  // TODO: 他のSNSでも汎用的に使えるようにリファクタしろよな
+  let twitterUrl = `https://twitter.com/intent/tweet`
+  twitterUrl += `?text=${album.name} - ゲーム音楽`
+  twitterUrl += `&url=https://video-game-music.net/albums/${album.id}?ai=${album.id}`
+  twitterUrl += `&hashtags=ゲーム音楽,vgm`
+  twitterUrl += `&via=vgm_net`
 
   return (
-    <Grid
-      container
-      spacing={2}
-      direction="row"
-      justify="center"
-      alignItems="center"
-    >
-      {contents}
+    <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+      <Grid item>
+        {/* サイズ統一するため無駄だけど無効ボタンにしておく */}
+        <IconButton size="small" disabled>
+          <ShareIcon/>
+        </IconButton>
+      </Grid>
+      <Grid item>
+        {/* ref: https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/overview */}
+        <IconButton
+          size="small"
+          href={twitterUrl}
+          target="_blank"
+        >
+          <TwitterIcon  />
+        </IconButton>
+      </Grid>
     </Grid>
   )
 }

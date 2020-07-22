@@ -2,13 +2,14 @@ import React, { useContext, useRef, useEffect, useState } from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid, Tooltip, ClickAwayListener, IconButton, Typography } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
 import PreviewPlayer from './PreviewPlayer';
-import ShareButtonComponent from './ShareButtonComponent';
+import MusicServiceButtonComponent from './MusicServiceButtonComponent';
 import { Album } from '../../graphql/types.d'
 import PlayerContext from '../../hooks/playerContext';
 import { useLocation } from 'react-router-dom';
 import PreviewPlayerItemComponent from './PreviewPlayerItemComponent';
 import InfoIcon from '@material-ui/icons/Info';
 import _ from 'lodash';
+import ShareButtonComponent from './ShareButtonComponent';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
@@ -110,8 +111,13 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
+            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+              <ShareButtonComponent album={album} />
+            </TableCell>
+          </TableRow>
+          <TableRow>
             <TableCell align="center" colSpan={2}>
-             <ShareButtonComponent album={album} />
+              <MusicServiceButtonComponent album={album} />
             </TableCell>
           </TableRow>
           <TableRow>
