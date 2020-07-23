@@ -11,8 +11,6 @@ const ShareButtonComponent = ({ album }:{ album:Album }) => {
   let twitterUrl = `https://twitter.com/intent/tweet`
   twitterUrl += `?text=${album.name} - ゲーム音楽`
   twitterUrl += `&url=${url}`
-  twitterUrl += `&hashtags=ゲーム音楽,vgm`
-  twitterUrl += `&via=vgm_net`
 
   let facebookUrl = `https://www.facebook.com/sharer/sharer.php`
   facebookUrl += `?u=${encodeURIComponent(url)}`
