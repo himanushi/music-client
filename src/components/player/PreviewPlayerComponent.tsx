@@ -121,7 +121,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center">
+            <TableCell style={{ width: 100 }} align="center">
               試聴
               <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
                 <Tooltip
