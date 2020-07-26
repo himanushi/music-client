@@ -4,6 +4,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import AlbumIcon from '@material-ui/icons/Album'
 import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
+import TwitterIcon from '@material-ui/icons/Twitter';
 
 // ref: https://material-ui.com/components/app-bar/#hide-app-bar
 interface Props {

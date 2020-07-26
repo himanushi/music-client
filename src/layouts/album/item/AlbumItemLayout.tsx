@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Album, StatusEnum } from '../../../graphql/types.d';
 import ImageCardComponent from '../../../components/imageCard/ImageCardComponent';
 import { Grid } from '@material-ui/core';
@@ -58,7 +58,7 @@ const AlbumItemLayout = (
       src={album.artworkM.url}
       width={width}
       linkUrl={`/albums/${album.id}?${params.toString()}`}
-      topComponent={<FavoriteComponent favorable_type="album" favorable_id={album.id} contentWidth={width} />}
+      // topComponent={<FavoriteComponent favorable_type="album" favorable_id={album.id} contentWidth={width} />}
       bottomComponent={<>{serviceIcons}</>}
     />
   )

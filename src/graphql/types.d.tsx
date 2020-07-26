@@ -883,7 +883,7 @@ export type ChangeFavoritesMutation = (
   { __typename?: 'Mutation' }
   & { changeFavorites?: Maybe<(
     { __typename?: 'ChangeFavoritesPayload' }
-    & { currentUser?: Maybe<Array<(
+    & { currentUser?: Maybe<(
       { __typename?: 'CurrentUser' }
       & Pick<CurrentUser, 'id' | 'name' | 'username'>
       & { role: (
@@ -893,7 +893,7 @@ export type ChangeFavoritesMutation = (
         { __typename?: 'Favorite' }
         & Pick<Favorite, 'albumIds' | 'artistIds'>
       ) }
-    )>> }
+    )> }
   )> }
 );
 

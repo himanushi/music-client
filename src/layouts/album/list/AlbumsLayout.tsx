@@ -24,7 +24,7 @@ const AlbumsLayout = () => {
         conditions: parameters.conditions,
       },
       // 戻るボタンで戻っても最初から読み込みが発生しない
-      fetchPolicy: "cache-first"
+      fetchPolicy: "cache-first",
     }
   )
 

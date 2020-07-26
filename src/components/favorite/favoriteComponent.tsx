@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Grid, IconButton, MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -13,14 +13,14 @@ const FavoriteComponent = ({
   contentWidth:number, favorable_type: "artist"|"album", favorable_id:string
 }) => {
   const { state, dispatch } = useContext(UserContext)
-  const [favorite, setFavorite] = useState(() => {
-    let _favorite = false
+  const [favorite, setFavorite] = useState(false)
+
+  useEffect(() => {
     if(state.user && state.user.favorite) {
       const ids = state.user.favorite.albumIds.concat(state.user.favorite.artistIds)
-      _favorite = ids.includes(favorable_id)
+      setFavorite(ids.includes(favorable_id))
     }
-    return _favorite
-  })
+  }, [state])
 
   // お気に入り更新
   let input: ChangeFavoritesInput = { favorite: !favorite }
