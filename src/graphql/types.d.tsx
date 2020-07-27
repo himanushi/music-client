@@ -874,6 +874,29 @@ export type UpsertRolePayload = {
   role?: Maybe<Role>;
 };
 
+export type ChangeFavoritesMutationVariables = {
+  input: ChangeFavoritesInput;
+};
+
+
+export type ChangeFavoritesMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFavorites?: Maybe<(
+    { __typename?: 'ChangeFavoritesPayload' }
+    & { currentUser?: Maybe<(
+      { __typename?: 'CurrentUser' }
+      & Pick<CurrentUser, 'id' | 'name' | 'username'>
+      & { role: (
+        { __typename?: 'Role' }
+        & Pick<Role, 'id' | 'name' | 'description' | 'allowedActions'>
+      ), favorite: (
+        { __typename?: 'Favorite' }
+        & Pick<Favorite, 'albumIds' | 'artistIds'>
+      ) }
+    )> }
+  )> }
+);
+
 export type AlbumQueryVariables = {
   id: Scalars['TTID'];
 };
@@ -1013,6 +1036,9 @@ export type MeQuery = (
     & { role: (
       { __typename?: 'Role' }
       & Pick<Role, 'id' | 'name' | 'description' | 'allowedActions'>
+    ), favorite: (
+      { __typename?: 'Favorite' }
+      & Pick<Favorite, 'albumIds' | 'artistIds'>
     ) }
   ) }
 );
@@ -1056,6 +1082,52 @@ export type SigninMutation = (
 );
 
 
+export const ChangeFavoritesDocument = gql`
+    mutation ChangeFavorites($input: ChangeFavoritesInput!) {
+  changeFavorites(input: $input) {
+    currentUser {
+      id
+      name
+      username
+      role {
+        id
+        name
+        description
+        allowedActions
+      }
+      favorite {
+        albumIds
+        artistIds
+      }
+    }
+  }
+}
+    `;
+export type ChangeFavoritesMutationFn = ApolloReactCommon.MutationFunction<ChangeFavoritesMutation, ChangeFavoritesMutationVariables>;
+
+/**
+ * __useChangeFavoritesMutation__
+ *
+ * To run a mutation, you first call `useChangeFavoritesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFavoritesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFavoritesMutation, { data, loading, error }] = useChangeFavoritesMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeFavoritesMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFavoritesMutation, ChangeFavoritesMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFavoritesMutation, ChangeFavoritesMutationVariables>(ChangeFavoritesDocument, baseOptions);
+      }
+export type ChangeFavoritesMutationHookResult = ReturnType<typeof useChangeFavoritesMutation>;
+export type ChangeFavoritesMutationResult = ApolloReactCommon.MutationResult<ChangeFavoritesMutation>;
+export type ChangeFavoritesMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFavoritesMutation, ChangeFavoritesMutationVariables>;
 export const AlbumDocument = gql`
     query Album($id: TTID!) {
   album(id: $id) {
@@ -1330,6 +1402,10 @@ export const MeDocument = gql`
       name
       description
       allowedActions
+    }
+    favorite {
+      albumIds
+      artistIds
     }
   }
 }

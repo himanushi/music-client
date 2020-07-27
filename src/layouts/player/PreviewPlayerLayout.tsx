@@ -78,7 +78,7 @@ const PreviewPlayerLayout = () => {
     const track = state.player.tracks[state.currentNo]
     if(track.artworkM?.url) {
       artwork_content =
-        <ImageCardComponent linkUrl={`${state.player.linkUrl}#${track.id}`} title={""} src={track.artworkM.url} width={"40px"} />
+        <ImageCardComponent linkUrl={`${state.player.linkUrl}#${track.id}`} title={""} src={track.artworkM.url} width={40} />
     }
     title_content =
       <Typography style={{

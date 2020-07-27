@@ -4,10 +4,11 @@ import ImageCardComponent from '../../../components/imageCard/ImageCardComponent
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { Grid } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
+import FavoriteComponent from '../../../components/favorite/FavoriteComponent';
 
 const ArtistItemLayout = (
   { artist, width }:
-  { artist: Artist, width:string|number }
+  { artist: Artist, width: number }
 ) => {
   // クエリパラメータ引き継ぎ
   let history = useHistory()
@@ -40,7 +41,7 @@ const ArtistItemLayout = (
   } else if (artist.status === StatusEnum.Ignore){
     serviceIcons.push(<Grid key={11} item style={{...style, color: "#000",backgroundColor: "#FF0000"}}>IG</Grid>)
   }
-  const componentInImage = <>{serviceIcons}</>
+  const bottomComponent = <>{serviceIcons}</>
 
   return (
     <ImageCardComponent
@@ -48,7 +49,8 @@ const ArtistItemLayout = (
       src={artist.artworkM.url}
       width={width}
       linkUrl={`/artists/${artist.id}?${params.toString()}`}
-      componentInImage={componentInImage}
+      topComponent={<FavoriteComponent favorable_type="artist" favorable_id={artist.id} contentWidth={width} />}
+      bottomComponent={bottomComponent}
     />
   )
 }

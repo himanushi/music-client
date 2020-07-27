@@ -4,10 +4,11 @@ import ImageCardComponent from '../../../components/imageCard/ImageCardComponent
 import { Grid } from '@material-ui/core';
 import { ParameterKeys, ParameterPrefixKeys } from '../../../hooks/useParameters';
 import { useHistory } from 'react-router-dom';
+import FavoriteComponent from '../../../components/favorite/FavoriteComponent';
 
 const AlbumItemLayout = (
   { album, width }:
-  { album: Album, width:string|number }
+  { album: Album, width: number }
 ) => {
   // クエリパラメータ引き継ぎ
   let history = useHistory()
@@ -51,15 +52,14 @@ const AlbumItemLayout = (
     serviceIcons.push(<Grid key={11} item style={{...style, color: "#000",backgroundColor: "#FF0000"}}>IG</Grid>)
   }
 
-  const componentInImage = <>{serviceIcons}</>
-
   return (
     <ImageCardComponent
       title={album.name}
       src={album.artworkM.url}
       width={width}
       linkUrl={`/albums/${album.id}?${params.toString()}`}
-      componentInImage={componentInImage}
+      topComponent={<FavoriteComponent favorable_type="album" favorable_id={album.id} contentWidth={width} />}
+      bottomComponent={<>{serviceIcons}</>}
     />
   )
 }

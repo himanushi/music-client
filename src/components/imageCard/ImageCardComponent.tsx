@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 interface Image {
   title: string
   src?: string | null
-  width: string | number
+  width: number
   linkUrl?: string
-  componentInImage?: JSX.Element
+  bottomComponent?: JSX.Element
+  topComponent?: JSX.Element
 }
 
 const ImageCardComponent = (image:Image) => {
@@ -22,10 +23,11 @@ const ImageCardComponent = (image:Image) => {
         <Card style={{ width: image.width, position: "relative" }}>
           <CardActionArea>
             <Grid container style={{ position: "absolute", left: "5px", bottom: "5px" }}>
-              { image.componentInImage ? image.componentInImage : <></> }
+              { image.bottomComponent ? image.bottomComponent : <></> }
             </Grid>
             <ImageComponent src={image.src || ""} width={image.width} title={image.title}/>
           </CardActionArea>
+          { image.topComponent ? image.topComponent : <></> }
           {
             image.title === "" ? <></> :
             <CardContent style={{ padding: "5px 5px" }}>

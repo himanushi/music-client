@@ -10,6 +10,7 @@ import PreviewPlayerItemComponent from './PreviewPlayerItemComponent';
 import InfoIcon from '@material-ui/icons/Info';
 import _ from 'lodash';
 import ShareButtonComponent from './ShareButtonComponent';
+import FavoriteComponent from '../favorite/FavoriteComponent';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
@@ -89,7 +90,9 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
                 justify="center"
                 alignItems="center"
               >
-                <ImageCardComponent title={""} src={album.artworkL.url} width={"250px"}/>
+                <ImageCardComponent title={""} src={album.artworkL.url} width={250}
+                  topComponent={<FavoriteComponent favorable_type="album" favorable_id={album.id} contentWidth={250} />}
+                />
               </Grid>
             </TableCell>
           </TableRow>
@@ -121,7 +124,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center">
+            <TableCell style={{ width: 100 }} align="center">
               試聴
               <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
                 <Tooltip

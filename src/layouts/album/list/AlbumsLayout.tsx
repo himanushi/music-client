@@ -13,6 +13,7 @@ const AlbumsLayout = () => {
   const parameters = useParameters<AlbumsQueryVariables>("album")
   let history = useHistory()
   const limit = 50
+  const fetchPolicy = parameters.conditions?.favorite ? "cache-and-network" : "cache-first"
   const { error, data, fetchMore } = useAlbumsQuery(
     {
       variables: {
@@ -23,8 +24,7 @@ const AlbumsLayout = () => {
         sort: parameters.sort,
         conditions: parameters.conditions,
       },
-      // 戻るボタンで戻っても最初から読み込みが発生しない
-      fetchPolicy: "cache-first"
+      fetchPolicy,
     }
   )
 
@@ -44,7 +44,7 @@ const AlbumsLayout = () => {
         (item, i) =>
           <Grid item key={i}>
             <PaginationComponent
-              component={<AlbumItemLayout album={item as Album} width="150px" />}
+              component={<AlbumItemLayout album={item as Album} width={150} />}
               no={i}
               offset={data.items.length}
               limit={limit}

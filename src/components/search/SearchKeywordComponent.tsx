@@ -1,31 +1,55 @@
-import React, { useState } from 'react'
-import SearchIcon from '@material-ui/icons/Search'
-import { FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment } from '@material-ui/core'
+import React, { useState, useContext } from 'react'
+import { FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment, MuiThemeProvider, createMuiTheme } from '@material-ui/core'
 import { ParameterPrefix, ParameterKeys, ParameterPrefixKeys } from '../../hooks/useParameters'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
+import SearchIcon from '@material-ui/icons/Search'
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import { red } from '@material-ui/core/colors'
+import UserContext from '../../hooks/userContext'
 
 const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
-  const [keyword, setKeyword] = useState<string>("")
   let history = useHistory()
+  const location = useLocation()
+  const { state } = useContext(UserContext)
+  const params = new URLSearchParams(location.search)
+  const [keyword, setKeyword]   = useState<string>("")
+  const [onlyFavorite, setOnlyFavorite] = useState(() => {
+    if(params.get(ParameterPrefixKeys[type] + ParameterKeys.favorite) === "1") return true
+    return false
+  })
 
   // 検索ボタンクリック
   const clickHandler = (_event: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>): void => {
-    search()
+    search(onlyFavorite)
+  }
+
+  // お気に入りボタンクリック
+  const favoriteClickHandler = (_event: React.MouseEvent<HTMLButtonElement, globalThis.MouseEvent>): void => {
+    search(!onlyFavorite)
+    setOnlyFavorite(!onlyFavorite)
   }
 
   // エンターでも検索可能にする
   const keyPressHandler = (event: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     if(event.keyCode === 13){
-      search()
+      search(onlyFavorite)
     }
   }
 
-  const search = () => {
+  const search = (favorite:boolean) => {
     const params = new URLSearchParams(history.location.search)
     if(keyword !== "") {
       params.set(ParameterPrefixKeys[type] + ParameterKeys.keyword, keyword)
     } else {
       params.delete(ParameterPrefixKeys[type] + ParameterKeys.keyword)
+    }
+
+    // お気に入りのみ表示
+    if(favorite) {
+      params.set(ParameterPrefixKeys[type] + ParameterKeys.favorite, "1")
+    } else {
+      params.delete(ParameterPrefixKeys[type] + ParameterKeys.favorite)
     }
 
     history.push(`${history.location.pathname}?${params.toString()}`)
@@ -44,6 +68,22 @@ const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
       break
   }
 
+  let favoriteContent = <></>
+  if(state.user && state.user.role.allowedActions.includes("changeFavorites")){
+    favoriteContent =
+      <IconButton
+        onClick={favoriteClickHandler}
+        edge="end"
+      >
+        { onlyFavorite ?
+            <MuiThemeProvider theme={createMuiTheme({ palette: { primary: red } })}>
+              <FavoriteIcon color="primary" stroke={"white"} strokeWidth={2} />
+            </MuiThemeProvider>
+          :
+            <FavoriteBorderIcon /> }
+      </IconButton>
+  }
+
   return (
     <FormControl variant="outlined">
       <InputLabel htmlFor="ord">{ searchType + "検索" }</InputLabel>
@@ -52,6 +92,7 @@ const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
         onKeyDown={keyPressHandler}
         endAdornment={
           <InputAdornment position="end">
+            {favoriteContent}
             <IconButton
               onClick={clickHandler}
               edge="end"

@@ -13,6 +13,7 @@ const ArtistsLayout = () => {
   const parameters = useParameters<ArtistsQueryVariables>("artist")
   let history = useHistory()
   const limit = 30
+  const fetchPolicy = parameters.conditions?.favorite ? "cache-and-network" : "cache-first"
   const { error, data, fetchMore } = useArtistsQuery(
     {
       variables: {
@@ -23,8 +24,7 @@ const ArtistsLayout = () => {
         sort: parameters.sort,
         conditions: parameters.conditions,
       },
-      // 戻るボタンで戻っても最初から読み込みが発生しない
-      fetchPolicy: "cache-first"
+      fetchPolicy
     }
   )
 
@@ -44,7 +44,7 @@ const ArtistsLayout = () => {
         (item, i) =>
           <Grid item key={i}>
             <PaginationComponent
-              component={<ArtistItemLayout artist={item as Artist} width="150px" />}
+              component={<ArtistItemLayout artist={item as Artist} width={150} />}
               no={i}
               offset={data.items.length}
               limit={limit}

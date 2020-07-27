@@ -13,6 +13,7 @@ export const ParameterKeys = {
   status:   "s",
   order:    "o",
   sortType: "r",
+  favorite: "f",
 //tag:      "t", // いつか実装する
 }
 
@@ -76,6 +77,11 @@ export default function useParameters<T>(prefix:ParameterPrefix){
   if(status.status.length !== 0) {
     parameters = _.mergeWith(parameters, { conditions: { ...status } })
   }
+
+  // お気に入り
+  getUniqueValues(prefixKey + ParameterKeys.favorite).forEach((value) => {
+    parameters = _.merge(parameters, { conditions: { favorite: (value === "1") } })
+  })
 
   // 並び順対象
   getUniqueValues(prefixKey + ParameterKeys.order).forEach((value) => {
