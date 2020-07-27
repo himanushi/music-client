@@ -20,7 +20,7 @@ const FavoriteComponent = ({
       const ids = state.user.favorite.albumIds.concat(state.user.favorite.artistIds)
       setFavorite(ids.includes(favorable_id))
     }
-  }, [state])
+  }, [state, favorable_id])
 
   // お気に入り更新
   let input: ChangeFavoritesInput = { favorite: !favorite }
@@ -51,7 +51,6 @@ const FavoriteComponent = ({
     return (
       <Grid container style={{ width: 24, position: "absolute", left: `${contentWidth - 35}px`, top: "5px" }}>
         <IconButton onClick={(e) => {
-            // setFavorite(!favorite)
             changeFavorite()
             // リンク遷移無効
             // TODO: 別のやり方が良いかも
