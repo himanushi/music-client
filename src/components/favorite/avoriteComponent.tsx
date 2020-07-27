@@ -44,7 +44,7 @@ const FavoriteComponent = ({
   // お気に入り機能制限
   if(state.user && state.user.role.allowedActions.includes("changeFavorites")){
     const favoriteIcon =
-    <MuiThemeProvider theme={createMuiTheme({ palette: { primary: red } })}>
+    <MuiThemeProvider theme={ createMuiTheme({ palette: { primary: red } })}>
       <FavoriteIcon color="primary" stroke={"white"} strokeWidth={1} />
     </MuiThemeProvider>
 
