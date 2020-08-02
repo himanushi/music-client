@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment, MuiThemeProvider, createMuiTheme } from '@material-ui/core'
+import { FormControl, IconButton, InputLabel, OutlinedInput, InputAdornment, MuiThemeProvider, createMuiTheme, Chip, TextField } from '@material-ui/core'
 import { ParameterPrefix, ParameterKeys, ParameterPrefixKeys } from '../../hooks/useParameters'
 import { useHistory, useLocation } from 'react-router-dom'
 import SearchIcon from '@material-ui/icons/Search'
@@ -84,12 +84,19 @@ const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
       </IconButton>
   }
 
+  const usernames = <></>//<Chip label="@himanushi" onDelete={()=>{}} />
+
   return (
     <FormControl variant="outlined">
       <InputLabel htmlFor="ord">{ searchType + "検索" }</InputLabel>
       <OutlinedInput
         onChange={(e)=>{setKeyword(e.target.value as string)}}
         onKeyDown={keyPressHandler}
+        // ユーザーとハッシュタグ
+        startAdornment={
+          usernames
+        }
+        // お気に入りと検索ボタン
         endAdornment={
           <InputAdornment position="end">
             {favoriteContent}
