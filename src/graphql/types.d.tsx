@@ -51,6 +51,8 @@ export type Album = {
 };
 
 export type AlbumsConditionsInputObject = {
+  /** ユーザー名 */
+  usernames?: Maybe<Array<Scalars['String']>>;
   /** アーティストID */
   artists?: Maybe<IdInputObject>;
   /** アルバム名(あいまい検索) */

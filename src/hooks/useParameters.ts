@@ -14,6 +14,7 @@ export const ParameterKeys = {
   order:    "o",
   sortType: "r",
   favorite: "f",
+  username: "u",
 //tag:      "t", // いつか実装する
 }
 
@@ -82,6 +83,15 @@ export default function useParameters<T>(prefix:ParameterPrefix){
   getUniqueValues(prefixKey + ParameterKeys.favorite).forEach((value) => {
     parameters = _.merge(parameters, { conditions: { favorite: (value === "1") } })
   })
+
+  // ユーザーお気に入り
+  let usernames = { usernames: [] }
+  getUniqueValues(prefixKey + ParameterKeys.username).forEach((value) => {
+    usernames = _.mergeWith(usernames, { usernames: [value] }, customizer)
+  })
+  if(usernames.usernames.length !== 0) {
+    parameters = _.mergeWith(parameters, { conditions: { ...usernames } })
+  }
 
   // 並び順対象
   getUniqueValues(prefixKey + ParameterKeys.order).forEach((value) => {
