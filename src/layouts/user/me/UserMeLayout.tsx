@@ -1,29 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Grid, FormControl, InputLabel, Input, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
 import { useMeQuery, useUpdateMeMutation, UpdateMePayload, UpdateMeInput } from '../../../graphql/types.d';
+import UserContext from '../../../hooks/userContext';
 
 const UserMeLayout = () => {
+  const [setup, setSetup] = useState(true)
   const [notification, setNotification] = useState(<></>)
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
   const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [input, setInput] = useState<UpdateMeInput>({ oldPassword })
+  const { state, dispatch } = useContext(UserContext)
 
   // カレントユーザーデフォルト値
-  const { data } = useMeQuery()
-  if(name === "" && username === "" && data && data.me){
-    setName(data.me.name)
-    setUsername(data.me.username)
-  }
-  // TODO: 適当すぎるので直すこと
-  let role:JSX.Element[] = []
-  if(data && data.me){
-    role = data.me.role.allowedActions.map((action, i) => {
-        return <p key={i}>{action}</p>
-      }
-    )
+  if(state.user && setup){
+    setSetup(false)
+    setName(state.user.name)
+    setUsername(state.user.username)
+
+    // 詳細情報はログに出しておく
+    if(state.user){
+      console.log({ id: state.user.id })
+      console.log({ role: state.user.role.allowedActions })
+    }
   }
 
   // カレントユーザー更新
@@ -50,7 +51,6 @@ const UserMeLayout = () => {
       alignItems="center"
     >
       <form autoComplete="off">
-        <div>ID: {(data && data.me) ? data.me.id : ""}</div>
         <div>
           <FormControl>
             <InputLabel>名前</InputLabel>
@@ -91,7 +91,6 @@ const UserMeLayout = () => {
           <Button type="submit" onClick={(e) =>{e.preventDefault(); updateMe()}} variant="contained">Update</Button>
         </div>
         <div>{notification}</div>
-        <div>権限: {role}</div>
       </form>
     </Grid>
   )
