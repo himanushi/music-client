@@ -140,6 +140,8 @@ export type Artist = {
 };
 
 export type ArtistsConditionsInputObject = {
+  /** ユーザー名 */
+  usernames?: Maybe<Array<Scalars['String']>>;
   /** アルバムID */
   albums?: Maybe<IdInputObject>;
   /** アーティスト名(あいまい検索) */
