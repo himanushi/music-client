@@ -273,6 +273,8 @@ export type CurrentUser = {
   favorite: Favorite;
   /** ID */
   id: Scalars['TTID'];
+  /** 初期設定済み */
+  initialized: Scalars['Boolean'];
   /** 名前 */
   name: Scalars['String'];
   /** ロール */
@@ -1036,7 +1038,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'CurrentUser' }
-    & Pick<CurrentUser, 'id' | 'name' | 'username'>
+    & Pick<CurrentUser, 'id' | 'name' | 'username' | 'initialized'>
     & { role: (
       { __typename?: 'Role' }
       & Pick<Role, 'id' | 'name' | 'description' | 'allowedActions'>
@@ -1401,6 +1403,7 @@ export const MeDocument = gql`
     id
     name
     username
+    initialized
     role {
       id
       name
