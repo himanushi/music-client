@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Grid, FormControl, InputLabel, Input, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
 import { useMeQuery, useUpdateMeMutation, UpdateMePayload, UpdateMeInput } from '../../../graphql/types.d';
@@ -15,17 +15,19 @@ const UserMeLayout = () => {
   const { state, dispatch } = useContext(UserContext)
 
   // カレントユーザーデフォルト値
-  if(state.user && setup){
-    setSetup(false)
-    setName(state.user.name)
-    setUsername(state.user.username)
+  useEffect(() => {
+    if(state.user && setup){
+      setSetup(false)
+      setName(state.user.name)
+      setUsername(state.user.username)
 
-    // 詳細情報はログに出しておく
-    if(state.user){
-      console.log({ id: state.user.id })
-      console.log({ role: state.user.role.allowedActions })
+      // 詳細情報はログに出しておく
+      if(state.user){
+        console.log({ id: state.user.id })
+        console.log({ role: state.user.role.allowedActions })
+      }
     }
-  }
+  }, [state, setup])
 
   // カレントユーザー更新
   interface UpdateMeResponse {
