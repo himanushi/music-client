@@ -43,8 +43,7 @@ const Bar = () => {
             spacing={3}
           >
             <Grid item>
-              <img src="/logo.png" style={{ width: "200px" }}/>
-              {/* <Typography variant="h6">ゲーム音楽</Typography> */}
+              <Typography variant="h6">ゲーム音楽</Typography>
             </Grid>
             <Grid item>
               <IconButton component={Link} onClick={resetTitle("アーティスト一覧")} to={`/artists`} edge="start" size="small" color="inherit" aria-label="menu">
