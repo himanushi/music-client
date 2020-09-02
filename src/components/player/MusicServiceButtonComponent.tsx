@@ -30,7 +30,7 @@ const MusicServiceButtonComponent = ({ album }:{ album:Album|null }) => {
       <Grid item key={1}>
         <MuiThemeProvider theme={createMuiTheme({ palette: { primary: blue } })}>
           <Button
-            href={`https://music.apple.com/jp/album/${album.itunesAlbum.appleMusicId}`}
+            href={`itmss://music.apple.com/jp/album/${album.itunesAlbum.appleMusicId}?app=itunes`}
             target="_blank"
             variant="contained" color="primary"
             onClick={() => dispatch({ type: "PAUSE" })}
