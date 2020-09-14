@@ -12,7 +12,7 @@ import UserMeLayout from '../user/me/UserMeLayout';
 import { Grid, Container, Toolbar } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
 import PlayerBar from './PlayerBar';
-import AboutLayout from '../information/AbputLayout';
+import AboutLayout from '../information/AboutLayout';
 import { UserProvider } from '../../hooks/userContext';
 import InitializeUser from './InitializeUser';
 
