@@ -1,7 +1,6 @@
 import React from 'react';
 import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid, Menu, MenuItem } from '@material-ui/core';
-import PersonIcon from '@material-ui/icons/Person'
-import AlbumIcon from '@material-ui/icons/Album'
+import SearchIcon from '@material-ui/icons/Search';
 import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
 
@@ -29,7 +28,8 @@ const Bar = () => {
     document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }
 
-  const [anchorEl, setAnchorEl] = React.useState<Element|null>(null)
+  const [searchEl, setSearchEl] = React.useState<Element|null>(null)
+  const [infoEl,   setInfoEl]   = React.useState<Element|null>(null)
 
   return <>
     <HideOnScroll>
@@ -46,29 +46,33 @@ const Bar = () => {
               <Typography variant="h6">ゲーム音楽</Typography>
             </Grid>
             <Grid item>
-              <IconButton component={Link} onClick={resetTitle("アーティスト一覧")} to={`/artists`} edge="start" size="small" color="inherit" aria-label="menu">
-                <PersonIcon />
+              <IconButton onClick={(event) => setSearchEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
+                <SearchIcon />
               </IconButton>
+              <Menu
+                anchorEl={searchEl}
+                keepMounted
+                open={Boolean(searchEl)}
+                onClose={() => setSearchEl(null)}
+              >
+                <MenuItem component={Link} onClick={()=>{resetTitle("アーティスト一覧");setSearchEl(null)}} to={`/artists`}>アーティスト一覧</MenuItem>
+                <MenuItem component={Link} onClick={()=>{resetTitle("アルバム一覧");setSearchEl(null)}} to={`/albums`}>アルバム一覧</MenuItem>
+              </Menu>
             </Grid>
             <Grid item>
-              <IconButton component={Link} onClick={resetTitle("アルバム一覧")} to={`/albums`} edge="start" size="small" color="inherit" aria-label="menu">
-                <AlbumIcon />
-              </IconButton>
-            </Grid>
-            <Grid item>
-              <IconButton onClick={(event) => setAnchorEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
+              <IconButton onClick={(event) => setInfoEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
                 <InfoIcon />
               </IconButton>
               <Menu
-                anchorEl={anchorEl}
+                anchorEl={infoEl}
                 keepMounted
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
+                open={Boolean(infoEl)}
+                onClose={() => setInfoEl(null)}
               >
-                <MenuItem component={Link} onClick={()=>{resetTitle("このサイトについて");setAnchorEl(null)}} to={`/about`}>このサイトについて</MenuItem>
-                <MenuItem component={Link} onClick={()=>{resetTitle("利用規約");setAnchorEl(null)}} to={`/terms`}>利用規約</MenuItem>
-                <MenuItem component={Link} onClick={()=>{resetTitle("プライバシーポリシー");setAnchorEl(null)}} to={`/privacy`}>プライバシーポリシー</MenuItem>
-                <MenuItem component={Link} onClick={()=>{resetTitle("クッキーポリシー");setAnchorEl(null)}} to={`/cookie_policy`}>クッキーポリシー</MenuItem>
+                <MenuItem component={Link} onClick={()=>{resetTitle("このサイトについて");setInfoEl(null)}} to={`/about`}>このサイトについて</MenuItem>
+                <MenuItem component={Link} onClick={()=>{resetTitle("利用規約");setInfoEl(null)}} to={`/terms`}>利用規約</MenuItem>
+                <MenuItem component={Link} onClick={()=>{resetTitle("プライバシーポリシー");setInfoEl(null)}} to={`/privacy`}>プライバシーポリシー</MenuItem>
+                <MenuItem component={Link} onClick={()=>{resetTitle("クッキーポリシー");setInfoEl(null)}} to={`/cookie_policy`}>クッキーポリシー</MenuItem>
               </Menu>
             </Grid>
             {/* <Grid item>
