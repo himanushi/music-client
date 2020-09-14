@@ -17,7 +17,7 @@ const InformationLayout = (markdown:string) => {
     <CardContent>
       <ReactMarkdown
         source={markdown}
-        escapeHtml={false}
+        escapeHtml={true}
       />
     </CardContent>
   </Card>
