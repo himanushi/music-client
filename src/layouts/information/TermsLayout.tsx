@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import InformationLayout from './InformationLayout'
 
 const TermsLayout = () => InformationLayout(`

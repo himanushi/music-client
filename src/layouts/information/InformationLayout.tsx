@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import { Card, Typography, CardContent, IconButton } from '@material-ui/core';
-import TwitterIcon from '@material-ui/icons/Twitter'
-import GitHubIcon from '@material-ui/icons/GitHub'
+import { Card, CardContent } from '@material-ui/core';
 import ReactGA from 'react-ga'
 import ReactMarkdown from 'react-markdown'
 
