@@ -14,6 +14,7 @@ import { PlayerProvider } from '../../hooks/playerContext';
 import PlayerBar from './PlayerBar';
 import AboutLayout from '../information/AboutLayout';
 import TermsLayout from '../information/TermsLayout';
+import PrivacyLayout from '../information/PrivacyLayout';
 import { UserProvider } from '../../hooks/userContext';
 import InitializeUser from './InitializeUser';
 
@@ -51,6 +52,7 @@ const RootLayout = () =>
                   <Route exact path="/me" component={UserMeLayout} />
                   <Route exact path="/about" component={AboutLayout} />
                   <Route exact path="/terms" component={TermsLayout} />
+                  <Route exact path="/privacy" component={PrivacyLayout} />
                 </Switch>
               </Grid>
               <Grid item>
