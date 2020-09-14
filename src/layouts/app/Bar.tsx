@@ -68,6 +68,7 @@ const Bar = () => {
                 <MenuItem component={Link} onClick={()=>{resetTitle("このサイトについて");setAnchorEl(null)}} to={`/about`}>このサイトについて</MenuItem>
                 <MenuItem component={Link} onClick={()=>{resetTitle("利用規約");setAnchorEl(null)}} to={`/terms`}>利用規約</MenuItem>
                 <MenuItem component={Link} onClick={()=>{resetTitle("プライバシーポリシー");setAnchorEl(null)}} to={`/privacy`}>プライバシーポリシー</MenuItem>
+                <MenuItem component={Link} onClick={()=>{resetTitle("クッキーポリシー");setAnchorEl(null)}} to={`/cookie_policy`}>クッキーポリシー</MenuItem>
               </Menu>
             </Grid>
             {/* <Grid item>
