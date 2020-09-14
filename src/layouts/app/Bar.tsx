@@ -43,7 +43,7 @@ const Bar = () => {
             spacing={3}
           >
             <Grid item>
-              <Typography variant="h6">ゲーム音楽</Typography>
+              <Typography color="inherit" style={{ textDecoration: 'none' }} component={Link} onClick={()=>{resetTitle("アルバム一覧");setSearchEl(null)}} to={`/albums`} variant="h6">ゲーム音楽</Typography>
             </Grid>
             <Grid item>
               <IconButton onClick={(event) => setSearchEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
