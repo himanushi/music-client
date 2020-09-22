@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { Grid, FormControl, InputLabel, Input, Button } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
-import { useSigninMutation, SigninPayload } from '../../../graphql/types.d';
+import { useLoginMutation, LoginPayload } from '../../../graphql/types.d';
 
-const UserSigninLayout = () => {
+const UserLoginLayout = () => {
   const [notification, setNotification] = useState(<></>)
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  interface SigninResponse {
-    data: { signin: SigninPayload }
+  interface LoginResponse {
+    data: { login: LoginPayload }
   }
-  const [signin] = useSigninMutation({
-    update: (_, response:SigninResponse) => {
-      if (response.data.signin.error) {
-        setNotification(<Alert severity="error">{response.data.signin.error}</Alert>)
+  const [login] = useLoginMutation({
+    update: (_, response:LoginResponse) => {
+      if (response.data.login.error) {
+        setNotification(<Alert severity="error">{response.data.login.error}</Alert>)
       } else {
         setNotification(<Alert severity="success">ログインしました</Alert>)
       }
@@ -44,7 +44,7 @@ const UserSigninLayout = () => {
           </FormControl>
         </div>
         <div>
-          <Button type="submit" onClick={(e) =>{e.preventDefault(); signin()}} variant="contained">Signin</Button>
+          <Button type="submit" onClick={(e) =>{e.preventDefault(); login()}} variant="contained">ログイン</Button>
         </div>
         <div>{notification}</div>
       </form>
@@ -52,4 +52,4 @@ const UserSigninLayout = () => {
   )
 }
 
-export default UserSigninLayout
+export default UserLoginLayout

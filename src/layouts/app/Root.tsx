@@ -7,7 +7,7 @@ import client from './client';
 import AlbumInfoLayout from '../album/info/AlbumInfoLayout';
 import ArtistsLayout from '../artist/list/ArtistsLayout';
 import ArtistInfoLayout from '../artist/info/ArtistInfoLayout';
-import UserSigninLayout from '../user/signin/UserSigninLayout';
+import UserLoginLayout from '../user/login/UserLoginLayout';
 import UserMeLayout from '../user/me/UserMeLayout';
 import { Grid, Container, Toolbar } from '@material-ui/core';
 import { PlayerProvider } from '../../hooks/playerContext';
@@ -49,7 +49,7 @@ const RootLayout = () =>
                   <Route exact path="/albums" component={AlbumsLayout} />
                   <Route exact path="/albums/:id" component={AlbumInfoLayout} />
                   {/* <Route exact path="/tracks" component={TracksLayout} /> */}
-                  <Route exact path="/signin" component={UserSigninLayout} />
+                  <Route exact path="/login" component={UserLoginLayout} />
                   <Route exact path="/me" component={UserMeLayout} />
                   <Route exact path="/about" component={AboutLayout} />
                   <Route exact path="/terms" component={TermsLayout} />
