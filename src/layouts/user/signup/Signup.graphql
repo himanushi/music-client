@@ -1,0 +1,21 @@
+mutation Signup($input:SignupInput!) {
+  updateMe(input: $input) {
+    currentUser {
+      id
+      name
+      username
+      initialized
+      role {
+        id
+        name
+        description
+        allowedActions
+      }
+      favorite {
+        albumIds
+        artistIds
+      }
+    }
+    error
+  }
+}
