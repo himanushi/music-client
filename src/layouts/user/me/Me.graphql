@@ -3,7 +3,7 @@ query Me {
     id
     name
     username
-    initialized
+    registered
     role {
       id
       name

@@ -4,7 +4,7 @@ mutation Login($input:LoginInput!){
       id
       name
       username
-      initialized
+      registered
       role {
         id
         name

@@ -1,10 +1,10 @@
 mutation Signup($input:SignupInput!) {
-  updateMe(input: $input) {
+  signup(input: $input) {
     currentUser {
       id
       name
       username
-      initialized
+      registered
       role {
         id
         name
