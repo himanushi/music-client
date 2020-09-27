@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Grid, FormControl, InputLabel, Input, Button, Card, CardContent, FormControlLabel, Checkbox } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
-import { useMeQuery, useUpdateMeMutation, UpdateMePayload, UpdateMeInput, CurrentUser } from '../../../graphql/types.d';
+import { useMeQuery, useUpdateMeMutation, UpdateMePayload, UpdateMeInput, CurrentUser, useSignupMutation, SignupPayload, SignupInput } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
 
 const UserSignupLayout = () => {
@@ -9,9 +9,11 @@ const UserSignupLayout = () => {
   const [notification, setNotification] = useState(<></>)
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
-  const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
-  const [input, setInput] = useState<UpdateMeInput>({ oldPassword })
+  const [oldPassword, setOldPassword] = useState("")
+  const [agreedTerms, setAgreedTerms] = useState(false)
+  const [agreedPrivacy, setAgreedPrivacy] = useState(false)
+  const [input, setInput] = useState<SignupInput>({ name, username, newPassword, oldPassword })
   const { state, dispatch } = useContext(UserContext)
 
   const recaptchaRef = React.createRef() // 追加
@@ -32,20 +34,23 @@ const UserSignupLayout = () => {
   }, [state, setup])
 
   // カレントユーザー更新
-  interface UpdateMeResponse {
-    data: { updateMe: UpdateMePayload }
+  interface SignupResponse {
+    data: { signup: SignupPayload }
   }
-  const [updateMe] = useUpdateMeMutation({
-    update: (_, response:UpdateMeResponse) => {
-      if (response.data.updateMe.error) {
-        setNotification(<Alert severity="error">{response.data.updateMe.error}</Alert>)
+  const [signup] = useSignupMutation({
+    update: (_, response:SignupResponse) => {
+      if (response.data.signup.error) {
+        setNotification(<Alert severity="error">{response.data.signup.error}</Alert>)
       } else {
-        dispatch({ type: "SET_USER", user: response.data.updateMe.currentUser as CurrentUser })
-        setNotification(<Alert severity="success">更新しました</Alert>)
+        dispatch({ type: "SET_USER", user: response.data.signup.currentUser as CurrentUser })
+        setNotification(<Alert severity="success">登録しました</Alert>)
       }
     },
     variables: { input },
   })
+
+  const buttonDisabled =
+    !name || !username || !newPassword || !oldPassword || !agreedTerms || !agreedPrivacy
 
   return (
     <Card>
@@ -59,7 +64,7 @@ const UserSignupLayout = () => {
             alignItems="center"
           >
             <Grid item>
-              <FormControl>
+              <FormControl required={true}>
                 <InputLabel>名前</InputLabel>
                 <Input value={name} onChange={e => {
                   setName(e.target.value || "")
@@ -68,8 +73,8 @@ const UserSignupLayout = () => {
               </FormControl>
             </Grid>
             <Grid item>
-              <FormControl>
-                <InputLabel>ユーザー名</InputLabel>
+              <FormControl required={true}>
+                <InputLabel>ユーザーID</InputLabel>
                 <Input value={username} onChange={e => {
                   setUsername(e.target.value || "")
                   setInput({ ...input, username: (e.target.value || "") })
@@ -77,7 +82,7 @@ const UserSignupLayout = () => {
               </FormControl>
             </Grid>
             <Grid item>
-              <FormControl>
+              <FormControl required={true}>
                 <InputLabel>パスワード</InputLabel>
                 <Input value={newPassword} onChange={e => {
                   setNewPassword(e.target.value || "")
@@ -99,10 +104,10 @@ const UserSignupLayout = () => {
             <Grid item>
               <FormControlLabel
                 control={<Checkbox
-                  checked={true}
+                  checked={agreedTerms}
                   color="secondary"
-                  // onChange={handleChange}
-                  name="checkedF"
+                  onChange={() => setAgreedTerms(!agreedTerms)}
+                  name="terms"
                 />}
                 label="利用規約に同意する"
               />
@@ -110,16 +115,16 @@ const UserSignupLayout = () => {
             <Grid item>
               <FormControlLabel
                 control={<Checkbox
-                  checked={true}
+                  checked={agreedPrivacy}
                   color="secondary"
-                  // onChange={handleChange}
-                  name="checkedF"
+                  onChange={() => setAgreedPrivacy(!agreedPrivacy)}
+                  name="privacy"
                 />}
                 label="プライバシーポリシーに同意する"
               />
             </Grid>
             <Grid item>
-              <Button type="submit" onClick={(e) =>{e.preventDefault(); updateMe()}} variant="contained">登録する</Button>
+              <Button disabled={buttonDisabled} type="submit" onClick={(e) =>{e.preventDefault(); signup()}} variant="contained">登録する</Button>
             </Grid>
             <Grid item>{notification}</Grid>
           </Grid>
