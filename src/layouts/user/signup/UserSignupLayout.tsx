@@ -1,11 +1,11 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Grid, FormControl, InputLabel, Input, Button, Card, CardContent, FormControlLabel, Checkbox } from '@material-ui/core';
+import React, { useState, useContext } from 'react';
+import { FormControl, InputLabel, Input, Button, FormControlLabel, Checkbox, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, FormHelperText } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert'
-import { useMeQuery, useUpdateMeMutation, UpdateMePayload, UpdateMeInput, CurrentUser, useSignupMutation, SignupPayload, SignupInput } from '../../../graphql/types.d';
+import { CurrentUser, useSignupMutation, SignupPayload, SignupInput } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
+import { Link } from 'react-router-dom';
 
 const UserSignupLayout = () => {
-  const [setup, setSetup] = useState(true)
   const [notification, setNotification] = useState(<></>)
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
@@ -14,26 +14,9 @@ const UserSignupLayout = () => {
   const [agreedTerms, setAgreedTerms] = useState(false)
   const [agreedPrivacy, setAgreedPrivacy] = useState(false)
   const [input, setInput] = useState<SignupInput>({ name, username, newPassword, oldPassword })
-  const { state, dispatch } = useContext(UserContext)
+  const { dispatch } = useContext(UserContext)
 
-  const recaptchaRef = React.createRef() // 追加
-
-  // カレントユーザーデフォルト値
-  useEffect(() => {
-    if(state.user && setup){
-      setSetup(false)
-      setName(state.user.name)
-      setUsername(state.user.username)
-
-      // 詳細情報はログに出しておく
-      if(state.user){
-        console.log({ id: state.user.id })
-        console.log({ role: state.user.role.allowedActions })
-      }
-    }
-  }, [state, setup])
-
-  // カレントユーザー更新
+  // カレントユーザー登録
   interface SignupResponse {
     data: { signup: SignupPayload }
   }
@@ -53,44 +36,52 @@ const UserSignupLayout = () => {
     !name || !username || !newPassword || !oldPassword || !agreedTerms || !agreedPrivacy
 
   return (
-    <Card>
-      <CardContent>
-        <form autoComplete="off">
-          <Grid
-            container
-            spacing={1}
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Grid item>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell align="center" style={{ border: 'none' }}>ユーザー登録</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow >
+            <TableCell align="center" style={{ border: 'none' }}>
               <FormControl required={true}>
                 <InputLabel>名前</InputLabel>
                 <Input value={name} onChange={e => {
                   setName(e.target.value || "")
                   setInput({ ...input, name: (e.target.value || "") })
                 }}/>
+                <FormHelperText>あとで変更可能</FormHelperText>
               </FormControl>
-            </Grid>
-            <Grid item>
+            </TableCell>
+          </TableRow>
+          <TableRow >
+             <TableCell align="center" style={{ border: 'none' }}>
               <FormControl required={true}>
                 <InputLabel>ユーザーID</InputLabel>
                 <Input value={username} onChange={e => {
                   setUsername(e.target.value || "")
                   setInput({ ...input, username: (e.target.value || "") })
                 }}/>
+                <FormHelperText>半角英数のみ, あとで変更不可</FormHelperText>
               </FormControl>
-            </Grid>
-            <Grid item>
+            </TableCell>
+          </TableRow>
+          <TableRow >
+            <TableCell align="center" style={{ border: 'none' }}>
               <FormControl required={true}>
-                <InputLabel>パスワード</InputLabel>
+                <InputLabel>パスワード設定</InputLabel>
                 <Input value={newPassword} onChange={e => {
                   setNewPassword(e.target.value || "")
                   setInput({ ...input, newPassword: (e.target.value || "") })
                 }} type="password" />
+                <FormHelperText>あとで変更可能</FormHelperText>
               </FormControl>
-            </Grid>
-            <Grid item>
+            </TableCell>
+          </TableRow>
+          <TableRow >
+            <TableCell align="center">
               <FormControl required={true}>
                 <InputLabel>再確認パスワード</InputLabel>
                 <Input value={oldPassword} onChange={e => {
@@ -98,10 +89,10 @@ const UserSignupLayout = () => {
                   setInput({ ...input, oldPassword: (e.target.value || "") })
                 }} type="password" />
               </FormControl>
-            </Grid>
-            <Grid item>
-            </Grid>
-            <Grid item>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="left" style={{ border: 'none' }}>
               <FormControlLabel
                 control={<Checkbox
                   checked={agreedTerms}
@@ -109,10 +100,12 @@ const UserSignupLayout = () => {
                   onChange={() => setAgreedTerms(!agreedTerms)}
                   name="terms"
                 />}
-                label="利用規約に同意する"
+                label={<><Link to="/terms" target="_blank">利用規約</Link>に同意する</>}
               />
-            </Grid>
-            <Grid item>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="left">
               <FormControlLabel
                 control={<Checkbox
                   checked={agreedPrivacy}
@@ -120,17 +113,21 @@ const UserSignupLayout = () => {
                   onChange={() => setAgreedPrivacy(!agreedPrivacy)}
                   name="privacy"
                 />}
-                label="プライバシーポリシーに同意する"
+                label={<><Link to="/privacy" target="_blank">プライバシーポリシー</Link>に同意する</>}
               />
-            </Grid>
-            <Grid item>
-              <Button disabled={buttonDisabled} type="submit" onClick={(e) =>{e.preventDefault(); signup()}} variant="contained">登録する</Button>
-            </Grid>
-            <Grid item>{notification}</Grid>
-          </Grid>
-        </form>
-      </CardContent>
-    </Card>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell style={{ border: 'none' }} align="center">{notification}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell align="center">
+              <Button disabled={buttonDisabled} variant="contained" onClick={() => signup()}>登録する</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 
