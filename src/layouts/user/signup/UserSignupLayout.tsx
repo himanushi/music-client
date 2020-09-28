@@ -3,7 +3,7 @@ import { FormControl, InputLabel, Input, Button, FormControlLabel, Checkbox, Tab
 import Alert from '@material-ui/lab/Alert'
 import { CurrentUser, useSignupMutation, SignupPayload, SignupInput } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const UserSignupLayout = () => {
   const [notification, setNotification] = useState(<></>)
@@ -16,6 +16,8 @@ const UserSignupLayout = () => {
   const [input, setInput] = useState<SignupInput>({ name, username, newPassword, oldPassword })
   const { dispatch } = useContext(UserContext)
 
+  let history = useHistory()
+
   // カレントユーザー登録
   interface SignupResponse {
     data: { signup: SignupPayload }
@@ -26,7 +28,7 @@ const UserSignupLayout = () => {
         setNotification(<Alert severity="error">{response.data.signup.error}</Alert>)
       } else {
         dispatch({ type: "SET_USER", user: response.data.signup.currentUser as CurrentUser })
-        setNotification(<Alert severity="success">登録しました</Alert>)
+        history.push("/albums")
       }
     },
     variables: { input },
@@ -116,9 +118,6 @@ const UserSignupLayout = () => {
                 label={<><Link to="/privacy" target="_blank">プライバシーポリシー</Link>に同意する</>}
               />
             </TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell style={{ border: 'none' }} align="center">{notification}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell align="center">
