@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Grid, FormControl, InputLabel, Input, Button, Card, CardContent } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert'
+import React, { useEffect, useContext } from 'react';
 import { useLogoutMutation, LogoutPayload, CurrentUser } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
+import InformationContext from '../../../hooks/informationContext';
+import { useHistory } from 'react-router-dom';
 
 const UserLogoutLayout = () => {
-  const [notification, setNotification] = useState(<></>)
+  const userContext = useContext(UserContext)
+  const infoContext = useContext(InformationContext)
 
-  const { state, dispatch } = useContext(UserContext)
+  let history = useHistory()
 
   interface LogoutResponse {
     data: { logout: LogoutPayload }
@@ -15,10 +16,11 @@ const UserLogoutLayout = () => {
   const [logout] = useLogoutMutation({
     update: (_, response:LogoutResponse) => {
       if (response.data.logout.error) {
-        setNotification(<Alert severity="error">{response.data.logout.error}</Alert>)
+        infoContext.dispatch({ type: "ADD_ALERT", severity: "error", duration: 5000, text: response.data.logout.error, buttonText: "OK" })
       } else {
-        dispatch({ type: "SET_USER", user: response.data.logout.currentUser as CurrentUser })
-        setNotification(<Alert severity="success">ログアウトしました</Alert>)
+        userContext.dispatch({ type: "SET_USER", user: response.data.logout.currentUser as CurrentUser })
+        infoContext.dispatch({ type: "ADD_ALERT", severity: "success", duration: 5000, text: "ログアウトしました", buttonText: "OK" })
+        history.push("/albums")
       }
     },
     variables: { input: {} },
@@ -28,7 +30,7 @@ const UserLogoutLayout = () => {
     logout()
   }, [])
 
-  return notification
+  return <></>
 }
 
 export default UserLogoutLayout
