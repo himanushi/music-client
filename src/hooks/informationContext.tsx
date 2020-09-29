@@ -13,16 +13,19 @@ const initialState: {
   duration: number | null
   text: string
   buttonText: string
+  open: boolean
 } = {
   severity: null,
   duration: null,
   text: "",
-  buttonText: ""
+  buttonText: "",
+  open: false
 }
 
 export type StateType = typeof initialState
 export type ActionType =
-  | { type: 'ADD_ALERT' } & typeof initialState
+  | { type: 'ADD_ALERT', severity: "info" | "success" | "warning" | "error" | null, duration: number | null, text: string, buttonText: string }
+  | { type: 'CLOSE_ALERT' }
 
 const reducer = (state:StateType, action:ActionType):StateType => {
   switch(action.type) {
@@ -32,7 +35,13 @@ const reducer = (state:StateType, action:ActionType):StateType => {
         severity: action.severity,
         duration: action.duration,
         text: action.text,
-        buttonText: action.buttonText
+        buttonText: action.buttonText,
+        open: true
+      }
+    case 'CLOSE_ALERT':
+      return {
+        ...state,
+        open: false
       }
     default:
       return state
