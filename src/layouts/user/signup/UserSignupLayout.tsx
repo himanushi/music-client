@@ -1,12 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { FormControl, InputLabel, Input, Button, FormControlLabel, Checkbox, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, FormHelperText } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert'
 import { CurrentUser, useSignupMutation, SignupPayload, SignupInput } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
 import { Link, useHistory } from 'react-router-dom';
+import InformationContext from '../../../hooks/informationContext';
 
 const UserSignupLayout = () => {
-  const [notification, setNotification] = useState(<></>)
   const [name, setName] = useState("")
   const [username, setUsername] = useState("")
   const [newPassword, setNewPassword] = useState("")
@@ -14,7 +13,8 @@ const UserSignupLayout = () => {
   const [agreedTerms, setAgreedTerms] = useState(false)
   const [agreedPrivacy, setAgreedPrivacy] = useState(false)
   const [input, setInput] = useState<SignupInput>({ name, username, newPassword, oldPassword })
-  const { dispatch } = useContext(UserContext)
+  const userContext = useContext(UserContext)
+  const infoContext = useContext(InformationContext)
 
   let history = useHistory()
 
@@ -25,9 +25,10 @@ const UserSignupLayout = () => {
   const [signup] = useSignupMutation({
     update: (_, response:SignupResponse) => {
       if (response.data.signup.error) {
-        setNotification(<Alert severity="error">{response.data.signup.error}</Alert>)
+        infoContext.dispatch({ type: "ADD_ALERT", severity: "error", duration: 5000, text: response.data.signup.error, buttonText: "OK" })
       } else {
-        dispatch({ type: "SET_USER", user: response.data.signup.currentUser as CurrentUser })
+        userContext.dispatch({ type: "SET_USER", user: response.data.signup.currentUser as CurrentUser })
+        infoContext.dispatch({ type: "ADD_ALERT", severity: "success", duration: 10000, text: "登録しました。音楽を楽しみましょう！", buttonText: "OK" })
         history.push("/albums")
       }
     },
