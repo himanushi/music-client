@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useScrollTrigger, AppBar, Toolbar, Typography, Slide, IconButton, Grid, Menu, MenuItem } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import InfoIcon from '@material-ui/icons/Info';
 import { Link } from 'react-router-dom';
+import UserContext from '../../hooks/userContext';
 
 // ref: https://material-ui.com/components/app-bar/#hide-app-bar
 interface Props {
@@ -28,7 +30,10 @@ const Bar = () => {
     document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }
 
+  const { state, dispatch } = useContext(UserContext)
+
   const [searchEl, setSearchEl] = React.useState<Element|null>(null)
+  const [userEl,   setUserEl]   = React.useState<Element|null>(null)
   const [infoEl,   setInfoEl]   = React.useState<Element|null>(null)
 
   return <>
@@ -60,6 +65,30 @@ const Bar = () => {
               </Menu>
             </Grid>
             <Grid item>
+              <IconButton onClick={(event) => setUserEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
+                <AccountCircleIcon />
+              </IconButton>
+              <Menu
+                anchorEl={userEl}
+                keepMounted
+                open={Boolean(userEl)}
+                onClose={() => setUserEl(null)}
+              >
+                {
+                  state.user?.registered ?
+                  [
+                    <MenuItem key={1} component={Link} onClick={()=>{resetTitle("ユーザー情報");setUserEl(null)}} to={`/me`}>ユーザー情報</MenuItem>,
+                    <MenuItem key={2} component={Link} onClick={()=>{resetTitle("ログアウト");setUserEl(null)}} to={`/logout`}>ログアウト</MenuItem>
+                  ]
+                  :
+                  [
+                    <MenuItem key={11} component={Link} onClick={()=>{resetTitle("登録する");setUserEl(null)}} to={`/signup`}>登録する</MenuItem>,
+                    <MenuItem key={12} component={Link} onClick={()=>{resetTitle("ログイン");setUserEl(null)}} to={`/login`}>ログイン</MenuItem>
+                  ]
+                }
+              </Menu>
+            </Grid>
+            <Grid item>
               <IconButton onClick={(event) => setInfoEl(event.currentTarget)} edge="start" size="small" color="inherit" aria-label="menu">
                 <InfoIcon />
               </IconButton>
@@ -75,11 +104,6 @@ const Bar = () => {
                 <MenuItem component={Link} onClick={()=>{resetTitle("クッキーポリシー");setInfoEl(null)}} to={`/cookie_policy`}>クッキーポリシー</MenuItem>
               </Menu>
             </Grid>
-            {/* <Grid item>
-              <IconButton component={Link} to={`/tracks`} edge="start" size="small" color="inherit" aria-label="menu">
-                <LibraryMusicIcon />
-              </IconButton>
-            </Grid> */}
           </Grid>
         </Toolbar>
       </AppBar>
