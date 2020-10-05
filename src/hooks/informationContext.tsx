@@ -11,7 +11,7 @@ const InformationContext = createContext({} as ContextValue)
 const initialState: {
   severity: "info" | "success" | "warning" | "error" | null
   duration: number | null
-  text: string
+  text: string | JSX.Element
   buttonText: string
   open: boolean
 } = {
@@ -24,7 +24,7 @@ const initialState: {
 
 export type StateType = typeof initialState
 export type ActionType =
-  | { type: 'ADD_ALERT', severity: "info" | "success" | "warning" | "error" | null, duration: number | null, text: string, buttonText: string }
+  | { type: 'ADD_ALERT', severity: "info" | "success" | "warning" | "error" | null, duration: number | null, text: string | JSX.Element, buttonText: string }
   | { type: 'CLOSE_ALERT' }
 
 const reducer = (state:StateType, action:ActionType):StateType => {
