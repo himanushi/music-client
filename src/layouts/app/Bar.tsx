@@ -77,13 +77,13 @@ const Bar = () => {
                 {
                   state.user?.registered ?
                   [
-                    <MenuItem key={1} component={Link} onClick={()=>{resetTitle("ユーザー情報");setUserEl(null)}} to={`/me`}>ユーザー情報</MenuItem>,
-                    <MenuItem key={2} component={Link} onClick={()=>{resetTitle("ログアウト");setUserEl(null)}} to={`/logout`}>ログアウト</MenuItem>
+                    state.user?.role.allowedActions.includes("me") ? <MenuItem key={1} component={Link} onClick={()=>{resetTitle("ユーザー情報");setUserEl(null)}} to={`/me`}>ユーザー情報</MenuItem> : <></>,
+                    state.user?.role.allowedActions.includes("logout") ? <MenuItem key={2} component={Link} onClick={()=>{resetTitle("ログアウト");setUserEl(null)}} to={`/logout`}>ログアウト</MenuItem> : <></>
                   ]
                   :
                   [
-                    <MenuItem key={11} component={Link} onClick={()=>{resetTitle("登録する");setUserEl(null)}} to={`/signup`}>登録する</MenuItem>,
-                    <MenuItem key={12} component={Link} onClick={()=>{resetTitle("ログイン");setUserEl(null)}} to={`/login`}>ログイン</MenuItem>
+                    state.user?.role.allowedActions.includes("signup") ? <MenuItem key={11} component={Link} onClick={()=>{resetTitle("登録する");setUserEl(null)}} to={`/signup`}>登録する</MenuItem> : <></>,
+                    state.user?.role.allowedActions.includes("login") ? <MenuItem key={12} component={Link} onClick={()=>{resetTitle("ログイン");setUserEl(null)}} to={`/login`}>ログイン</MenuItem> : <></>
                   ]
                 }
               </Menu>
