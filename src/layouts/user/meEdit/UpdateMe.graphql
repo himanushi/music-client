@@ -1,0 +1,21 @@
+mutation UpdateMe($input:UpdateMeInput!) {
+  updateMe(input: $input) {
+    currentUser {
+      id
+      name
+      username
+      registered
+      role {
+        id
+        name
+        description
+        allowedActions
+      }
+      favorite {
+        albumIds
+        artistIds
+      }
+    }
+    error
+  }
+}
