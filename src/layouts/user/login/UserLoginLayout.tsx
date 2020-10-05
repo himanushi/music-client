@@ -14,6 +14,11 @@ const UserLoginLayout = () => {
 
   let history = useHistory()
 
+  if(userContext.state.user?.registered) {
+    infoContext.dispatch({ type: "ADD_ALERT", severity: "info", duration: 5000, text: "ログイン済みです", buttonText: "OK" })
+    history.push("/albums")
+  }
+
   interface LoginResponse {
     data: { login: LoginPayload }
   }
