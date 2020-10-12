@@ -23,6 +23,7 @@ import InitializeUser from './InitializeUser';
 import UserSignupLayout from '../user/signup/UserSignupLayout';
 import SnackbarComponent from '../../components/infomation/SnackbarComponent';
 import { InformationProvider } from '../../hooks/informationContext';
+import CookieInformation from './CookieInformation';
 
 const RootLayout = () =>
   <BrowserRouter>
@@ -30,6 +31,7 @@ const RootLayout = () =>
       <UserProvider >
         <InformationProvider>
           <PlayerProvider >
+            <CookieInformation />
             <InitializeUser />
             {/* アプリバー */}
             <Bar />
