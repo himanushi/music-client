@@ -82,7 +82,7 @@ const UserLoginLayout = () => {
           </TableRow>
           <TableRow>
             <TableCell align="center">
-              <Button disabled={!username || !password || !token} variant="contained" onClick={() => login()}>ログインする</Button>
+              <Button disabled={!username || !password || !token} variant="contained" onClick={() => {login();setToken("")}}>ログインする</Button>
             </TableCell>
           </TableRow>
         </TableBody>

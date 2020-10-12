@@ -148,7 +148,7 @@ const UserSignupLayout = () => {
           </TableRow>
           <TableRow>
             <TableCell align="center">
-              <Button disabled={buttonDisabled} variant="contained" onClick={() => signup()}>登録する</Button>
+              <Button disabled={buttonDisabled} variant="contained" onClick={() => {signup();setToken("")}}>登録する</Button>
             </TableCell>
           </TableRow>
         </TableBody>
