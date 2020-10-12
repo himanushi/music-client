@@ -36,7 +36,7 @@ const UserMeEditLayout = () => {
         console.log({ role: userContext.state.user.role.allowedActions })
       }
     }
-  }, [userContext.state, setup])
+  }, [userContext.state, setup, input])
 
   // カレントユーザー更新
   interface UpdateMeResponse {
