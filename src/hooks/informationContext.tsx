@@ -1,5 +1,4 @@
 import React, { useReducer, createContext, Dispatch } from 'react'
-import { CurrentUser } from '../graphql/types.d'
 
 type ContextValue = {
   state: StateType
@@ -14,17 +13,18 @@ const initialState: {
   text: string | JSX.Element
   buttonText: string
   open: boolean
+  closeHandler?: (event: any) => void
 } = {
   severity: null,
   duration: null,
   text: "",
   buttonText: "",
-  open: false
+  open: false,
 }
 
 export type StateType = typeof initialState
 export type ActionType =
-  | { type: 'ADD_ALERT', severity: "info" | "success" | "warning" | "error" | null, duration: number | null, text: string | JSX.Element, buttonText: string }
+  | { type: 'ADD_ALERT', severity: "info" | "success" | "warning" | "error" | null, duration: number | null, text: string | JSX.Element, buttonText: string, closeHandler?: (event: any) => void }
   | { type: 'CLOSE_ALERT' }
 
 const reducer = (state:StateType, action:ActionType):StateType => {
@@ -36,7 +36,8 @@ const reducer = (state:StateType, action:ActionType):StateType => {
         duration: action.duration,
         text: action.text,
         buttonText: action.buttonText,
-        open: true
+        open: true,
+        closeHandler: action.closeHandler
       }
     case 'CLOSE_ALERT':
       return {
