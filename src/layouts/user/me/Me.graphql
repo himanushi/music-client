@@ -4,6 +4,10 @@ query Me {
     name
     username
     registered
+    publicInformations {
+      id
+      publicType
+    }
     role {
       id
       name

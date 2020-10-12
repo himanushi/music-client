@@ -5,6 +5,10 @@ mutation UpdateMe($input:UpdateMeInput!) {
       name
       username
       registered
+      publicInformations {
+        id
+        publicType
+      }
       role {
         id
         name

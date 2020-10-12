@@ -5,6 +5,10 @@ mutation Signup($input:SignupInput!) {
       name
       username
       registered
+      publicInformations {
+        id
+        publicType
+      }
       role {
         id
         name

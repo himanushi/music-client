@@ -5,6 +5,10 @@ mutation Login($input:LoginInput!){
       name
       username
       registered
+      publicInformations {
+        id
+        publicType
+      }
       role {
         id
         name

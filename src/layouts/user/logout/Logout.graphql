@@ -5,6 +5,10 @@ mutation Logout($input:LogoutInput!){
       name
       username
       registered
+      publicInformations {
+        id
+        publicType
+      }
       role {
         id
         name
