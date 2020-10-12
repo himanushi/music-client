@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { Grid, FormControl, InputLabel, Input, Button, Card, CardContent, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, ClickAwayListener, Tooltip, IconButton } from '@material-ui/core';
-import Alert from '@material-ui/lab/Alert'
+import { FormControl, InputLabel, Input, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import { useUpdateMeMutation, UpdateMePayload, UpdateMeInput, CurrentUser } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import InformationContext from '../../../hooks/informationContext';
 
 const UserMeEditLayout = () => {
@@ -13,10 +12,8 @@ const UserMeEditLayout = () => {
   const [newPassword, setNewPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
   const [input, setInput] = useState<UpdateMeInput>({})
-
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
-
   let history = useHistory()
 
   // カレントユーザーデフォルト値
@@ -42,9 +39,9 @@ const UserMeEditLayout = () => {
       if (response.data.updateMe.error) {
         infoContext.dispatch({ type: "ADD_ALERT", severity: "error", duration: 20000, text: response.data.updateMe.error, buttonText: "OK" })
       } else {
+        history.push("/me")
         userContext.dispatch({ type: "SET_USER", user: response.data.updateMe.currentUser as CurrentUser })
         infoContext.dispatch({ type: "ADD_ALERT", severity: "success", duration: 10000, text: "更新しました", buttonText: "OK" })
-        history.push("/me")
       }
     },
     variables: { input },

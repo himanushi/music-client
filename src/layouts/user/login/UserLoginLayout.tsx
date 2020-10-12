@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef, createRef } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { FormControl, InputLabel, Input, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import { useLoginMutation, LoginPayload, CurrentUser } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
@@ -9,26 +9,25 @@ import ReCAPTCHA from "react-google-recaptcha";
 const UserLoginLayout = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [token,    setToken] = useState("")
-  const recaptchaRef = useRef<ReCAPTCHA>() as React.RefObject<ReCAPTCHA>
-
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
-
   let history = useHistory()
 
-  useEffect(() => {
-    if(token) {
-      document.cookie = `reCAPTCHAv2Token=${token};`
-    }
+  const [token, setToken] = useState("")
+  const recaptchaRef = useRef<ReCAPTCHA>() as React.RefObject<ReCAPTCHA>
 
-    return () => { document.cookie = `reCAPTCHAv2Token=;` }
+  useEffect(() => {
+    if(token) document.cookie = `reCAPTCHAv2Token=${token}; max-age=300; path=/;`
+    return () => { document.cookie = `reCAPTCHAv2Token=; max-age=300; path=/;` }
   }, [token])
 
-  if(userContext.state.user?.registered) {
-    infoContext.dispatch({ type: "ADD_ALERT", severity: "info", duration: 5000, text: "ログイン済みです", buttonText: "OK" })
-    history.push("/albums")
-  }
+  // ログイン済みの場合はリターン
+  useEffect(() => {
+    if(userContext.state.user?.registered) {
+      history.push("/albums")
+      infoContext.dispatch({ type: "ADD_ALERT", severity: "info", duration: 5000, text: "ログイン済みです", buttonText: "OK" })
+    }
+  }, [userContext, infoContext, history])
 
   interface LoginResponse {
     data: { login: LoginPayload }
@@ -39,9 +38,9 @@ const UserLoginLayout = () => {
         recaptchaRef?.current?.reset()
         infoContext.dispatch({ type: "ADD_ALERT", severity: "error", duration: 5000, text: response.data.login.error, buttonText: "OK" })
       } else {
+        history.push("/albums")
         userContext.dispatch({ type: "SET_USER", user: response.data.login.currentUser as CurrentUser })
         infoContext.dispatch({ type: "ADD_ALERT", severity: "success", duration: 5000, text: "ログインしました。", buttonText: "OK" })
-        history.push("/albums")
       }
     },
     variables: { input: { username, password } },

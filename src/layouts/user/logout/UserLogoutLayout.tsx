@@ -18,9 +18,9 @@ const UserLogoutLayout = () => {
       if (response.data.logout.error) {
         infoContext.dispatch({ type: "ADD_ALERT", severity: "error", duration: 5000, text: response.data.logout.error, buttonText: "OK" })
       } else {
+        history.push("/")
         userContext.dispatch({ type: "SET_USER", user: response.data.logout.currentUser as CurrentUser })
         infoContext.dispatch({ type: "ADD_ALERT", severity: "success", duration: 5000, text: "ログアウトしました", buttonText: "OK" })
-        history.push("/albums")
       }
     },
     variables: { input: {} },
@@ -28,7 +28,7 @@ const UserLogoutLayout = () => {
 
   useEffect(() => {
     logout()
-  }, [])
+  }, [logout])
 
   return <></>
 }

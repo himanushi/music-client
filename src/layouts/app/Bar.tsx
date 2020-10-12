@@ -30,7 +30,7 @@ const Bar = () => {
     document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }
 
-  const { state, dispatch } = useContext(UserContext)
+  const { state } = useContext(UserContext)
 
   const [searchEl, setSearchEl] = React.useState<Element|null>(null)
   const [userEl,   setUserEl]   = React.useState<Element|null>(null)
@@ -77,13 +77,13 @@ const Bar = () => {
                 {
                   state.user?.registered ?
                   [
-                    state.user?.role.allowedActions.includes("me") ? <MenuItem key={1} component={Link} onClick={()=>{resetTitle("ユーザー情報");setUserEl(null)}} to={`/me`}>ユーザー情報</MenuItem> : <></>,
-                    state.user?.role.allowedActions.includes("logout") ? <MenuItem key={2} component={Link} onClick={()=>{resetTitle("ログアウト");setUserEl(null)}} to={`/logout`}>ログアウト</MenuItem> : <></>
+                    state.user?.role.allowedActions.includes("me") ? <MenuItem key={1} component={Link} onClick={()=>{resetTitle("ユーザー情報");setUserEl(null)}} to={`/me`}>ユーザー情報</MenuItem> : "",
+                    state.user?.role.allowedActions.includes("logout") ? <MenuItem key={2} component={Link} onClick={()=>{resetTitle("ログアウト");setUserEl(null)}} to={`/logout`}>ログアウト</MenuItem> : ""
                   ]
                   :
                   [
-                    state.user?.role.allowedActions.includes("signup") ? <MenuItem key={11} component={Link} onClick={()=>{resetTitle("登録する");setUserEl(null)}} to={`/signup`}>登録する</MenuItem> : <></>,
-                    state.user?.role.allowedActions.includes("login") ? <MenuItem key={12} component={Link} onClick={()=>{resetTitle("ログイン");setUserEl(null)}} to={`/login`}>ログイン</MenuItem> : <></>
+                    state.user?.role.allowedActions.includes("signup") ? <MenuItem key={11} component={Link} onClick={()=>{resetTitle("登録する");setUserEl(null)}} to={`/signup`}>登録する</MenuItem> : "",
+                    state.user?.role.allowedActions.includes("login") ? <MenuItem key={12} component={Link} onClick={()=>{resetTitle("ログイン");setUserEl(null)}} to={`/login`}>ログイン</MenuItem> : ""
                   ]
                 }
               </Menu>
