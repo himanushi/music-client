@@ -1,12 +1,13 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter } from "react-router-dom"
-import AlbumsLayout from '../album/list/AlbumsLayout';
 import Bar from './Bar';
 import { ApolloProvider } from '@apollo/react-hoc';
 import client from './client';
-import AlbumInfoLayout from '../album/info/AlbumInfoLayout';
 import ArtistsLayout from '../artist/list/ArtistsLayout';
 import ArtistInfoLayout from '../artist/info/ArtistInfoLayout';
+import AlbumsLayout from '../album/list/AlbumsLayout';
+import AlbumInfoLayout from '../album/info/AlbumInfoLayout';
+import TracksLayout from '../track/list/TracksLayout';
 import UserLoginLayout from '../user/login/UserLoginLayout';
 import UserLogoutLayout from '../user/logout/UserLogoutLayout';
 import UserMeLayout from '../user/me/UserMeLayout';
@@ -56,6 +57,7 @@ const RootLayout = () =>
                     <Route exact path="/artists/:id" component={ArtistInfoLayout} />
                     <Route exact path="/albums" component={AlbumsLayout} />
                     <Route exact path="/albums/:id" component={AlbumInfoLayout} />
+                    <Route exact path="/tracks" component={TracksLayout} />
                     <Route exact path="/signup" component={UserSignupLayout} />
                     <Route exact path="/login" component={UserLoginLayout} />
                     <Route exact path="/logout" component={UserLogoutLayout} />

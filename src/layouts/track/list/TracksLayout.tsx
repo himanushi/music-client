@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState } from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid } from '@material-ui/core';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid, ClickAwayListener, Tooltip, IconButton } from '@material-ui/core';
 import { useLocation, useHistory } from 'react-router-dom';
 import PreviewPlayerItemComponent from '../../../components/player/PreviewPlayerItemComponent';
 import { useTracksQuery, TracksQueryVariables, Track } from '../../../graphql/types.d';
@@ -8,14 +8,19 @@ import PreviewPlayer from '../../../components/player/PreviewPlayer';
 import PlayerContext from '../../../hooks/playerContext';
 import SearchKeywordComponent from '../../../components/search/SearchKeywordComponent';
 import OrderComponent from '../../../components/search/OrderComponent';
+import InfoIcon from '@material-ui/icons/Info';
 
 const TracksLayout = () => {
   const [order, setOrder] = useState<string>("NAME.DESC")
+  const parameters = useParameters<TracksQueryVariables>("track")
+  const [openPreviewInfo, setOpenPreviewInfo] = useState(false)
+  const [openTitleInfo, setOpenTitleInfo] = useState(false)
   const { dispatch } = useContext(PlayerContext)
+
   const location = useLocation()
   let history = useHistory()
-  const parameters = useParameters<TracksQueryVariables>("track")
-  const limit = 100
+
+  const limit = 50
   const { error, data, loading } = useTracksQuery(
     {
       variables: {
@@ -119,8 +124,48 @@ const TracksLayout = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="center">試聴</TableCell>
-              <TableCell>タイトル</TableCell>
+              <TableCell style={{ width: 100 }} align="center">
+                試聴
+                <ClickAwayListener onClickAway={()=>setOpenPreviewInfo(false)}>
+                  <Tooltip
+                    PopperProps={{
+                      disablePortal: true,
+                    }}
+                    onClose={()=>setOpenPreviewInfo(false)}
+                    open={openPreviewInfo}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top-start"
+                    title={ "Apple Music または Spotify のプレビューURLによるストリーミング試聴" }
+                  >
+                    <IconButton size="small" onClick={()=>setOpenPreviewInfo(true)}>
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </ClickAwayListener>
+              </TableCell>
+              <TableCell>
+                タイトル
+                <ClickAwayListener onClickAway={()=>setOpenTitleInfo(false)}>
+                  <Tooltip
+                    PopperProps={{
+                      disablePortal: true,
+                    }}
+                    onClose={()=>setOpenTitleInfo(false)}
+                    open={openTitleInfo}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    placement="top-start"
+                    title={ "50件まで検索結果が表示されます" }
+                  >
+                    <IconButton size="small" onClick={()=>setOpenTitleInfo(true)}>
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </ClickAwayListener>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

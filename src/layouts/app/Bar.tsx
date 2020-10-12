@@ -62,6 +62,7 @@ const Bar = () => {
               >
                 <MenuItem component={Link} onClick={()=>{resetTitle("アーティスト一覧");setSearchEl(null)}} to={`/artists`}>アーティスト一覧</MenuItem>
                 <MenuItem component={Link} onClick={()=>{resetTitle("アルバム一覧");setSearchEl(null)}} to={`/albums`}>アルバム一覧</MenuItem>
+                { state.user?.role.allowedActions.includes("tracks") ? <MenuItem component={Link} onClick={()=>{resetTitle("曲一覧");setSearchEl(null)}} to={`/tracks`}>曲一覧(β版)</MenuItem> : ""}
               </Menu>
             </Grid>
             <Grid item>
