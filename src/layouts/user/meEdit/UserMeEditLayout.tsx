@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { FormControl, InputLabel, Input, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { FormControl, InputLabel, Input, Button, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Select, MenuItem } from '@material-ui/core';
 import { useUpdateMeMutation, UpdateMePayload, UpdateMeInput, CurrentUser } from '../../../graphql/types.d';
 import UserContext from '../../../hooks/userContext';
 import { useHistory } from 'react-router-dom';
@@ -8,10 +8,12 @@ import InformationContext from '../../../hooks/informationContext';
 const UserMeEditLayout = () => {
   const [setup, setSetup] = useState(true)
   const [name, setName] = useState("")
+  const [isPublicArtist, setIsPublicArtist] = useState(0)
+  const [isPublicAlbum, setIsPublicAlbum] = useState(0)
   const [oldPassword, setOldPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [passwordConfirmation, setPasswordConfirmation] = useState("")
-  const [input, setInput] = useState<UpdateMeInput>({})
+  const [input, setInput] = useState<UpdateMeInput>({ isPublicArtist: false, isPublicAlbum: false })
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
   let history = useHistory()
@@ -21,6 +23,12 @@ const UserMeEditLayout = () => {
     if(userContext.state.user && setup){
       setSetup(false)
       setName(userContext.state.user.name)
+      const publicTypes = userContext.state.user.publicInformations.map(p=>p.publicType)
+      const publicArtist = publicTypes.includes("artist")
+      setIsPublicArtist(publicArtist ? 1 : 0)
+      const publicAlbum = publicTypes.includes("album")
+      setIsPublicAlbum(publicAlbum ? 1 : 0)
+      setInput({ ...input, isPublicArtist: publicArtist, isPublicAlbum: publicAlbum })
 
       // 詳細情報はログに出しておく
       if(userContext.state.user){
@@ -64,6 +72,61 @@ const UserMeEditLayout = () => {
                   setName(e.target.value || "")
                   setInput({ ...input, name: (e.target.value || "") })
                 }}/>
+              </FormControl>
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell colSpan={2} align="center">
+              <Button onClick={() => updateMe()} variant="contained">更新する</Button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell colSpan={2} align="center" style={{ border: 'none' }}>公開情報更新</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow >
+            <TableCell align="right" style={{ border: 'none' }}>
+              お気に入りアーティストを
+            </TableCell>
+            <TableCell align="left" style={{ border: 'none' }}>
+              <FormControl required={true}>
+              <Select
+                value={isPublicArtist}
+                onChange={(e)=>{
+                  const publicArtist = e.target.value as number
+                  setIsPublicArtist(publicArtist)
+                  setInput({ ...input, isPublicArtist: !!publicArtist })
+                }}
+              >
+                <MenuItem value={0}>公開しない</MenuItem>
+                <MenuItem value={1}>公開する</MenuItem>
+              </Select>
+              </FormControl>
+            </TableCell>
+          </TableRow>
+          <TableRow >
+            <TableCell align="right" style={{ border: 'none' }}>
+              お気に入りアルバムを
+            </TableCell>
+            <TableCell align="left" style={{ border: 'none' }}>
+              <FormControl required={true}>
+              <Select
+                value={isPublicAlbum}
+                onChange={(e)=>{
+                  const publicAlbum = e.target.value as number
+                  setIsPublicAlbum(publicAlbum)
+                  setInput({ ...input, isPublicAlbum: !!publicAlbum })
+                }}
+              >
+                <MenuItem value={0}>公開しない</MenuItem>
+                <MenuItem value={1}>公開する</MenuItem>
+              </Select>
               </FormControl>
             </TableCell>
           </TableRow>

@@ -10,6 +10,10 @@ const UserMeLayout = () => {
   const [openInfoPublicInformation, setOpenInfoPublicInformation] = useState(false)
   const [openInfoMusicServiceLogin, setOpenInfoMusicServiceLogin] = useState(false)
 
+  const publicTypes = state.user?.publicInformations?.map(p=>p.publicType) || []
+  const publicArtist = publicTypes.includes("artist") ? "公開する" : "公開しない"
+  const publicAlbum  = publicTypes.includes("album") ? "公開する" : "公開しない"
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -49,7 +53,7 @@ const UserMeLayout = () => {
                   disableHoverListener
                   disableTouchListener
                   placement="top"
-                  title="開発中。お気に入りが公開できます。"
+                  title="お気に入りが公開できます。"
                 >
                   <IconButton size="small" onClick={()=>setOpenInfoPublicInformation(true)}>
                     <InfoIcon fontSize="small" />
@@ -62,11 +66,11 @@ const UserMeLayout = () => {
         <TableBody>
           <TableRow>
             <TableCell align="right" style={{ border: 'none' }}>好きなアーティスト</TableCell>
-            <TableCell align="left" style={{ border: 'none' }}>公開しない</TableCell>
+            <TableCell align="left" style={{ border: 'none' }}>{publicArtist}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell align="right">好きなアルバム</TableCell>
-            <TableCell align="left">公開しない</TableCell>
+            <TableCell align="left">{publicAlbum}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
