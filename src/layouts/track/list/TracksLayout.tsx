@@ -158,7 +158,7 @@ const TracksLayout = () => {
                     disableHoverListener
                     disableTouchListener
                     placement="top-start"
-                    title={ "50件まで検索結果が表示されます" }
+                    title={ "50件までの検索結果が表示されます" }
                   >
                     <IconButton size="small" onClick={()=>setOpenTitleInfo(true)}>
                       <InfoIcon fontSize="small" />
