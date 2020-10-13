@@ -3,6 +3,7 @@ import { Button, TableContainer, Paper, Table, TableBody, TableRow, TableCell, T
 import UserContext from '../../../hooks/userContext';
 import { Link } from 'react-router-dom';
 import InfoIcon from '@material-ui/icons/Info';
+import useMusicKitAuthentication from '../../../hooks/useMusicKit/useMusicKitAuthentication';
 
 const UserMeLayout = () => {
   const { state } = useContext(UserContext)
@@ -13,6 +14,13 @@ const UserMeLayout = () => {
   const publicTypes = state.user?.publicInformations?.map(p=>p.publicType) || []
   const publicArtist = publicTypes.includes("artist") ? "公開する" : "公開しない"
   const publicAlbum  = publicTypes.includes("album") ? "公開する" : "公開しない"
+
+  const { authentication, isAuthorized } = useMusicKitAuthentication()
+
+  const canLoginToApple = state.user?.role.allowedActions.includes("appleMusicToken")
+  const appleLoginButton = isAuthorized ?
+    <Button disabled={!canLoginToApple} onClick={() => authentication.logout()} variant="contained">ログアウト</Button> :
+    <Button disabled={!canLoginToApple} onClick={() => authentication.login()} variant="contained">ログイン</Button>
 
   return (
     <TableContainer component={Paper}>
@@ -103,7 +111,9 @@ const UserMeLayout = () => {
         <TableBody>
           <TableRow>
             <TableCell align="right" style={{ border: 'none' }}>Apple Music</TableCell>
-            <TableCell align="left" style={{ border: 'none' }}>未ログイン</TableCell>
+            <TableCell align="left" style={{ border: 'none' }}>
+              {appleLoginButton}
+            </TableCell>
           </TableRow>
           <TableRow>
             <TableCell align="right">Spotify</TableCell>
