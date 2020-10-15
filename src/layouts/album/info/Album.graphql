@@ -42,6 +42,11 @@ query Album($id: TTID!) {
         width
         height
       }
+      appleMusicTracks {
+        id
+        name
+        appleMusicId
+      }
     }
   }
 }

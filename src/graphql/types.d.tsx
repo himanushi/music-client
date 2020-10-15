@@ -970,7 +970,10 @@ export type AlbumQuery = (
       & { artworkM: (
         { __typename?: 'Artwork' }
         & Pick<Artwork, 'url' | 'width' | 'height'>
-      ) }
+      ), appleMusicTracks?: Maybe<Array<(
+        { __typename?: 'AppleMusicTrack' }
+        & Pick<AppleMusicTrack, 'id' | 'name' | 'appleMusicId'>
+      )>> }
     )> }
   )> }
 );
@@ -1001,6 +1004,14 @@ export type AlbumsQuery = (
       & Pick<SpotifyAlbum, 'id'>
     )> }
   )> }
+);
+
+export type AppleMusicTokenQueryVariables = {};
+
+
+export type AppleMusicTokenQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'appleMusicToken'>
 );
 
 export type ArtistQueryVariables = {
@@ -1169,14 +1180,6 @@ export type UpdateMeMutation = (
   )> }
 );
 
-export type AppleMusicTokenQueryVariables = {};
-
-
-export type AppleMusicTokenQuery = (
-  { __typename?: 'Query' }
-  & Pick<Query, 'appleMusicToken'>
-);
-
 export type SignupMutationVariables = {
   input: SignupInput;
 };
@@ -1296,6 +1299,11 @@ export const AlbumDocument = gql`
         width
         height
       }
+      appleMusicTracks {
+        id
+        name
+        appleMusicId
+      }
     }
   }
 }
@@ -1377,6 +1385,36 @@ export function useAlbumsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookO
 export type AlbumsQueryHookResult = ReturnType<typeof useAlbumsQuery>;
 export type AlbumsLazyQueryHookResult = ReturnType<typeof useAlbumsLazyQuery>;
 export type AlbumsQueryResult = ApolloReactCommon.QueryResult<AlbumsQuery, AlbumsQueryVariables>;
+export const AppleMusicTokenDocument = gql`
+    query AppleMusicToken {
+  appleMusicToken
+}
+    `;
+
+/**
+ * __useAppleMusicTokenQuery__
+ *
+ * To run a query within a React component, call `useAppleMusicTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAppleMusicTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAppleMusicTokenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAppleMusicTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>) {
+        return ApolloReactHooks.useQuery<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>(AppleMusicTokenDocument, baseOptions);
+      }
+export function useAppleMusicTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>(AppleMusicTokenDocument, baseOptions);
+        }
+export type AppleMusicTokenQueryHookResult = ReturnType<typeof useAppleMusicTokenQuery>;
+export type AppleMusicTokenLazyQueryHookResult = ReturnType<typeof useAppleMusicTokenLazyQuery>;
+export type AppleMusicTokenQueryResult = ApolloReactCommon.QueryResult<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>;
 export const ArtistDocument = gql`
     query Artist($id: TTID!) {
   artist(id: $id) {
@@ -1719,36 +1757,6 @@ export function useUpdateMeMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type UpdateMeMutationHookResult = ReturnType<typeof useUpdateMeMutation>;
 export type UpdateMeMutationResult = ApolloReactCommon.MutationResult<UpdateMeMutation>;
 export type UpdateMeMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateMeMutation, UpdateMeMutationVariables>;
-export const AppleMusicTokenDocument = gql`
-    query AppleMusicToken {
-  appleMusicToken
-}
-    `;
-
-/**
- * __useAppleMusicTokenQuery__
- *
- * To run a query within a React component, call `useAppleMusicTokenQuery` and pass it any options that fit your needs.
- * When your component renders, `useAppleMusicTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAppleMusicTokenQuery({
- *   variables: {
- *   },
- * });
- */
-export function useAppleMusicTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>) {
-        return ApolloReactHooks.useQuery<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>(AppleMusicTokenDocument, baseOptions);
-      }
-export function useAppleMusicTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>(AppleMusicTokenDocument, baseOptions);
-        }
-export type AppleMusicTokenQueryHookResult = ReturnType<typeof useAppleMusicTokenQuery>;
-export type AppleMusicTokenLazyQueryHookResult = ReturnType<typeof useAppleMusicTokenLazyQuery>;
-export type AppleMusicTokenQueryResult = ApolloReactCommon.QueryResult<AppleMusicTokenQuery, AppleMusicTokenQueryVariables>;
 export const SignupDocument = gql`
     mutation Signup($input: SignupInput!) {
   signup(input: $input) {
