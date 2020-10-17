@@ -28,6 +28,7 @@ const UserLogoutLayout = () => {
 
   useEffect(() => {
     logout()
+    try { MusicKit.getInstance().unauthorize() } catch {}
   }, [logout])
 
   return <></>
