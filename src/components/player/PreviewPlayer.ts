@@ -1,55 +1,20 @@
 import { Howl } from 'howler'
 import { Track } from '../../graphql/types.d'
 import { ActionType } from '../../hooks/playerContext'
-import { isEmpty } from 'lodash'
 
 class PreviewPlayer {
-  linkUrl: string
-  playlist: { [key:number]:Howl }
-  tracks: Track[]
-  currentPlaybackNo: number
-  dispatch?: React.Dispatch<ActionType>
+  track?: Track
+  player?: Howl
+  currentPlaybackNo?: number
+  dispatch: React.Dispatch<ActionType>
 
-  constructor(
-    { linkUrl, tracks, dispatch }:
-    { linkUrl:string, tracks:Track[], dispatch?: React.Dispatch<ActionType> }
-  ){
-    this.linkUrl = linkUrl
-    this.currentPlaybackNo = 0
-    this.playlist = {}
-    tracks.forEach((track, index) => {
-      if(!track.previewUrl) return
-      const player:Howl = new Howl({
-        src: track.previewUrl,
-        html5: true,
-        preload: false,
-        autoplay: false,
-        onend: async () => this.autoNextPlay(),
-        onplay: () => {
-          // Media Session API
-          if(this.dispatch) this.setMediaMetadata(this.dispatch)
-          // フェードイン
-          if(player.volume() === 0) player.fade(0, 0.5, 2000)
-          // フェードアウト
-          // ref: https://stackoverflow.com/questions/56043259/how-to-make-a-fade-out-at-the-end-of-the-sound-in-howlerjs
-          var fadeouttime = 2000;
-          setTimeout(
-            () => player.fade(0.5, 0, fadeouttime),
-            (player.duration() - (player.seek() as number)) * 1000 - fadeouttime
-          )
-        },
-        onstop: () => player.volume(0),
-        volume: 0,
-      })
-      this.playlist[index] = player
-    })
-    this.tracks = tracks
+  constructor({ dispatch }:{ dispatch: React.Dispatch<ActionType> }){
     this.dispatch = dispatch
   }
 
   setMediaMetadata(dispatch: React.Dispatch<ActionType>) {
     if(navigator.mediaSession) {
-      const track = this.currentTrack()
+      const track = this.track
       if(track) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: track.name,
@@ -62,74 +27,71 @@ class PreviewPlayer {
     }
   }
 
-  currentTrack() {
-    if(isEmpty(this.playlist)) return
-    return this.tracks[this.currentPlaybackNo]
+  canPlay(_track: Track) {
+    return true
   }
 
-  async play(no?:number) {
-    if(isEmpty(this.playlist)) return
-
-    if(no === undefined) {
-      const player = this.playlist[this.currentPlaybackNo]
+  async play(no: number, track: Track, isLastTrack: boolean) {
+    if(no === this.currentPlaybackNo) {
       // 再生可否による分岐
-      if(player){
-        await player.play()
+      if(this.player){
+        await this.player.play()
       } else {
         // 再生不可の場合は次の曲を再生
-        await this.autoNextPlay()
+        this.dispatch({ type: "NEXT_PLAY" })
       }
     } else {
-      this.stopAndPlay(this.currentPlaybackNo, no)
       this.currentPlaybackNo = no
+      this.track  = track
+      this.player = this.setPlayer(track, isLastTrack)
+      this.play(no, track, isLastTrack)
     }
   }
 
-  async autoNextPlay() {
-    this.dispatch && this.dispatch({ type: "NEXT_PLAY" })
+  setPlayer(track: Track, isLastTrack: boolean) {
+    if(this.player) this.player.stop()
+    if(!track.previewUrl) return
+
+    const player:Howl = new Howl({
+      src: track.previewUrl,
+      html5: true,
+      preload: false,
+      autoplay: false,
+      onend: async () => {
+        if(isLastTrack) {
+          this.dispatch({ type: "STATUS_FINISH" })
+        } else {
+          this.dispatch({ type: "NEXT_PLAY" })
+        }
+      },
+      onplay: () => {
+        // Media Session API
+        this.setMediaMetadata(this.dispatch)
+        // フェードイン
+        if(player.volume() === 0) player.fade(0, 0.5, 2000)
+        // フェードアウト
+        // ref: https://stackoverflow.com/questions/56043259/how-to-make-a-fade-out-at-the-end-of-the-sound-in-howlerjs
+        var fadeouttime = 2000;
+        setTimeout(
+          () => player.fade(0.5, 0, fadeouttime),
+          (player.duration() - (player.seek() as number)) * 1000 - fadeouttime
+        )
+      },
+      onstop: () => player.volume(0),
+      volume: 0,
+    })
+
+    return player
   }
 
-  async nextPlay():Promise<number> {
-    if(isEmpty(this.playlist)) return 0
-
-    const nextNo = this.currentPlaybackNo + 1
-    if((this.tracks.length - 1) < nextNo) {
-      // プレイリスト最後の曲
-      await this.playlist[this.currentPlaybackNo].stop()
-      this.currentPlaybackNo = 0
-      this.dispatch && this.dispatch({ type: "STATUS_FINISH" })
-      return this.currentPlaybackNo
-    } else {
-      const currentNo = this.currentPlaybackNo
-      this.currentPlaybackNo = nextNo
-      await this.stopAndPlay(currentNo, nextNo)
-      return this.currentPlaybackNo
-    }
+  async pause(no: number) {
+    this.currentPlaybackNo = no
+    this.player && await this.player.pause()
   }
 
-  async stopAndPlay(stopNo:number, playNo:number) {
-    await this.playlist[stopNo]?.stop()
-    const player = this.playlist[playNo]
-    // 再生可否による分岐
-    if(player){
-      await player.play()
-    } else {
-      // 再生不可の場合は次の曲を再生
-      await this.autoNextPlay()
-    }
-  }
-
-  async pause() {
-    if(isEmpty(this.playlist)) return
-
-    await this.playlist[this.currentPlaybackNo].pause()
-  }
-
-  async stop() {
-    if(isEmpty(this.playlist)) return
-
-    await this.playlist[this.currentPlaybackNo].stop()
-    this.currentPlaybackNo = 0
+  async stop(no: number) {
+    this.currentPlaybackNo = no
+    this.player && await this.player.stop()
   }
 }
 
