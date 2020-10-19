@@ -1,13 +1,27 @@
 import React, { useContext, useEffect } from 'react';
-import { useAppleMusicTokenQuery } from '../../graphql/types.d';
+import { AppleMusicTokenDocument } from '../../graphql/types.d';
 import initMusicKit from '../../hooks/useMusicKit/initMusicKit';
+import UserContext from '../../hooks/userContext';
+import useMusicKitReady from '../../hooks/useMusicKit/useMusicKitReady';
+import { useLazyQuery } from '@apollo/react-hooks';
 
 // Apple Music API を初期化するだけの component
 const InitAppleMusic = () => {
-  const { data } = useAppleMusicTokenQuery()
+  const [getToken, { data }] = useLazyQuery(AppleMusicTokenDocument);
+  const userContext = useContext(UserContext)
+  const isReady = useMusicKitReady()
 
   useEffect(() => {
-    if(!data) return
+    if(!userContext.state.user) return
+    // 実行権限
+    if(!userContext.state.user.role.allowedActions.includes("appleMusicToken")) return
+    // 設定済みのためスキップ
+    if(isReady) return
+
+    if(!data) {
+      getToken()
+      return
+    }
 
     const config = {
       initConfig : {
@@ -21,7 +35,7 @@ const InitAppleMusic = () => {
     }
 
     initMusicKit(config)
-  }, [data])
+  }, [getToken, data, userContext.state.user, isReady])
 
   return <></>
 }
