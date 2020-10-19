@@ -31,7 +31,7 @@ class PreviewPlayer {
     return true
   }
 
-  async play(no: number, track: Track, isLastTrack: boolean) {
+  async play(no: number, track: Track) {
     if(no === this.currentPlaybackNo) {
       // 再生可否による分岐
       if(this.player){
@@ -44,12 +44,12 @@ class PreviewPlayer {
     } else {
       this.currentPlaybackNo = no
       this.track  = track
-      this.player = this.setPlayer(track, isLastTrack)
-      this.play(no, track, isLastTrack)
+      this.player = this.setPlayer(track)
+      this.play(no, track)
     }
   }
 
-  setPlayer(track: Track, isLastTrack: boolean) {
+  setPlayer(track: Track) {
     if(this.player) this.player.stop()
     if(!track.previewUrl) return
 
@@ -58,13 +58,7 @@ class PreviewPlayer {
       html5: true,
       preload: false,
       autoplay: false,
-      onend: async () => {
-        if(isLastTrack) {
-          this.dispatch({ type: "STATUS_FINISH" })
-        } else {
-          this.dispatch({ type: "NEXT_PLAY" })
-        }
-      },
+      onend: () => this.dispatch({ type: "NEXT_PLAY" }),
       onplay: () => {
         // Media Session API
         this.setMediaMetadata(this.dispatch)
@@ -92,7 +86,7 @@ class PreviewPlayer {
     this.player && await this.player.pause()
   }
 
-  async stop(no: number) {
+  async stop() {
     this.currentPlaybackNo = undefined
     console.log("Stop Preview Music")
     this.player && await this.player.stop()

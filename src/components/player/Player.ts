@@ -42,8 +42,7 @@ class Player {
 
   async play(no?:number) {
     this.currentPlaybackNo = no ?? this.currentPlaybackNo
-    const isLastTrack = (this.tracks.length - 1) === this.currentPlaybackNo
-    this.player().play(this.currentPlaybackNo, this.currentTrack(), isLastTrack)
+    this.player().play(this.currentPlaybackNo, this.currentTrack())
   }
 
   // 再生可能なプレイヤーを取得
@@ -59,6 +58,7 @@ class Player {
     const nextNo = this.currentPlaybackNo + 1
     if((this.tracks.length - 1) < nextNo) {
       // プレイリスト最後の曲
+      this.currentPlaybackNo = 0
       this.dispatch && this.dispatch({ type: "STATUS_FINISH" })
     } else {
       this.currentPlaybackNo = nextNo
@@ -71,12 +71,7 @@ class Player {
   }
 
   async stop() {
-    this.players.forEach(p => p?.stop(this.currentPlaybackNo))
-  }
-
-  async finish() {
-    this.stop()
-    this.currentPlaybackNo = 0
+    this.players.forEach(p => p?.stop())
   }
 }
 

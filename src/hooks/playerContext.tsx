@@ -92,7 +92,7 @@ const reducer = (state:StateType, action:ActionType):StateType => {
         loadingStatus: LoadingStatus.Done,
       }
     case 'STATUS_FINISH':
-      state.player.finish()
+      state.player.stop()
       return {
         ...state,
         currentNo: 0,
