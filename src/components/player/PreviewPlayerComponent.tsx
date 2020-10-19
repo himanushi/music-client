@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Grid, Tooltip, ClickAwayListener, IconButton, Typography } from '@material-ui/core';
 import ImageCardComponent from '../imageCard/ImageCardComponent';
-import PreviewPlayer from './PreviewPlayer';
 import MusicServiceButtonComponent from './MusicServiceButtonComponent';
 import { Album } from '../../graphql/types.d'
 import PlayerContext from '../../hooks/playerContext';
@@ -11,6 +10,8 @@ import InfoIcon from '@material-ui/icons/Info';
 import _ from 'lodash';
 import ShareButtonComponent from './ShareButtonComponent';
 import FavoriteComponent from '../favorite/FavoriteComponent';
+import useMusicKitAuthentication from '../../hooks/useMusicKit/useMusicKitAuthentication';
+import Player from './Player';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
@@ -48,14 +49,19 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
     return () => document.querySelector('meta[name="description"]')?.setAttribute("content", "音楽サブスクリプション配信中のゲーム音楽のポータルサイト")
   }, [album, ms, releaseDate])
 
+  // 音楽サービスログイン
+  const { isAuthorized } = useMusicKitAuthentication()
+  const hasAppleMusicAlbum = !!album.appleMusicAlbum
+
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
   const playAction = (no:number) => {
     if(initPlayer.current) {
-      const _player = new PreviewPlayer({
+      const _player = new Player({
         linkUrl: `${location.pathname}${location.search}`,
         tracks: album.tracks,
-        dispatch
+        dispatch,
+        canFullPlayAppleMusic: hasAppleMusicAlbum && isAuthorized
       })
 
       dispatch({ type: "SET_PLAYER", player: _player })
@@ -65,11 +71,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
     dispatch({ type: "PLAY", no })
   }
 
-  // 人気度平均
-  const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)
-
   // 視聴音楽出典元
-  // TODO: デザインとか雑なのであとでしっかり実装すること
   let previewUrlFromService = ""
   if(album.appleMusicAlbum) {
     previewUrlFromService = "Apple Music"
@@ -78,6 +80,32 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   } else if(album.spotifyAlbum) {
     previewUrlFromService = "Spotify"
   }
+
+  const previewOrPlayLabel =
+    <>
+      { (hasAppleMusicAlbum && isAuthorized) ? "再生" : "視聴" }
+      <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
+        <Tooltip
+          PopperProps={{
+            disablePortal: true,
+          }}
+          onClose={()=>setOpenInfo(false)}
+          open={openInfo}
+          disableFocusListener
+          disableHoverListener
+          disableTouchListener
+          placement="top-end"
+          title={ isAuthorized ? "AppleMusic によるストリーミング再生" : `${previewUrlFromService} のプレビューURLによるストリーミング試聴` }
+        >
+          <IconButton size="small" onClick={()=>setOpenInfo(true)}>
+            <InfoIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </ClickAwayListener>
+    </>
+
+  // 人気度平均
+  const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)
 
   return (
     <TableContainer component={Paper} style={{ maxWidth: "600px" }}>
@@ -125,25 +153,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
           </TableRow>
           <TableRow>
             <TableCell style={{ width: 100 }} align="center">
-              試聴
-              <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
-                <Tooltip
-                  PopperProps={{
-                    disablePortal: true,
-                  }}
-                  onClose={()=>setOpenInfo(false)}
-                  open={openInfo}
-                  disableFocusListener
-                  disableHoverListener
-                  disableTouchListener
-                  placement="top-end"
-                  title={ previewUrlFromService + " のプレビューURLによるストリーミング試聴" }
-                >
-                  <IconButton size="small" onClick={()=>setOpenInfo(true)}>
-                    <InfoIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              </ClickAwayListener>
+              {previewOrPlayLabel}
             </TableCell>
             <TableCell>タイトル</TableCell>
           </TableRow>

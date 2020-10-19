@@ -9,6 +9,7 @@ import PlayerContext from '../../../hooks/playerContext';
 import SearchKeywordComponent from '../../../components/search/SearchKeywordComponent';
 import OrderComponent from '../../../components/search/OrderComponent';
 import InfoIcon from '@material-ui/icons/Info';
+import Player from '../../../components/player/Player';
 
 const TracksLayout = () => {
   const [order, setOrder] = useState<string>("NAME.DESC")
@@ -48,10 +49,11 @@ const TracksLayout = () => {
     if (!data?.items) return
 
     if(initPlayer.current) {
-      const _player = new PreviewPlayer({
+      const _player = new Player({
         linkUrl: `${location.pathname}${location.search}`,
         tracks: data.items as Track[],
-        dispatch
+        dispatch,
+        canFullPlayAppleMusic: false
       })
 
       dispatch({ type: "SET_PLAYER", player: _player })
