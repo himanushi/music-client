@@ -55,19 +55,19 @@ const reducer = (state:StateType, action:ActionType):StateType => {
         playbackStatus: PlaybackStatus.Stop,
       }
     case 'PLAY':
-      state.player.play(action.no)
-      const currentNo = action.no === undefined ? state.currentNo : action.no
       return {
         ...state,
+        currentNo: state.player.play(action.no),
         playbackStatus: PlaybackStatus.Play,
-        currentNo,
       }
     case 'NEXT_PLAY':
-      state.player.nextPlay()
+      const currentNo = state.player.nextPlay()
+      // currentNo が 0 ということは再生が終了したということになる
+      const playbackStatus = currentNo === 0 ? PlaybackStatus.Stop : PlaybackStatus.Play
       return {
         ...state,
-        currentNo: state.player.currentPlaybackNo,
-        playbackStatus: PlaybackStatus.Play,
+        currentNo,
+        playbackStatus,
       }
     case 'PAUSE':
       state.player.pause()

@@ -67,7 +67,6 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
       dispatch({ type: "SET_PLAYER", player: _player })
       initPlayer.current = false
     }
-    console.log("dispatch PLAY")
     dispatch({ type: "PLAY", no })
   }
 

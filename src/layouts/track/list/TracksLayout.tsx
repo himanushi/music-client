@@ -4,7 +4,6 @@ import { useLocation, useHistory } from 'react-router-dom';
 import PreviewPlayerItemComponent from '../../../components/player/PreviewPlayerItemComponent';
 import { useTracksQuery, TracksQueryVariables, Track } from '../../../graphql/types.d';
 import useParameters, { ParameterPrefixKeys, ParameterKeys } from '../../../hooks/useParameters';
-import PreviewPlayer from '../../../components/player/PreviewPlayer';
 import PlayerContext from '../../../hooks/playerContext';
 import SearchKeywordComponent from '../../../components/search/SearchKeywordComponent';
 import OrderComponent from '../../../components/search/OrderComponent';
@@ -59,7 +58,6 @@ const TracksLayout = () => {
       dispatch({ type: "SET_PLAYER", player: _player })
       initPlayer.current = false
     }
-    console.log("dispatch PLAY")
     dispatch({ type: "PLAY", no })
   }
 

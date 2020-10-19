@@ -40,9 +40,10 @@ class Player {
     return this.tracks[this.currentPlaybackNo]
   }
 
-  async play(no?:number) {
+  play(no?:number) {
     this.currentPlaybackNo = no ?? this.currentPlaybackNo
     this.player().play(this.currentPlaybackNo, this.currentTrack())
+    return this.currentPlaybackNo
   }
 
   // 再生可能なプレイヤーを取得
@@ -54,16 +55,17 @@ class Player {
      return _player
   }
 
-  async nextPlay() {
+  nextPlay() {
     const nextNo = this.currentPlaybackNo + 1
     if((this.tracks.length - 1) < nextNo) {
       // プレイリスト最後の曲
       this.currentPlaybackNo = 0
-      this.dispatch && this.dispatch({ type: "STATUS_FINISH" })
+      this.stop()
     } else {
       this.currentPlaybackNo = nextNo
-      await this.play()
+      this.play()
     }
+    return this.currentPlaybackNo
   }
 
   async pause() {

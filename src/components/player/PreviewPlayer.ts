@@ -35,7 +35,6 @@ class PreviewPlayer {
     if(no === this.currentPlaybackNo) {
       // 再生可否による分岐
       if(this.player){
-        console.log("Play Preview Music")
         await this.player.play()
       } else {
         // 再生不可の場合は次の曲を再生
@@ -82,13 +81,11 @@ class PreviewPlayer {
   async pause(no: number) {
     // 未再生の場合はセットしない
     this.currentPlaybackNo = this.currentPlaybackNo === undefined ? undefined : no
-    console.log("Pause Preview Music")
     this.player && await this.player.pause()
   }
 
   async stop() {
     this.currentPlaybackNo = undefined
-    console.log("Stop Preview Music")
     this.player && await this.player.stop()
   }
 }
