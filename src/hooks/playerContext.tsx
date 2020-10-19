@@ -1,5 +1,5 @@
 import React, { useReducer, createContext, Dispatch } from 'react'
-import PreviewPlayer from '../components/player/PreviewPlayer'
+import Player from '../components/player/Player'
 
 type ContextValue = {
   state: StateType
@@ -22,15 +22,21 @@ export enum LoadingStatus {
 }
 
 const initialState = {
-  player: new PreviewPlayer({ linkUrl: "", tracks: [] }),
+  player: new Player({ linkUrl: "", tracks: [], canFullPlayAppleMusic: false }),
   currentNo: 0,
   playbackStatus: PlaybackStatus.None,
   loadingStatus: LoadingStatus.Done,
 }
 
-export type StateType = typeof initialState
+export type StateType = {
+  player: Player
+  currentNo: number
+  playbackStatus: PlaybackStatus
+  loadingStatus: LoadingStatus
+}
+
 export type ActionType =
-  | { type: 'SET_PLAYER', player: PreviewPlayer }
+  | { type: 'SET_PLAYER', player: Player }
   | { type: 'PLAY', no?: number }
   | { type: 'NEXT_PLAY' }
   | { type: 'PAUSE' }
@@ -57,7 +63,7 @@ const reducer = (state:StateType, action:ActionType):StateType => {
         currentNo,
       }
     case 'NEXT_PLAY':
-      (async () => await state.player.nextPlay())()
+      state.player.nextPlay()
       return {
         ...state,
         currentNo: state.player.currentPlaybackNo,
@@ -86,9 +92,10 @@ const reducer = (state:StateType, action:ActionType):StateType => {
         loadingStatus: LoadingStatus.Done,
       }
     case 'STATUS_FINISH':
+      state.player.finish()
       return {
         ...state,
-        currentNo: state.player.currentPlaybackNo,
+        currentNo: 0,
         playbackStatus: PlaybackStatus.Pause,
         loadingStatus: LoadingStatus.Done,
       }
