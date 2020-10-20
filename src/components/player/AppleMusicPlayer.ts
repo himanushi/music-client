@@ -52,6 +52,8 @@ class AppleMusicPlayer {
       return
     }
 
+    this.setMediaMetadata(this.dispatch)
+
     if(no === this.currentPlaybackNo) {
       // 再生可否による分岐
       if(music.player.queue.items.length === 1){
