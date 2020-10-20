@@ -1,23 +1,34 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Button, TableContainer, Paper, Table, TableBody, TableRow, TableCell, TableHead, ClickAwayListener, Tooltip, IconButton } from '@material-ui/core';
 import UserContext from '../../../hooks/userContext';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import InfoIcon from '@material-ui/icons/Info';
 import useMusicKitAuthentication from '../../../hooks/useMusicKit/useMusicKitAuthentication';
+import InformationContext from '../../../hooks/informationContext';
 
 const UserMeLayout = () => {
-  const { state } = useContext(UserContext)
+  const userContext = useContext(UserContext)
+  const infoContext = useContext(InformationContext)
+  let history = useHistory()
 
   const [openInfoPublicInformation, setOpenInfoPublicInformation] = useState(false)
   const [openInfoMusicServiceLogin, setOpenInfoMusicServiceLogin] = useState(false)
 
-  const publicTypes = state.user?.publicInformations?.map(p=>p.publicType) || []
+  const publicTypes = userContext.state.user?.publicInformations?.map(p=>p.publicType) || []
   const publicArtist = publicTypes.includes("artist") ? "公開する" : "公開しない"
   const publicAlbum  = publicTypes.includes("album") ? "公開する" : "公開しない"
 
   const { authentication, isAuthorized } = useMusicKitAuthentication()
 
-  const canLoginToApple = state.user?.role.allowedActions.includes("appleMusicToken")
+  // 未ログインの場合は登録画面へ
+  useEffect(() => {
+    if(userContext.state.user?.registered === false) {
+      history.push("/signup")
+      infoContext.dispatch({ type: "ADD_ALERT", severity: "info", duration: 20000, text: "ユーザー登録後にユーザー情報が変更できます", buttonText: "OK" })
+    }
+  }, [userContext, infoContext, history])
+
+  const canLoginToApple = userContext.state.user?.role.allowedActions.includes("appleMusicToken")
   const appleLoginButton = isAuthorized ?
     <Button disabled={!canLoginToApple} onClick={() => authentication.logout()} variant="contained">ログアウト</Button> :
     <Button disabled={!canLoginToApple} onClick={() => authentication.login()} variant="contained">ログイン</Button>
@@ -33,15 +44,15 @@ const UserMeLayout = () => {
         <TableBody>
           <TableRow >
             <TableCell align="right" style={{ border: 'none' }}>ユーザー名</TableCell>
-            <TableCell align="left" style={{ border: 'none' }}>{state.user?.name}</TableCell>
+            <TableCell align="left" style={{ border: 'none' }}>{userContext.state.user?.name}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell align="right" style={{ border: 'none' }}>ユーザーID</TableCell>
-            <TableCell align="left" style={{ border: 'none' }}>{state.user?.username}</TableCell>
+            <TableCell align="left" style={{ border: 'none' }}>{userContext.state.user?.username}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell align="right">権限</TableCell>
-            <TableCell align="left">{state.user?.role.description}</TableCell>
+            <TableCell align="left">{userContext.state.user?.role.description}</TableCell>
           </TableRow>
         </TableBody>
       </Table>
