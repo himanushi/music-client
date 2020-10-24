@@ -1,4 +1,5 @@
 import InformationLayout from './InformationLayout'
+import Cookies from 'js-cookie'
 
 const AboutLayout = () => InformationLayout(`
 # このサイトについて
@@ -16,6 +17,9 @@ const AboutLayout = () => InformationLayout(`
 
 ## 問い合わせ
 [Twitter にてダイレクトメッセージをお願いします](https://twitter.com/vgm_net)
+
+###### ファイルバージョン
+###### ${Cookies.get("jsFileVersion")}
 `)
 
 export default AboutLayout
