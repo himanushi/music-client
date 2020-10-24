@@ -4,6 +4,7 @@ query Me {
     name
     username
     registered
+    version
     publicInformations {
       id
       publicType

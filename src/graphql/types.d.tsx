@@ -283,6 +283,8 @@ export type CurrentUser = {
   role: Role;
   /** ユーザー名 */
   username: Scalars['String'];
+  /** バージョンファイル */
+  version: Scalars['String'];
 };
 
 export type CursorInputObject = {
@@ -1139,7 +1141,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'CurrentUser' }
-    & Pick<CurrentUser, 'id' | 'name' | 'username' | 'registered'>
+    & Pick<CurrentUser, 'id' | 'name' | 'username' | 'registered' | 'version'>
     & { publicInformations: Array<(
       { __typename?: 'PublicInformation' }
       & Pick<PublicInformation, 'id' | 'publicType'>
@@ -1663,6 +1665,7 @@ export const MeDocument = gql`
     name
     username
     registered
+    version
     publicInformations {
       id
       publicType
