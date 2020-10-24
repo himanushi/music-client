@@ -63,7 +63,12 @@ class Player {
       this.stop()
     } else {
       this.currentPlaybackNo = nextNo
-      this.play()
+      // プレビュープレイヤーが存在しない曲は一旦再生しない
+      if(!this.currentTrack().previewUrl) {
+        this.nextPlay()
+      } else {
+        this.play()
+      }
     }
     return this.currentPlaybackNo
   }

@@ -57,6 +57,7 @@ class AppleMusicPlayer {
     if(no === this.currentPlaybackNo) {
       // 再生可否による分岐
       if(music.player.queue.items.length === 1){
+        console.log("Play Apple Music!!")
         await music.play()
       } else {
         // 再生不可の場合は次の曲を再生
@@ -73,12 +74,14 @@ class AppleMusicPlayer {
   async pause(no: number) {
     // 未再生の場合はセットしない
     this.currentPlaybackNo = this.currentPlaybackNo === undefined ? undefined : no
+    console.log("Pause Apple Music!!")
     await MusicKit.getInstance().pause()
   }
 
   async stop() {
     this.currentPlaybackNo = undefined
     if(MusicKit.PlaybackStates[MusicKit.getInstance().player.playbackState] === "playing") {
+      console.log("Stop Apple Music!!")
       await MusicKit.getInstance().stop()
     }
   }
