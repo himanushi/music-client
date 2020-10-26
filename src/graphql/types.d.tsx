@@ -615,6 +615,8 @@ export type Query = {
   me: CurrentUser;
   /** ロール一覧取得 */
   roles: Array<Role>;
+  /** Spotify Token */
+  spotifyToken: SpotifyToken;
   /** トラック一覧取得 */
   tracks: Array<Track>;
 };
@@ -641,6 +643,12 @@ export type QueryArtistsArgs = {
   cursor?: Maybe<CursorInputObject>;
   sort?: Maybe<ArtistsSortInputObject>;
   conditions?: Maybe<ArtistsConditionsInputObject>;
+};
+
+
+export type QuerySpotifyTokenArgs = {
+  code?: Maybe<Scalars['String']>;
+  refreshToken?: Maybe<Scalars['String']>;
 };
 
 
@@ -709,6 +717,16 @@ export type SpotifyArtist = {
   name: Scalars['String'];
   /** Spotify ID */
   spotifyId: Scalars['String'];
+};
+
+/** Spotify Token */
+export type SpotifyToken = {
+   __typename?: 'SpotifyToken';
+  accessToken: Scalars['String'];
+  expiresIn: Scalars['Int'];
+  refreshToken?: Maybe<Scalars['String']>;
+  scope: Scalars['String'];
+  tokenType: Scalars['String'];
 };
 
 /** Spotify トラック */
@@ -941,6 +959,20 @@ export type ChangeFavoritesMutation = (
   )> }
 );
 
+export type SpotifyTokenQueryVariables = {
+  code?: Maybe<Scalars['String']>;
+  refreshToken?: Maybe<Scalars['String']>;
+};
+
+
+export type SpotifyTokenQuery = (
+  { __typename?: 'Query' }
+  & { spotifyToken: (
+    { __typename?: 'SpotifyToken' }
+    & Pick<SpotifyToken, 'accessToken' | 'expiresIn' | 'refreshToken' | 'scope' | 'tokenType'>
+  ) }
+);
+
 export type AlbumQueryVariables = {
   id: Scalars['TTID'];
 };
@@ -975,6 +1007,9 @@ export type AlbumQuery = (
       ), appleMusicTracks?: Maybe<Array<(
         { __typename?: 'AppleMusicTrack' }
         & Pick<AppleMusicTrack, 'id' | 'name' | 'appleMusicId'>
+      )>>, spotifyTracks?: Maybe<Array<(
+        { __typename?: 'SpotifyTrack' }
+        & Pick<SpotifyTrack, 'id' | 'name' | 'spotifyId'>
       )>> }
     )> }
   )> }
@@ -1256,6 +1291,44 @@ export function useChangeFavoritesMutation(baseOptions?: ApolloReactHooks.Mutati
 export type ChangeFavoritesMutationHookResult = ReturnType<typeof useChangeFavoritesMutation>;
 export type ChangeFavoritesMutationResult = ApolloReactCommon.MutationResult<ChangeFavoritesMutation>;
 export type ChangeFavoritesMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFavoritesMutation, ChangeFavoritesMutationVariables>;
+export const SpotifyTokenDocument = gql`
+    query SpotifyToken($code: String, $refreshToken: String) {
+  spotifyToken(code: $code, refreshToken: $refreshToken) {
+    accessToken
+    expiresIn
+    refreshToken
+    scope
+    tokenType
+  }
+}
+    `;
+
+/**
+ * __useSpotifyTokenQuery__
+ *
+ * To run a query within a React component, call `useSpotifyTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSpotifyTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSpotifyTokenQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *      refreshToken: // value for 'refreshToken'
+ *   },
+ * });
+ */
+export function useSpotifyTokenQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SpotifyTokenQuery, SpotifyTokenQueryVariables>) {
+        return ApolloReactHooks.useQuery<SpotifyTokenQuery, SpotifyTokenQueryVariables>(SpotifyTokenDocument, baseOptions);
+      }
+export function useSpotifyTokenLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SpotifyTokenQuery, SpotifyTokenQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SpotifyTokenQuery, SpotifyTokenQueryVariables>(SpotifyTokenDocument, baseOptions);
+        }
+export type SpotifyTokenQueryHookResult = ReturnType<typeof useSpotifyTokenQuery>;
+export type SpotifyTokenLazyQueryHookResult = ReturnType<typeof useSpotifyTokenLazyQuery>;
+export type SpotifyTokenQueryResult = ApolloReactCommon.QueryResult<SpotifyTokenQuery, SpotifyTokenQueryVariables>;
 export const AlbumDocument = gql`
     query Album($id: TTID!) {
   album(id: $id) {
@@ -1305,6 +1378,11 @@ export const AlbumDocument = gql`
         id
         name
         appleMusicId
+      }
+      spotifyTracks {
+        id
+        name
+        spotifyId
       }
     }
   }

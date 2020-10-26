@@ -47,6 +47,11 @@ query Album($id: TTID!) {
         name
         appleMusicId
       }
+      spotifyTracks {
+        id
+        name
+        spotifyId
+      }
     }
   }
 }
