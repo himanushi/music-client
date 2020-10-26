@@ -21,9 +21,10 @@ class AppleMusicPlayer {
         }
       })
     }
+    MusicKit.getInstance().player.volume = 0.5
   }
 
-  setMediaMetadata(dispatch: React.Dispatch<ActionType>) {
+  setMediaMetadata() {
     if(navigator.mediaSession) {
       const track = this.track
       if(track) {
@@ -32,15 +33,10 @@ class AppleMusicPlayer {
           artwork: [{ src: track.artworkM.url || "", sizes: "300x300", type: 'image/png' }]
         })
       }
-      navigator.mediaSession.setActionHandler('play', () => dispatch({ type: "PLAY" }))
-      navigator.mediaSession.setActionHandler('pause', () => dispatch({ type: "PAUSE" }))
-      navigator.mediaSession.setActionHandler('nexttrack', () => dispatch({ type: "NEXT_PLAY" }))
+      navigator.mediaSession.setActionHandler('play', () => this.dispatch({ type: "PLAY" }))
+      navigator.mediaSession.setActionHandler('pause', () => this.dispatch({ type: "PAUSE" }))
+      navigator.mediaSession.setActionHandler('nexttrack', () => this.dispatch({ type: "NEXT_PLAY" }))
     }
-  }
-
-  canPlay(track: Track) {
-    const appleMusicTrack = track.appleMusicTracks?.find(a => a)
-    return !!appleMusicTrack
   }
 
   async play(no: number, track: Track) {
@@ -48,11 +44,10 @@ class AppleMusicPlayer {
     const appleMusicTrack = track.appleMusicTracks?.find(a => a)
 
     if(!appleMusicTrack) {
-      this.dispatch({ type: "NEXT_PLAY" })
-      return
+      throw new Error("Not found Apple Music Track")
     }
 
-    this.setMediaMetadata(this.dispatch)
+    this.setMediaMetadata()
 
     if(no === this.currentPlaybackNo) {
       // 再生可否による分岐
@@ -66,11 +61,8 @@ class AppleMusicPlayer {
     } else {
       this.currentPlaybackNo = no
       this.track  = track
-      if(MusicKit.PlaybackStates[MusicKit.getInstance().player.playbackState] === "playing") {
-        await MusicKit.getInstance().stop()
-      }
       await music.setQueue({ songs: [appleMusicTrack.appleMusicId] })
-      this.play(no, track)
+      await this.play(no, track)
     }
   }
 

@@ -12,6 +12,7 @@ import ShareButtonComponent from './ShareButtonComponent';
 import FavoriteComponent from '../favorite/FavoriteComponent';
 import useMusicKitAuthentication from '../../hooks/useMusicKit/useMusicKitAuthentication';
 import Player from './Player';
+import useSpotifyAuthentication from '../../hooks/useSpotify/useSpotifyAuthentication';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const { dispatch } = useContext(PlayerContext)
@@ -50,8 +51,11 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   }, [album, ms, releaseDate])
 
   // 音楽サービスログイン
-  const { isAuthorized } = useMusicKitAuthentication()
+  const apple = useMusicKitAuthentication()
+  const spotify = useSpotifyAuthentication()
   const hasAppleMusicAlbum = !!album.appleMusicAlbum
+  const hasSpotifyAlbum    = !!album.spotifyAlbum
+  const canFullPlay        = hasAppleMusicAlbum || hasSpotifyAlbum
 
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
@@ -61,7 +65,8 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
         linkUrl: `${location.pathname}${location.search}`,
         tracks: album.tracks,
         dispatch,
-        canFullPlayAppleMusic: hasAppleMusicAlbum && isAuthorized
+        canFullPlayAppleMusic: hasAppleMusicAlbum && apple.isAuthorized,
+        canFullPlaySpotify: hasSpotifyAlbum && spotify.isAuthorized,
       })
 
       dispatch({ type: "SET_PLAYER", player: _player })
@@ -81,27 +86,24 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   }
 
   const previewOrPlayLabel =
-    <>
-      { (hasAppleMusicAlbum && isAuthorized) ? "再生" : "視聴" }
-      <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
-        <Tooltip
-          PopperProps={{
-            disablePortal: true,
-          }}
-          onClose={()=>setOpenInfo(false)}
-          open={openInfo}
-          disableFocusListener
-          disableHoverListener
-          disableTouchListener
-          placement="top-end"
-          title={ isAuthorized ? "AppleMusic によるストリーミング再生" : `${previewUrlFromService} のプレビューURLによるストリーミング試聴` }
-        >
-          <IconButton size="small" onClick={()=>setOpenInfo(true)}>
-            <InfoIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </ClickAwayListener>
-    </>
+    <ClickAwayListener onClickAway={()=>setOpenInfo(false)}>
+      <Tooltip
+        PopperProps={{
+          disablePortal: true,
+        }}
+        onClose={()=>setOpenInfo(false)}
+        open={openInfo}
+        disableFocusListener
+        disableHoverListener
+        disableTouchListener
+        placement="top-end"
+        title="Apple Music または Spotify によるストリーミング再生またはストリーミング視聴"
+      >
+        <IconButton size="small" onClick={()=>setOpenInfo(true)}>
+          <InfoIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
+    </ClickAwayListener>
 
   // 人気度平均
   const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)

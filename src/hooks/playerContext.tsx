@@ -22,7 +22,7 @@ export enum LoadingStatus {
 }
 
 const initialState = {
-  player: new Player({ linkUrl: "", tracks: [], canFullPlayAppleMusic: false }),
+  player: new Player({ linkUrl: "", tracks: [] }),
   currentNo: 0,
   playbackStatus: PlaybackStatus.None,
   loadingStatus: LoadingStatus.Done,

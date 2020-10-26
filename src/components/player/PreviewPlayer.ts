@@ -12,7 +12,7 @@ class PreviewPlayer {
     this.dispatch = dispatch
   }
 
-  setMediaMetadata(dispatch: React.Dispatch<ActionType>) {
+  setMediaMetadata() {
     if(navigator.mediaSession) {
       const track = this.track
       if(track) {
@@ -21,14 +21,10 @@ class PreviewPlayer {
           artwork: [{ src: track.artworkM.url || "", sizes: "300x300", type: 'image/png' }]
         })
       }
-      navigator.mediaSession.setActionHandler('play', () => dispatch({ type: "PLAY" }))
-      navigator.mediaSession.setActionHandler('pause', () => dispatch({ type: "PAUSE" }))
-      navigator.mediaSession.setActionHandler('nexttrack', () => dispatch({ type: "NEXT_PLAY" }))
+      navigator.mediaSession.setActionHandler('play', () => this.dispatch({ type: "PLAY" }))
+      navigator.mediaSession.setActionHandler('pause', () => this.dispatch({ type: "PAUSE" }))
+      navigator.mediaSession.setActionHandler('nexttrack', () => this.dispatch({ type: "NEXT_PLAY" }))
     }
-  }
-
-  canPlay(_track: Track) {
-    return true
   }
 
   async play(no: number, track: Track) {
@@ -61,7 +57,7 @@ class PreviewPlayer {
       onend: () => this.dispatch({ type: "NEXT_PLAY" }),
       onplay: () => {
         // Media Session API
-        this.setMediaMetadata(this.dispatch)
+        this.setMediaMetadata()
         // フェードイン
         if(player.volume() === 0) player.fade(0, 0.5, 2000)
         // フェードアウト
@@ -82,14 +78,18 @@ class PreviewPlayer {
   async pause(no: number) {
     // 未再生の場合はセットしない
     this.currentPlaybackNo = this.currentPlaybackNo === undefined ? undefined : no
-    console.log("Pause Preview!!")
-    this.player && await this.player.pause()
+    if(this.player && this.player.playing()) {
+      console.log("Pause Preview!!")
+      this.player && await this.player.pause()
+    }
   }
 
   async stop() {
     this.currentPlaybackNo = undefined
-    console.log("Stop Preview!!")
-    this.player && await this.player.stop()
+    if(this.player && this.player.playing()) {
+      console.log("Stop Preview!!")
+      await this.player.stop()
+    }
   }
 }
 

@@ -34,7 +34,7 @@ const InitAppleMusic = () => {
       countryCode: "jp",
     }
 
-    console.log("init MusicKit")
+    console.log("Init Apple Music!!")
     initMusicKit(config)
   }, [getToken, data, userContext.state.user, isReady])
 
