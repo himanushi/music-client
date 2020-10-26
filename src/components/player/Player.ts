@@ -2,34 +2,39 @@ import { Track } from '../../graphql/types.d'
 import { ActionType } from '../../hooks/playerContext'
 import PreviewPlayer from './PreviewPlayer'
 import AppleMusicPlayer from './AppleMusicPlayer'
+import SpotifyPlayer from './SpotifyPlayer'
 
 // 複数のプレイヤーをまとめる
 class Player {
-  currentPlyer?: PreviewPlayer | AppleMusicPlayer
-  players: [AppleMusicPlayer?, PreviewPlayer?]
+  currentPlyer?: PreviewPlayer | AppleMusicPlayer | SpotifyPlayer
+  players: [AppleMusicPlayer?, SpotifyPlayer?, PreviewPlayer?]
   tracks: Track[]
   currentPlaybackNo: number
   dispatch?: React.Dispatch<ActionType>
   linkUrl: string
 
   constructor(
-    { linkUrl, tracks, dispatch, canFullPlayAppleMusic }:
+    { linkUrl, tracks, dispatch, canFullPlayAppleMusic, canFullPlaySpotify }:
     {
       linkUrl: string,
       tracks: Track[],
       dispatch?: React.Dispatch<ActionType>,
-      canFullPlayAppleMusic: boolean
+      canFullPlayAppleMusic?: boolean,
+      canFullPlaySpotify?: boolean
     }
   ){
-    let _players:[PreviewPlayer?, AppleMusicPlayer?] = []
+    let _players:[PreviewPlayer?, SpotifyPlayer?, AppleMusicPlayer?] = []
     if(dispatch) {
       _players.push(new PreviewPlayer({ dispatch }))
 
+      if(canFullPlaySpotify) {
+        _players.push(new SpotifyPlayer({ dispatch }))
+      }
       if(canFullPlayAppleMusic) {
         _players.push(new AppleMusicPlayer({ dispatch }))
       }
     }
-    this.players = _players.reverse() as [AppleMusicPlayer?, PreviewPlayer?]
+    this.players = _players.reverse() as [AppleMusicPlayer?, SpotifyPlayer?, PreviewPlayer?]
     this.currentPlaybackNo = 0
     this.tracks = tracks
     this.dispatch = dispatch
@@ -41,18 +46,25 @@ class Player {
   }
 
   play(no?:number) {
-    this.currentPlaybackNo = no ?? this.currentPlaybackNo
-    this.player().play(this.currentPlaybackNo, this.currentTrack())
-    return this.currentPlaybackNo
-  }
+    const playbackNo = no ?? this.currentPlaybackNo;
 
-  // 再生可能なプレイヤーを取得
-  player(): PreviewPlayer | AppleMusicPlayer {
-     const _player = this.players.find(p => p && p.canPlay(this.currentTrack())) as PreviewPlayer | AppleMusicPlayer
-     // 前回のプレイヤーが別の場合はリセット
-     if(this.currentPlyer && this.currentPlyer.constructor.name !== _player.constructor.name) this.stop()
-     this.currentPlyer = _player
-     return _player
+    // 再生した場合にエラーになる可能性もあるため優先順位順に実行してく
+    (async () => {
+      for (const player of this.players) {
+        try {
+
+          // 別の曲を再生した場合は停止する
+          if(typeof no === "number") await this.stop()
+
+          // エラーが出ない場合は正常に再生できていると判断する
+          player && await player.play(playbackNo, this.currentTrack())
+          break;
+        } catch {}
+      }
+    })()
+
+    this.currentPlaybackNo = playbackNo
+    return this.currentPlaybackNo
   }
 
   nextPlay() {
@@ -67,18 +79,22 @@ class Player {
       if(!this.currentTrack().previewUrl) {
         this.nextPlay()
       } else {
-        this.play()
+        this.play(this.currentPlaybackNo)
       }
     }
     return this.currentPlaybackNo
   }
 
   async pause() {
-    this.players.forEach(p => p?.pause(this.currentPlaybackNo))
+    for (const player of this.players) {
+      player && await player.pause(this.currentPlaybackNo)
+    }
   }
 
   async stop() {
-    this.players.forEach(p => p?.stop())
+    for (const player of this.players) {
+      player && await player.stop()
+    }
   }
 }
 
