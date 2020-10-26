@@ -5,10 +5,13 @@ import { Link, useHistory } from 'react-router-dom';
 import InfoIcon from '@material-ui/icons/Info';
 import useMusicKitAuthentication from '../../../hooks/useMusicKit/useMusicKitAuthentication';
 import InformationContext from '../../../hooks/informationContext';
+import useSpotifyAuthentication from '../../../hooks/useSpotify/useSpotifyAuthentication';
+import PlayerContext from '../../../hooks/playerContext';
 
 const UserMeLayout = () => {
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
+  const playerContext = useContext(PlayerContext)
   let history = useHistory()
 
   const [openInfoPublicInformation, setOpenInfoPublicInformation] = useState(false)
@@ -18,7 +21,8 @@ const UserMeLayout = () => {
   const publicArtist = publicTypes.includes("artist") ? "公開する" : "公開しない"
   const publicAlbum  = publicTypes.includes("album") ? "公開する" : "公開しない"
 
-  const { authentication, isAuthorized } = useMusicKitAuthentication()
+  const apple   = useMusicKitAuthentication()
+  const spotify = useSpotifyAuthentication()
 
   // 未ログインの場合は登録画面へ
   useEffect(() => {
@@ -29,9 +33,14 @@ const UserMeLayout = () => {
   }, [userContext, infoContext, history])
 
   const canLoginToApple = userContext.state.user?.role.allowedActions.includes("appleMusicToken")
-  const appleLoginButton = isAuthorized ?
-    <Button disabled={!canLoginToApple} onClick={() => authentication.logout()} variant="contained">ログアウト</Button> :
-    <Button disabled={!canLoginToApple} onClick={() => authentication.login()} variant="contained">ログイン</Button>
+  const appleLoginButton = apple.isAuthorized ?
+    <Button disabled={!canLoginToApple} onClick={() => { apple.authentication.logout(); window.location.reload() }} variant="contained">ログアウト</Button> :
+    <Button disabled={!canLoginToApple} onClick={() => apple.authentication.login()} variant="contained">ログイン</Button>
+
+  const canLoginToSpotify = userContext.state.user?.role.allowedActions.includes("spotifyToken")
+  const spotifyLoginButton = spotify.isAuthorized ?
+    <Button disabled={!canLoginToSpotify} onClick={() => { spotify.authentication.logout(); window.location.reload() }} variant="contained">ログアウト</Button> :
+    <Button disabled={!canLoginToSpotify} onClick={() => spotify.authentication.login()} variant="contained">ログイン</Button>
 
   return (
     <TableContainer component={Paper}>
@@ -109,7 +118,7 @@ const UserMeLayout = () => {
                   disableHoverListener
                   disableTouchListener
                   placement="top"
-                  title="開発中。ログインするとフル再生とライブラリ追加ができるようになります。"
+                  title="ログインするとフル再生とライブラリ追加ができるようになります。"
                 >
                   <IconButton size="small" onClick={()=>setOpenInfoMusicServiceLogin(true)}>
                     <InfoIcon fontSize="small" />
@@ -128,7 +137,9 @@ const UserMeLayout = () => {
           </TableRow>
           <TableRow>
             <TableCell align="right">Spotify</TableCell>
-            <TableCell align="left">未ログイン</TableCell>
+            <TableCell align="left">
+              {spotifyLoginButton}
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

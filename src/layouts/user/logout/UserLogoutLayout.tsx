@@ -3,10 +3,15 @@ import { useLogoutMutation, LogoutPayload, CurrentUser } from '../../../graphql/
 import UserContext from '../../../hooks/userContext';
 import InformationContext from '../../../hooks/informationContext';
 import { useHistory } from 'react-router-dom';
+import SecureCookies from '../../../lib/SecureCookies';
 
 const UserLogoutLayout = () => {
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
+  const cookie = new SecureCookies()
+  const spotifyAccessToken = "spotifyAccessToken"
+  const spotifyRefreshToken = "spotifyRefreshToken"
+  const spotifyDeviceId = "spotifyDeviceId"
 
   let history = useHistory()
 
@@ -28,7 +33,11 @@ const UserLogoutLayout = () => {
 
   useEffect(() => {
     logout()
+    // 全音楽サービスログアウト
     try { MusicKit.getInstance().unauthorize() } catch {}
+    cookie.remove(spotifyAccessToken)
+    cookie.remove(spotifyRefreshToken)
+    cookie.remove(spotifyDeviceId)
   }, [logout])
 
   return <></>

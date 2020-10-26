@@ -26,6 +26,7 @@ import SnackbarComponent from '../../components/infomation/SnackbarComponent';
 import { InformationProvider } from '../../hooks/informationContext';
 import CookieInformation from './CookieInformation';
 import InitAppleMusic from '../appleMusic/InitAppleMusic';
+import InitSpotify from '../spotify/InitSpotify';
 
 const RootLayout = () =>
   <BrowserRouter>
@@ -36,6 +37,7 @@ const RootLayout = () =>
             <CookieInformation />
             <InitializeUser />
             <InitAppleMusic />
+            <InitSpotify />
             {/* アプリバー */}
             <Bar />
             {/* プレイヤー */}
