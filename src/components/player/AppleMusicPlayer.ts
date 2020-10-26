@@ -66,6 +66,9 @@ class AppleMusicPlayer {
     } else {
       this.currentPlaybackNo = no
       this.track  = track
+      if(MusicKit.PlaybackStates[MusicKit.getInstance().player.playbackState] === "playing") {
+        await MusicKit.getInstance().stop()
+      }
       await music.setQueue({ songs: [appleMusicTrack.appleMusicId] })
       this.play(no, track)
     }
