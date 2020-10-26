@@ -6,12 +6,10 @@ import InfoIcon from '@material-ui/icons/Info';
 import useMusicKitAuthentication from '../../../hooks/useMusicKit/useMusicKitAuthentication';
 import InformationContext from '../../../hooks/informationContext';
 import useSpotifyAuthentication from '../../../hooks/useSpotify/useSpotifyAuthentication';
-import PlayerContext from '../../../hooks/playerContext';
 
 const UserMeLayout = () => {
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
-  const playerContext = useContext(PlayerContext)
   let history = useHistory()
 
   const [openInfoPublicInformation, setOpenInfoPublicInformation] = useState(false)

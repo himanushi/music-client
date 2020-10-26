@@ -55,7 +55,6 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   const spotify = useSpotifyAuthentication()
   const hasAppleMusicAlbum = !!album.appleMusicAlbum
   const hasSpotifyAlbum    = !!album.spotifyAlbum
-  const canFullPlay        = hasAppleMusicAlbum || hasSpotifyAlbum
 
   // プレビュー画面表示時に初期化される
   const initPlayer = useRef<boolean>(true);
@@ -73,16 +72,6 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
       initPlayer.current = false
     }
     dispatch({ type: "PLAY", no })
-  }
-
-  // 視聴音楽出典元
-  let previewUrlFromService = ""
-  if(album.appleMusicAlbum) {
-    previewUrlFromService = "Apple Music"
-  } else if(album.itunesAlbum) {
-    previewUrlFromService = "iTunes"
-  } else if(album.spotifyAlbum) {
-    previewUrlFromService = "Spotify"
   }
 
   const previewOrPlayLabel =

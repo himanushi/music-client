@@ -4,15 +4,12 @@ import UserContext from '../../../hooks/userContext';
 import InformationContext from '../../../hooks/informationContext';
 import { useHistory } from 'react-router-dom';
 import SecureCookies from '../../../lib/SecureCookies';
+import PlayerContext from '../../../hooks/playerContext';
 
 const UserLogoutLayout = () => {
   const userContext = useContext(UserContext)
   const infoContext = useContext(InformationContext)
-  const cookie = new SecureCookies()
-  const spotifyAccessToken = "spotifyAccessToken"
-  const spotifyRefreshToken = "spotifyRefreshToken"
-  const spotifyDeviceId = "spotifyDeviceId"
-
+  const playerContext = useContext(PlayerContext)
   let history = useHistory()
 
   interface LogoutResponse {
@@ -26,6 +23,17 @@ const UserLogoutLayout = () => {
         history.push("/")
         userContext.dispatch({ type: "SET_USER", user: response.data.logout.currentUser as CurrentUser })
         infoContext.dispatch({ type: "ADD_ALERT", severity: "success", duration: 5000, text: "ログアウトしました", buttonText: "OK" })
+        playerContext.dispatch({ type: "STOP" })
+
+        // 全音楽サービスログアウト
+        try {
+          if(MusicKit.getInstance().isAuthorized) MusicKit.getInstance().unauthorize()
+        } catch {}
+
+        const cookie = new SecureCookies()
+        cookie.remove("spotifyAccessToken")
+        cookie.remove("spotifyRefreshToken")
+        cookie.remove("spotifyDeviceId")
       }
     },
     variables: { input: {} },
@@ -33,11 +41,6 @@ const UserLogoutLayout = () => {
 
   useEffect(() => {
     logout()
-    // 全音楽サービスログアウト
-    try { MusicKit.getInstance().unauthorize() } catch {}
-    cookie.remove(spotifyAccessToken)
-    cookie.remove(spotifyRefreshToken)
-    cookie.remove(spotifyDeviceId)
   }, [logout])
 
   return <></>

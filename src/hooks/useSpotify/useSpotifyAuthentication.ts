@@ -17,19 +17,18 @@ const useSpotifyAuthentication = () => {
     !!cookie.get(spotifyAccessToken) || !!cookie.get(spotifyRefreshToken)
   )
   const location = useLocation()
-  let history = useHistory()
-  const params = new URLSearchParams(location.search)
+  const history = useHistory()
   const [getToken, { data, error }] = useLazyQuery<SpotifyTokenQuery, SpotifyTokenQueryVariables>(SpotifyTokenDocument);
   const infoContext = useContext(InformationContext)
   const scopes = ["streaming", "user-read-email", "user-read-private"]
-  const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID || ""
-  const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI || ""
-  const spotifyApi = new SpotifyWebApi({ clientId, redirectUri })
 
   const authentication = {
     login: async () => {
       const _uuid = uuid()
       cookie.set("spotifyState", _uuid, { expires: 300 })
+      const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID || ""
+      const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI || ""
+      const spotifyApi = new SpotifyWebApi({ clientId, redirectUri })
       const url = spotifyApi.createAuthorizeURL(scopes, _uuid)
       window.open(url, "_self")
     },
@@ -41,19 +40,22 @@ const useSpotifyAuthentication = () => {
     },
   }
 
-  // 1. ログイン後のリダイレクト
+  // 1. ログイン後のリダイレクトでサーバーに問い合わせ
   useEffect(() => {
     if(isAuthorized) return
 
+    const params = new URLSearchParams(location.search)
     const code = params.get("code")
+
     if(!!code && params.get("state") === cookie.get("spotifyState")) {
       cookie.remove("spotifyState", { expires: 300 })
       history.push(history.location.pathname)
+      console.log("Get spotify token.")
       getToken({ variables: { code } })
     }
-  }, [isAuthorized, setIsAuthorized])
+  }, [isAuthorized, setIsAuthorized, cookie, getToken, history, location.search])
 
-  // 2. サーバーにトークン問い合わせ
+  // 2. サーバーにトークン問い合わせ後
   useEffect(() => {
     if(isAuthorized) return
 
@@ -61,6 +63,10 @@ const useSpotifyAuthentication = () => {
 
       // 会員プランチェック
       (async () => {
+        const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID || ""
+        const redirectUri = process.env.REACT_APP_SPOTIFY_REDIRECT_URI || ""
+        const spotifyApi = new SpotifyWebApi({ clientId, redirectUri })
+
         spotifyApi.setAccessToken(data.spotifyToken.accessToken)
         const me = await spotifyApi.getMe()
         if(me.body.product !== "premium") {
@@ -68,6 +74,7 @@ const useSpotifyAuthentication = () => {
         }
       })()
 
+      console.log("Set spotify token.")
       cookie.set(spotifyAccessToken, data.spotifyToken.accessToken, { expires: 1/24 })
 
       // リフレッシュトークンは1週間にしておく
@@ -79,7 +86,7 @@ const useSpotifyAuthentication = () => {
     } else if(error) {
       infoContext.dispatch({ type: "ADD_ALERT", severity: "error", duration: 5000, text: "Spotify : " + error.graphQLErrors[0]["message"], buttonText: "OK" })
     }
-  }, [data, error, setIsAuthorized])
+  }, [data, error, isAuthorized, setIsAuthorized, cookie, infoContext])
 
   // 3. トークンリフレッシュ
   useEffect(() => {
@@ -90,13 +97,14 @@ const useSpotifyAuthentication = () => {
 
       // サーバー問い合わせ前
       const refreshToken = cookie.get(spotifyRefreshToken)
+      console.log("Refresh spotify token.")
       getToken({ variables: { refreshToken } })
     } else if(data && isRefresh) {
 
       // サーバー問い合わせ後
       cookie.set(spotifyAccessToken, data.spotifyToken.accessToken, { expires: 1/24 })
     }
-  }, [data, error, isAuthorized])
+  }, [data, error, isAuthorized, cookie, getToken])
 
   return { authentication, isAuthorized }
 }
