@@ -21,6 +21,7 @@ class AppleMusicPlayer {
         }
       })
     }
+    MusicKit.getInstance().player.volume = 0.5
   }
 
   setMediaMetadata(dispatch: React.Dispatch<ActionType>) {
