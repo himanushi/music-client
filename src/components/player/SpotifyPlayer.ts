@@ -42,7 +42,10 @@ class SpotifyPlayer {
     }
 
     // TODO: アクセストークン切れの場合にこのハンドリングであっているのか検証すること
-    const me = await this.player.getMe().catch(e => window.location.reload())
+    const me = await this.player.getMe().catch(e => {
+      console.log(e)
+      window.location.reload()
+    })
     if(me && me.body.product !== "premium") {
       throw new Error('Premium user only!!')
     }
