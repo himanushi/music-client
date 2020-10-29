@@ -59,7 +59,9 @@ class Player {
           // エラーが出ない場合は正常に再生できていると判断する
           player && await player.play(playbackNo, this.currentTrack())
           break;
-        } catch {}
+        } catch(e) {
+          console.log(e)
+        }
       }
     })()
 
