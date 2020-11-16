@@ -8,7 +8,7 @@ import ReactGA from 'react-ga';
 
 // TODO: このファイル汚すぎるのでリファクタすること
 const AlbumInfoLayout = () => {
-  const { id } = useParams()
+  const { id } = useParams<{ id:string }>()
   const { loading, error, data } = useAlbumQuery({ variables: { id: id } })
 
   // SEO対策

@@ -9,7 +9,7 @@ import ReactGA from 'react-ga';
 import FavoriteComponent from '../../../components/favorite/FavoriteComponent';
 
 const ArtistInfoLayout = () => {
-  const { id } = useParams()
+  const { id } = useParams<{ id:string }>()
   const { error, data } =
     useQuery<{ artist: Artist | null }>(ArtistDocument,{ variables: { id: id } })
 
