@@ -5,6 +5,7 @@ mutation Logout($input:LogoutInput!){
       name
       username
       registered
+      version
       publicInformations {
         id
         publicType
@@ -18,6 +19,7 @@ mutation Logout($input:LogoutInput!){
       favorite {
         albumIds
         artistIds
+        trackIds
       }
     }
     error

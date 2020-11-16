@@ -4,6 +4,12 @@ mutation ChangeFavorites($input:ChangeFavoritesInput!) {
       id
       name
       username
+      registered
+      version
+      publicInformations {
+        id
+        publicType
+      }
       role {
         id
         name
@@ -13,6 +19,7 @@ mutation ChangeFavorites($input:ChangeFavoritesInput!) {
       favorite {
         albumIds
         artistIds
+        trackIds
       }
     }
   }

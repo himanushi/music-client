@@ -5,6 +5,7 @@ mutation Login($input:LoginInput!){
       name
       username
       registered
+      version
       publicInformations {
         id
         publicType
@@ -18,6 +19,7 @@ mutation Login($input:LoginInput!){
       favorite {
         albumIds
         artistIds
+        trackIds
       }
     }
     error

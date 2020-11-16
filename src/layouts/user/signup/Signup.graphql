@@ -5,6 +5,7 @@ mutation Signup($input:SignupInput!) {
       name
       username
       registered
+      version
       publicInformations {
         id
         publicType
@@ -18,6 +19,7 @@ mutation Signup($input:SignupInput!) {
       favorite {
         albumIds
         artistIds
+        trackIds
       }
     }
     error

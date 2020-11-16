@@ -5,6 +5,7 @@ mutation UpdateMe($input:UpdateMeInput!) {
       name
       username
       registered
+      version
       publicInformations {
         id
         publicType
@@ -18,6 +19,7 @@ mutation UpdateMe($input:UpdateMeInput!) {
       favorite {
         albumIds
         artistIds
+        trackIds
       }
     }
     error
