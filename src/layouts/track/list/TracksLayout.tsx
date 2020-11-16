@@ -20,7 +20,8 @@ const TracksLayout = () => {
   const location = useLocation()
   let history = useHistory()
 
-  const limit = 50
+  const limit = 20
+  const fetchPolicy = parameters.conditions?.favorite ? "cache-and-network" : "cache-first"
   const { error, data, loading } = useTracksQuery(
     {
       variables: {
@@ -31,8 +32,7 @@ const TracksLayout = () => {
         sort: parameters.sort,
         conditions: parameters.conditions,
       },
-      // 戻るボタンで戻っても最初から読み込みが発生しない
-      fetchPolicy: "cache-first"
+      fetchPolicy,
     }
   )
 
@@ -124,8 +124,8 @@ const TracksLayout = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell style={{ width: 100 }} align="center">
-                試聴
+              <TableCell style={{ width: 50 }} align="center"></TableCell>
+              <TableCell style={{ width: 50 }} align="center">
                 <ClickAwayListener onClickAway={()=>setOpenPreviewInfo(false)}>
                   <Tooltip
                     PopperProps={{
@@ -137,7 +137,7 @@ const TracksLayout = () => {
                     disableHoverListener
                     disableTouchListener
                     placement="top-start"
-                    title={ "Apple Music または Spotify のプレビューURLによるストリーミング試聴" }
+                    title={ "Apple Music または Spotify によるストリーミング視聴" }
                   >
                     <IconButton size="small" onClick={()=>setOpenPreviewInfo(true)}>
                       <InfoIcon fontSize="small" />
@@ -147,24 +147,6 @@ const TracksLayout = () => {
               </TableCell>
               <TableCell>
                 タイトル
-                <ClickAwayListener onClickAway={()=>setOpenTitleInfo(false)}>
-                  <Tooltip
-                    PopperProps={{
-                      disablePortal: true,
-                    }}
-                    onClose={()=>setOpenTitleInfo(false)}
-                    open={openTitleInfo}
-                    disableFocusListener
-                    disableHoverListener
-                    disableTouchListener
-                    placement="top-start"
-                    title={ "50件までの検索結果が表示されます" }
-                  >
-                    <IconButton size="small" onClick={()=>setOpenTitleInfo(true)}>
-                      <InfoIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </ClickAwayListener>
               </TableCell>
             </TableRow>
           </TableHead>

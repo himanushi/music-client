@@ -13,9 +13,11 @@ import FavoriteComponent from '../favorite/FavoriteComponent';
 import useMusicKitAuthentication from '../../hooks/useMusicKit/useMusicKitAuthentication';
 import Player from './Player';
 import useSpotifyAuthentication from '../../hooks/useSpotify/useSpotifyAuthentication';
+import UserContext from '../../hooks/userContext';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
-  const { dispatch } = useContext(PlayerContext)
+  const userContext = useContext(UserContext)
+  const playerContext = useContext(PlayerContext)
   const location = useLocation()
   const [openInfo, setOpenInfo] = useState(false)
 
@@ -63,15 +65,15 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
       const _player = new Player({
         linkUrl: `${location.pathname}${location.search}`,
         tracks: album.tracks,
-        dispatch,
+        dispatch: playerContext.dispatch,
         canFullPlayAppleMusic: hasAppleMusicAlbum && apple.isAuthorized,
         canFullPlaySpotify: hasSpotifyAlbum && spotify.isAuthorized,
       })
 
-      dispatch({ type: "SET_PLAYER", player: _player })
+      playerContext.dispatch({ type: "SET_PLAYER", player: _player })
       initPlayer.current = false
     }
-    dispatch({ type: "PLAY", no })
+    playerContext.dispatch({ type: "PLAY", no })
   }
 
   const previewOrPlayLabel =
@@ -97,12 +99,20 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
   // 人気度平均
   const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)
 
+  // 曲お気に入り行追加
+  let columnSize = 2
+  let canChangeFavorite = false
+  if(userContext.state.user && userContext.state.user.role.allowedActions.includes("changeFavorites")) {
+    columnSize = 3
+    canChangeFavorite = true
+  }
+
   return (
     <TableContainer component={Paper} style={{ maxWidth: "600px" }}>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={columnSize} style={{ border: 'none' }}>
               <Grid
                 container
                 justify="center"
@@ -115,34 +125,39 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={columnSize} style={{ border: 'none' }}>
               { album.name }
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={columnSize} style={{ border: 'none' }}>
              <Typography color="textSecondary" variant="caption">
                { album.copyright }
              </Typography>
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={columnSize} style={{ border: 'none' }}>
               { `${releaseDate}発売、${album.totalTracks}曲、${timeConversion(ms)}` }
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={2} style={{ border: 'none' }}>
+            <TableCell align="center" colSpan={columnSize} style={{ border: 'none' }}>
               <ShareButtonComponent album={album} />
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell align="center" colSpan={2}>
+            <TableCell align="center" colSpan={columnSize}>
               <MusicServiceButtonComponent album={album} />
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell style={{ width: 100 }} align="center">
+            {
+              canChangeFavorite ?
+              <TableCell style={{ width: 50 }} align="center"></TableCell> :
+              ""
+            }
+            <TableCell style={{ width: 50 }} align="center">
               {previewOrPlayLabel}
             </TableCell>
             <TableCell>タイトル</TableCell>

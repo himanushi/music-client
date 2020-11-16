@@ -1,10 +1,12 @@
 import React, { useContext } from 'react';
-import { TableRow, TableCell, IconButton, makeStyles, Theme, SvgIconProps } from '@material-ui/core';
+import { TableRow, TableCell, IconButton, makeStyles, Theme, SvgIconProps, Grid } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StarRateIcon from '@material-ui/icons/StarRate'
 import AlbumIcon from '@material-ui/icons/Album'
 import { Track } from '../../graphql/types.d'
 import PlayerContext, { PlaybackStatus } from '../../hooks/playerContext';
+import FavoriteComponent from '../favorite/FavoriteComponent';
+import UserContext from '../../hooks/userContext';
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@keyframes playing-icon-spin': {
@@ -26,13 +28,14 @@ const PreviewPlayerItemComponent = (
   { track:Track, index:number, playAction:(no:number) => void, averagePopularity:number }
 ) => {
   const classes = useStyles()
-  const { state } = useContext(PlayerContext)
+  const userContext = useContext(UserContext)
+  const playerContext = useContext(PlayerContext)
 
   const playable = track.previewUrl !== null
-  const playing = (state.playbackStatus === PlaybackStatus.Play)
+  const playing = (playerContext.state.playbackStatus === PlaybackStatus.Play)
   const currentTrack =
-    (index === state.currentNo) &&
-    (track.id === state.player.currentTrack()?.id)
+    (index === playerContext.state.currentNo) &&
+    (track.id === playerContext.state.player.currentTrack()?.id)
 
   let currentTrackIcon = <AlbumIcon
     color="primary"
@@ -68,8 +71,24 @@ const PreviewPlayerItemComponent = (
   let starable = false
   if(averagePopularity < track.popularity) starable = true
 
+  // 曲お気に入り行追加
+  let canChangeFavorite = false
+  if(userContext.state.user && userContext.state.user.role.allowedActions.includes("changeFavorites")) {
+    canChangeFavorite = true
+  }
+
   return (
     <TableRow>
+      {
+        canChangeFavorite ?
+        <TableCell align="center">
+          <Grid style={{ position: "relative" }}>
+            <FavoriteComponent favorable_type="track" favorable_id={track.id} contentWidth={35} contentTop={-15} />
+          </Grid>
+        </TableCell>
+        :
+        <></>
+      }
       <TableCell align="center">
         {
           currentTrack ?
