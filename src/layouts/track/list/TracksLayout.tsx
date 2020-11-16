@@ -14,7 +14,6 @@ const TracksLayout = () => {
   const [order, setOrder] = useState<string>("NAME.DESC")
   const parameters = useParameters<TracksQueryVariables>("track")
   const [openPreviewInfo, setOpenPreviewInfo] = useState(false)
-  const [openTitleInfo, setOpenTitleInfo] = useState(false)
   const { dispatch } = useContext(PlayerContext)
 
   const location = useLocation()

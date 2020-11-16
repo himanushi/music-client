@@ -155,7 +155,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             {
               canChangeFavorite ?
               <TableCell style={{ width: 50 }} align="center"></TableCell> :
-              ""
+              <></>
             }
             <TableCell style={{ width: 50 }} align="center">
               {previewOrPlayLabel}
