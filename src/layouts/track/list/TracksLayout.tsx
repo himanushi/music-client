@@ -123,7 +123,6 @@ const TracksLayout = () => {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell style={{ width: 50 }} align="center"></TableCell>
               <TableCell style={{ width: 50 }} align="center">
                 <ClickAwayListener onClickAway={()=>setOpenPreviewInfo(false)}>
                   <Tooltip
@@ -147,6 +146,7 @@ const TracksLayout = () => {
               <TableCell>
                 タイトル
               </TableCell>
+              <TableCell style={{ width: 50 }} align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

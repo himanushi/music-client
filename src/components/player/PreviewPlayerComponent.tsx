@@ -13,10 +13,8 @@ import FavoriteComponent from '../favorite/FavoriteComponent';
 import useMusicKitAuthentication from '../../hooks/useMusicKit/useMusicKitAuthentication';
 import Player from './Player';
 import useSpotifyAuthentication from '../../hooks/useSpotify/useSpotifyAuthentication';
-import UserContext from '../../hooks/userContext';
 
 const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
-  const userContext = useContext(UserContext)
   const playerContext = useContext(PlayerContext)
   const location = useLocation()
   const [openInfo, setOpenInfo] = useState(false)
@@ -98,14 +96,7 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
 
   // 人気度平均
   const averagePopularity = _.meanBy(album.tracks, (t) => t.popularity)
-
-  // 曲お気に入り行追加
-  let columnSize = 2
-  let canChangeFavorite = false
-  if(userContext.state.user && userContext.state.user.role.allowedActions.includes("changeFavorites")) {
-    columnSize = 3
-    canChangeFavorite = true
-  }
+  const columnSize = 3
 
   return (
     <TableContainer component={Paper} style={{ maxWidth: "600px" }}>
@@ -152,15 +143,11 @@ const PreviewPlayerComponent = ({ album }:{ album:Album }) => {
             </TableCell>
           </TableRow>
           <TableRow>
-            {
-              canChangeFavorite ?
-              <TableCell style={{ width: 50 }} align="center"></TableCell> :
-              <></>
-            }
             <TableCell style={{ width: 50 }} align="center">
               {previewOrPlayLabel}
             </TableCell>
             <TableCell>タイトル</TableCell>
+            <TableCell style={{ width: 50 }}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
