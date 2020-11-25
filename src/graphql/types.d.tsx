@@ -55,6 +55,8 @@ export type AlbumsConditionsInputObject = {
   usernames?: Maybe<Array<Scalars['String']>>;
   /** アーティストID */
   artists?: Maybe<IdInputObject>;
+  /** トラックID */
+  tracks?: Maybe<IdInputObject>;
   /** アルバム名(あいまい検索) */
   name?: Maybe<Scalars['String']>;
   /** 表示ステータス */
@@ -144,6 +146,8 @@ export type ArtistsConditionsInputObject = {
   usernames?: Maybe<Array<Scalars['String']>>;
   /** アルバムID */
   albums?: Maybe<IdInputObject>;
+  /** トラックID */
+  tracks?: Maybe<IdInputObject>;
   /** アーティスト名(あいまい検索) */
   name?: Maybe<Scalars['String']>;
   /** 表示ステータス */
