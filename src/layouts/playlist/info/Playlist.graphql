@@ -1,0 +1,51 @@
+query Playlist($id: TTID!) {
+  playlist(id: $id) {
+    id
+    name
+    description
+    track {
+      id
+      artworkL {
+        url
+        width
+        height
+      }
+    }
+    author {
+      id
+      name
+      username
+    }
+    publicType
+    createdAt
+    updatedAt
+    items {
+      trackNumber
+      track {
+        id
+        isrc
+        name
+        discNumber
+        trackNumber
+        durationMs
+        previewUrl
+        popularity
+        artworkM {
+          url
+          width
+          height
+        }
+        appleMusicTracks {
+          id
+          name
+          appleMusicId
+        }
+        spotifyTracks {
+          id
+          name
+          spotifyId
+        }
+      }
+    }
+  }
+}
