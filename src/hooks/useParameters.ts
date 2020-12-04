@@ -2,9 +2,10 @@ import { useLocation } from "react-router-dom"
 import _ from "lodash"
 
 export const ParameterPrefixKeys = {
-  artist: "a",
-  album:  "b",
-  track:  "t",
+  artist:   "a",
+  album:    "b",
+  track:    "t",
+  playlist: "p",
 }
 
 export const ParameterKeys = {
