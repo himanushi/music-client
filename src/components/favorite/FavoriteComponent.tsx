@@ -10,7 +10,7 @@ import { useChangeFavoritesMutation, ChangeFavoritesInput, ChangeFavoritesMutati
 const FavoriteComponent = ({
   contentWidth, contentTop, favorable_type, favorable_id
 }:{
-  contentWidth:number, contentTop?:number, favorable_type: "artist"|"album"|"track", favorable_id:string
+  contentWidth:number, contentTop?:number, favorable_type: "artist"|"album"|"track"|"playlist", favorable_id:string
 }) => {
   const { state, dispatch } = useContext(UserContext)
   const [favorite, setFavorite] = useState(false)
@@ -30,6 +30,8 @@ const FavoriteComponent = ({
   } else if(favorable_type === "album"){
     input_id = { albumIds: [favorable_id] }
   } else if(favorable_type === "track"){
+    input_id = { trackIds: [favorable_id] }
+  } else if(favorable_type === "playlist"){
     input_id = { trackIds: [favorable_id] }
   }
   input = { favorite: !favorite, ...input_id }

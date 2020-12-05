@@ -106,6 +106,9 @@ const SearchKeywordComponent = ({ type }:{ type:ParameterPrefix }) => {
     case 'track':
       searchType = "曲"
       break
+    case 'playlist':
+      searchType = "プレイリスト"
+      break
   }
 
   let favoriteContent = <></>

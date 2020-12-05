@@ -27,6 +27,8 @@ import { InformationProvider } from '../../hooks/informationContext';
 import CookieInformation from './CookieInformation';
 import InitAppleMusic from '../appleMusic/InitAppleMusic';
 import InitSpotify from '../spotify/InitSpotify';
+import PlaylistsLayout from '../playlist/list/PlaylistsLayout';
+import PlaylistInfoLayout from '../playlist/info/PlaylistInfoLayout';
 
 const RootLayout = () =>
   <BrowserRouter>
@@ -62,6 +64,8 @@ const RootLayout = () =>
                     <Route exact path="/albums" component={AlbumsLayout} />
                     <Route exact path="/albums/:id" component={AlbumInfoLayout} />
                     <Route exact path="/tracks" component={TracksLayout} />
+                    <Route exact path="/playlist" component={PlaylistsLayout} />
+                    <Route exact path="/playlist/:id" component={PlaylistInfoLayout} />
                     <Route exact path="/signup" component={UserSignupLayout} />
                     <Route exact path="/login" component={UserLoginLayout} />
                     <Route exact path="/logout" component={UserLogoutLayout} />
