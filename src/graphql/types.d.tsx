@@ -631,6 +631,25 @@ export type MutationUpsertRoleArgs = {
   input: UpsertRoleInput;
 };
 
+export type MyPlaylistsConditionsInputObject = {
+  /** プレイリスト名( like 検索) */
+  name?: Maybe<Scalars['String']>;
+};
+
+export enum MyPlaylistsQueryOrderEnum {
+  /** 作成日順 */
+  New = 'NEW',
+  /** 更新日順 */
+  Updated = 'UPDATED'
+}
+
+export type MyPlaylistsSortInputObject = {
+  /** 並び順対象 */
+  order?: Maybe<MyPlaylistsQueryOrderEnum>;
+  /** 並び順 */
+  type?: Maybe<SortEnum>;
+};
+
 /** プレイリスト */
 export type Playlist = {
    __typename?: 'Playlist';
@@ -715,6 +734,8 @@ export type Query = {
   artists: Array<Artist>;
   /** カレントユーザー情報取得 */
   me: CurrentUser;
+  /** マイプレイリスト一覧取得 */
+  myPlaylists: Array<Playlist>;
   /** プレイリスト取得 */
   playlist?: Maybe<Playlist>;
   /** プレイリスト一覧取得 */
@@ -749,6 +770,13 @@ export type QueryArtistsArgs = {
   cursor?: Maybe<CursorInputObject>;
   sort?: Maybe<ArtistsSortInputObject>;
   conditions?: Maybe<ArtistsConditionsInputObject>;
+};
+
+
+export type QueryMyPlaylistsArgs = {
+  cursor?: Maybe<CursorInputObject>;
+  sort?: Maybe<MyPlaylistsSortInputObject>;
+  conditions?: Maybe<MyPlaylistsConditionsInputObject>;
 };
 
 
@@ -1119,6 +1147,32 @@ export type ChangeFavoritesMutation = (
         { __typename?: 'Favorite' }
         & Pick<Favorite, 'albumIds' | 'artistIds' | 'trackIds'>
       ) }
+    )> }
+  )> }
+);
+
+export type MyPlaylistsQueryVariables = {
+  cursor?: Maybe<CursorInputObject>;
+  sort?: Maybe<MyPlaylistsSortInputObject>;
+  conditions?: Maybe<MyPlaylistsConditionsInputObject>;
+};
+
+
+export type MyPlaylistsQuery = (
+  { __typename?: 'Query' }
+  & { items: Array<(
+    { __typename?: 'Playlist' }
+    & Pick<Playlist, 'id' | 'name' | 'createdAt' | 'updatedAt'>
+    & { track: (
+      { __typename?: 'Track' }
+      & Pick<Track, 'id'>
+      & { artworkM: (
+        { __typename?: 'Artwork' }
+        & Pick<Artwork, 'url' | 'width' | 'height'>
+      ) }
+    ), author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'name'>
     )> }
   )> }
 );
@@ -1529,6 +1583,56 @@ export function useChangeFavoritesMutation(baseOptions?: ApolloReactHooks.Mutati
 export type ChangeFavoritesMutationHookResult = ReturnType<typeof useChangeFavoritesMutation>;
 export type ChangeFavoritesMutationResult = ApolloReactCommon.MutationResult<ChangeFavoritesMutation>;
 export type ChangeFavoritesMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFavoritesMutation, ChangeFavoritesMutationVariables>;
+export const MyPlaylistsDocument = gql`
+    query MyPlaylists($cursor: CursorInputObject, $sort: MyPlaylistsSortInputObject, $conditions: MyPlaylistsConditionsInputObject) {
+  items: myPlaylists(cursor: $cursor, sort: $sort, conditions: $conditions) {
+    id
+    name
+    track {
+      id
+      artworkM {
+        url
+        width
+        height
+      }
+    }
+    author {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useMyPlaylistsQuery__
+ *
+ * To run a query within a React component, call `useMyPlaylistsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyPlaylistsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyPlaylistsQuery({
+ *   variables: {
+ *      cursor: // value for 'cursor'
+ *      sort: // value for 'sort'
+ *      conditions: // value for 'conditions'
+ *   },
+ * });
+ */
+export function useMyPlaylistsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<MyPlaylistsQuery, MyPlaylistsQueryVariables>) {
+        return ApolloReactHooks.useQuery<MyPlaylistsQuery, MyPlaylistsQueryVariables>(MyPlaylistsDocument, baseOptions);
+      }
+export function useMyPlaylistsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<MyPlaylistsQuery, MyPlaylistsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<MyPlaylistsQuery, MyPlaylistsQueryVariables>(MyPlaylistsDocument, baseOptions);
+        }
+export type MyPlaylistsQueryHookResult = ReturnType<typeof useMyPlaylistsQuery>;
+export type MyPlaylistsLazyQueryHookResult = ReturnType<typeof useMyPlaylistsLazyQuery>;
+export type MyPlaylistsQueryResult = ApolloReactCommon.QueryResult<MyPlaylistsQuery, MyPlaylistsQueryVariables>;
 export const SpotifyTokenDocument = gql`
     query SpotifyToken($code: String, $refreshToken: String) {
   spotifyToken(code: $code, refreshToken: $refreshToken) {

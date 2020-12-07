@@ -1,0 +1,20 @@
+query MyPlaylists($cursor: CursorInputObject, $sort: MyPlaylistsSortInputObject, $conditions: MyPlaylistsConditionsInputObject) {
+  items: myPlaylists(cursor: $cursor, sort: $sort, conditions: $conditions) {
+    id
+    name
+    track {
+      id
+      artworkM {
+        url
+        width
+        height
+      }
+    }
+    author {
+      id
+      name
+    }
+    createdAt
+    updatedAt
+  }
+}
