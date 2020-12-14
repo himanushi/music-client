@@ -20,6 +20,7 @@ const useSpotifyAuthentication = () => {
   const history = useHistory()
   const [getToken, { data, error }] = useLazyQuery<SpotifyTokenQuery, SpotifyTokenQueryVariables>(SpotifyTokenDocument);
   const infoContext = useContext(InformationContext)
+  const [alreadyGetToken, setAlreadyGetToken] = useState(false)
   const scopes = ["streaming", "user-read-email", "user-read-private"]
 
   const authentication = {
@@ -91,6 +92,9 @@ const useSpotifyAuthentication = () => {
   // 3. トークンリフレッシュ
   useEffect(() => {
 
+    // トークン問い合わせ済みの場合はスキップ
+    if(alreadyGetToken) return
+
     // リフレッシュトークンのみある状態は更新する
     const isRefresh = isAuthorized && !cookie.get(spotifyAccessToken) && cookie.get(spotifyRefreshToken)
     if(!data && isRefresh) {
@@ -98,13 +102,14 @@ const useSpotifyAuthentication = () => {
       // サーバー問い合わせ前
       const refreshToken = cookie.get(spotifyRefreshToken)
       console.log("Refresh spotify token.")
+      setAlreadyGetToken(true)
       getToken({ variables: { refreshToken } })
     } else if(data && isRefresh) {
 
       // サーバー問い合わせ後
       cookie.set(spotifyAccessToken, data.spotifyToken.accessToken, { expires: 1/24 })
     }
-  }, [data, error, isAuthorized, cookie, getToken])
+  }, [data, error, isAuthorized, cookie, getToken, alreadyGetToken])
 
   return { authentication, isAuthorized }
 }

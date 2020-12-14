@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import { TableRow, TableCell, IconButton, makeStyles, Theme, SvgIconProps, Grid, Collapse, Box, Table, TableBody } from '@material-ui/core';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StarRateIcon from '@material-ui/icons/StarRate'
@@ -6,11 +6,13 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import LinkIcon from '@material-ui/icons/Link';
 import AlbumIcon from '@material-ui/icons/Album'
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import { Track } from '../../graphql/types.d'
 import PlayerContext, { PlaybackStatus } from '../../hooks/playerContext';
 import FavoriteComponent from '../favorite/FavoriteComponent';
 import UserContext from '../../hooks/userContext';
 import { Link } from 'react-router-dom';
+import AddPlayerComponent from '../playlist/AddPlaylistComponent';
 
 const useStyles = makeStyles((theme: Theme) => ({
   '@keyframes playing-icon-spin': {
@@ -35,6 +37,11 @@ const PreviewPlayerItemComponent = (
   const userContext = useContext(UserContext)
   const playerContext = useContext(PlayerContext)
   const [open, setOpen] = useState(false)
+  const [playlistOpen, setPlaylistOpen] = useState(false)
+
+  const closeHandler = useCallback(() => {
+    setPlaylistOpen(false)
+  }, [])
 
   const playable = track.previewUrl !== null
   const playing = (playerContext.state.playbackStatus === PlaybackStatus.Play)
@@ -131,6 +138,14 @@ const PreviewPlayerItemComponent = (
                   }
                   <TableRow>
                     <TableCell style={{ width: "10%", border: 'none' }} component="th" scope="row">
+                      <IconButton onClick={()=>{setPlaylistOpen(true)}} size="small">
+                        <PlaylistAddIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell style={{ width: "90%", border: 'none' }}>プレイリストに追加</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell style={{ width: "10%", border: 'none' }} component="th" scope="row">
                       <IconButton component={Link} onClick={()=>{resetTitle("アーティスト一覧")}} to={`/artists?ai=${track.id}`} size="small">
                         <LinkIcon />
                       </IconButton>
@@ -151,6 +166,7 @@ const PreviewPlayerItemComponent = (
           </Collapse>
         </TableCell>
       </TableRow>
+      <AddPlayerComponent open={playlistOpen} onClose={closeHandler}/>
     </>
   )
 }
