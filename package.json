@@ -70,6 +70,6 @@
     "@graphql-codegen/cli": "^1.13.2",
     "@graphql-codegen/typescript": "^1.13.2",
     "@graphql-codegen/typescript-operations": "^1.13.2",
-    "node-sass": "^4.13.1"
+    "node-sass": "^7.0.0"
   }
 }
