@@ -38,7 +38,7 @@
     "react-google-recaptcha": "^2.1.0",
     "react-markdown": "^4.3.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.1",
+    "react-scripts": "5.0.1",
     "react-waypoint": "^9.0.2",
     "spotify-web-api-node": "4.0.0",
     "typescript": "^3.8.3",
